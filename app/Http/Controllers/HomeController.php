@@ -55,6 +55,8 @@ class HomeController extends Controller
             ->limit(4)
             ->get();
 
+        $faq = self::faq();
+
         $brandName = (string) $tenantContext->brand('site_name', 'e-test.ro');
         $brandDescription = (string) $tenantContext->brand(
             'seo_description',
@@ -74,14 +76,17 @@ class HomeController extends Controller
                 ->when($allowedVerticalIds !== null, fn ($query) => $query->whereIn('vertical_id', $allowedVerticalIds))
                 ->count(),
             'urlGenerator' => $urls,
-            'faq' => self::faq(),
+            'faq' => $faq,
             'canonical' => route('home'),
             'seoTitle' => (string) $tenantContext->brand(
                 'seo_title',
                 $brandName.' – teste online gratuite pentru examene și certificări',
             ),
             'seoDescription' => $brandDescription,
-            'structuredData' => [$structuredData->website()],
+            'structuredData' => [
+                $structuredData->website(),
+                $structuredData->faqPage($faq),
+            ],
         ]);
     }
 

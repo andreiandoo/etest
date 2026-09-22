@@ -1,12 +1,19 @@
 User-agent: *
+
+# Suprafețe private sau fără valoare pentru indexare.
 Disallow: /admin
-Disallow: /dashboard
-Disallow: /attempts
-Disallow: /login
-Disallow: /register
-Disallow: /auth
-Disallow: /go
+Disallow: /panou
+Disallow: /istoric
+Disallow: /clasament
+Disallow: /rezultate
+Disallow: /autentificare
+Disallow: /cont-nou
+Disallow: /iesire
+Disallow: /catre
 Disallow: /newsletter
-Disallow: /*/*/start
+Disallow: /cauta
+
+# Rularea unui test nu e o pagină de destinație.
+Disallow: /*/*/incepe
 
 Sitemap: https://e-test.ro/sitemap.xml

@@ -114,6 +114,7 @@ class PublicContentController extends Controller
             'structuredData' => [
                 $structuredData->breadcrumbs($breadcrumbs),
                 $structuredData->collection($node->name, $description, $canonical),
+                $structuredData->itemList($node->name, $tests->items()),
             ],
             'urlGenerator' => $urls,
             'monetization' => $monetizationResolver->resolve($node->vertical, $node),

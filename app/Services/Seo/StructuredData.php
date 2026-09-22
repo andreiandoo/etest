@@ -85,6 +85,65 @@ final readonly class StructuredData
     }
 
     /**
+     * Întrebări frecvente, în forma pe care motoarele o pot afișa direct în
+     * rezultate. Textul trebuie să fie identic cu cel vizibil în pagină.
+     *
+     * @param  array<int, array{question: string, answer: string}>  $entries
+     * @return array<string, mixed>
+     */
+    public function faqPage(array $entries): array
+    {
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            'inLanguage' => 'ro-RO',
+            'mainEntity' => array_map(
+                static fn (array $entry): array => [
+                    '@type' => 'Question',
+                    'name' => $entry['question'],
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => $entry['answer'],
+                    ],
+                ],
+                $entries,
+            ),
+        ];
+    }
+
+    /**
+     * Lista de teste a unei pagini de colecție. Ajută motoarele să înțeleagă
+     * că pagina e un index, nu un articol, și ce conține.
+     *
+     * @param  iterable<int, TestDefinition>  $tests
+     * @return array<string, mixed>
+     */
+    public function itemList(string $name, iterable $tests): array
+    {
+        $elements = [];
+        $position = 1;
+
+        foreach ($tests as $test) {
+            $elements[] = [
+                '@type' => 'ListItem',
+                'position' => $position,
+                'url' => $this->urls->test($test),
+                'name' => $test->title,
+            ];
+
+            $position++;
+        }
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'ItemList',
+            'name' => $name,
+            'numberOfItems' => count($elements),
+            'itemListElement' => $elements,
+        ];
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public function quiz(TestDefinition $test): array

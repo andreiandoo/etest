@@ -1,81 +1,140 @@
 @extends('layouts.app')
 
 @section('content')
-<section class="mx-auto max-w-5xl px-5 py-10 lg:px-8 lg:py-14">
+@php
+    use App\Enums\TestMode;
+    use App\Services\Content\VerticalTheme;
+
+    $theme = VerticalTheme::for($vertical);
+    $isExam = $test->mode === TestMode::Exam;
+    $minutes = $test->duration_seconds !== null && $test->duration_seconds > 0
+        ? (int) ceil($test->duration_seconds / 60)
+        : null;
+
+    $benefits = [
+        'Acces complet la toate întrebările, gratuit',
+        'Explicație și sursă la fiecare răspuns',
+        'Rezultat pe capitole, ca să știi ce să reiei',
+        'Progresul rămâne salvat în cont',
+    ];
+@endphp
+
+<div class="mx-auto max-w-[1440px] px-5 py-6 lg:px-10">
+
     @include('partials.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
     @include('partials.monetization.sponsor', ['placement' => $monetization['sponsor']])
 
-    <div class="mt-7 grid gap-6 lg:grid-cols-[1fr_280px]">
-        <article class="rounded-[2rem] border border-slate-200 bg-white p-7 shadow-sm sm:p-9 dark:border-white/10 dark:bg-white/5">
-            <p class="text-sm font-extrabold uppercase tracking-[0.18em] text-indigo-600">{{ $test->mode->value }}</p>
-            <h1 class="mt-4 text-4xl font-extrabold tracking-[-0.035em] sm:text-5xl">{{ $test->title }}</h1>
+    <div class="mt-4 grid gap-8 lg:grid-cols-[1fr_380px]">
 
-            @if($test->description)
-                <p class="mt-5 text-lg leading-8 text-slate-600 dark:text-slate-300">{{ $test->description }}</p>
-            @endif
+        <div>
+            <div class="rounded-card p-8 lg:p-10" style="background: {{ $theme['solid'] }}">
+                <p class="text-[13px] font-bold text-white/80">
+                    {{ $test->taxonomyNode?->name ?? $vertical->name }}
+                </p>
+                <h1 class="mt-2 text-[38px] font-bold leading-tight tracking-tight text-white">{{ $test->title }}</h1>
 
-            <div class="mt-7 flex flex-wrap gap-2 text-sm font-semibold">
-                <span class="rounded-full bg-slate-100 px-4 py-2 dark:bg-white/10">{{ $test->question_limit ?? $questionCount }} întrebări</span>
-                @if($test->duration_seconds)
-                    <span class="rounded-full bg-slate-100 px-4 py-2 dark:bg-white/10">{{ (int) ceil($test->duration_seconds / 60) }} minute</span>
+                @if($test->description)
+                    <p class="mt-3 max-w-2xl text-[17px] leading-7 text-white/85">{{ $test->description }}</p>
                 @endif
-                @if($test->passing_percentage !== null)
-                    <span class="rounded-full bg-slate-100 px-4 py-2 dark:bg-white/10">Prag {{ rtrim(rtrim(number_format((float) $test->passing_percentage, 2, '.', ''), '0'), '.') }}%</span>
-                @endif
-                <span class="rounded-full bg-emerald-50 px-4 py-2 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-200">Gratuit</span>
+
+                <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/85">
+                    <span class="rounded-[4px] bg-white/15 px-2.5 py-1 font-bold text-white">
+                        {{ $isExam ? 'Mod examen' : 'Mod exersare' }}
+                    </span>
+                    <span>{{ $test->question_limit ?? $questionCount }} întrebări</span>
+                    <span>{{ $minutes !== null ? $minutes.' minute' : 'fără limită de timp' }}</span>
+                    @if($test->passing_percentage !== null)
+                        <span>prag {{ rtrim(rtrim(number_format((float) $test->passing_percentage, 2, ',', ' '), '0'), ',') }}%</span>
+                    @endif
+                </div>
             </div>
 
             @if($test->instructions)
-                <div class="mt-8 border-t border-slate-200 pt-7 dark:border-white/10">
-                    <h2 class="text-xl font-extrabold">Cum funcționează</h2>
-                    <p class="mt-3 whitespace-pre-line leading-7 text-slate-600 dark:text-slate-300">{{ $test->instructions }}</p>
-                </div>
+                <section class="mt-8">
+                    <h2 class="text-[19px] font-bold">Înainte să începi</h2>
+                    <p class="mt-2 whitespace-pre-line text-[15px] leading-7 text-ink-700">{{ $test->instructions }}</p>
+                </section>
             @endif
-        </article>
 
-        <aside class="h-fit rounded-[2rem] bg-slate-950 p-6 text-white dark:bg-white dark:text-slate-950">
-            <p class="text-sm font-bold opacity-60">Pregătit?</p>
-            <h2 class="mt-2 text-2xl font-extrabold">Începe testul</h2>
-            <p class="mt-3 text-sm leading-6 opacity-75">Rezultatul și progresul sunt salvate în contul tău.</p>
+            <section class="mt-8">
+                <h2 class="text-[19px] font-bold">Cum funcționează acest test</h2>
+                <dl class="mt-4 grid gap-4 sm:grid-cols-3">
+                    <div class="rounded-card border border-line p-4">
+                        <dt class="text-[13px] text-ink-500">Explicații</dt>
+                        <dd class="mt-1 text-[15px] font-bold">
+                            {{ $test->show_explanations ? 'Afișate după fiecare răspuns' : 'Afișate la final' }}
+                        </dd>
+                    </div>
+                    <div class="rounded-card border border-line p-4">
+                        <dt class="text-[13px] text-ink-500">Revizuire</dt>
+                        <dd class="mt-1 text-[15px] font-bold">
+                            {{ $test->allow_review ? 'Poți relua răspunsurile' : 'Indisponibilă' }}
+                        </dd>
+                    </div>
+                    <div class="rounded-card border border-line p-4">
+                        <dt class="text-[13px] text-ink-500">Ordinea întrebărilor</dt>
+                        <dd class="mt-1 text-[15px] font-bold">
+                            {{ $test->randomize_questions ? 'Amestecată la fiecare încercare' : 'Fixă' }}
+                        </dd>
+                    </div>
+                </dl>
+            </section>
 
-            @auth
-                <a href="{{ route('tests.start', [$vertical, $test]) }}" class="mt-6 flex justify-center rounded-2xl bg-indigo-600 px-5 py-3 font-bold text-white">
-                    Începe acum
-                </a>
-            @else
-                <a href="{{ route('login', ['redirect' => $canonical]) }}" class="mt-6 flex justify-center rounded-2xl bg-indigo-600 px-5 py-3 font-bold text-white">
-                    Autentifică-te
-                </a>
-                <a href="{{ route('register') }}" class="mt-3 flex justify-center rounded-2xl border border-white/20 px-5 py-3 text-sm font-bold dark:border-slate-300">
-                    Creează cont gratuit
-                </a>
-            @endauth
+            <section class="mt-8 rounded-card bg-surface-alt p-6">
+                <h2 class="text-[19px] font-bold">Fiecare răspuns are o sursă</h2>
+                <p class="mt-2 max-w-3xl text-[15px] leading-7 text-ink-700">
+                    Întrebările din acest test poartă explicație, referința pe care se bazează și data ultimei verificări.
+                    Dacă găsești o greșeală, o poți raporta direct din test, iar semnalarea intră la revizuire.
+                </p>
+            </section>
+        </div>
 
-            @auth
-                <livewire:user.favorite-toggle :test="$test" :key="'favorite-test-'.$test->id" />
-            @endauth
+        <aside class="lg:sticky lg:top-24 lg:self-start">
+            <div class="rounded-card border border-line p-6">
+                <p class="text-[17px] font-bold">Ce primești</p>
+
+                <ul class="mt-4 space-y-3">
+                    @foreach($benefits as $benefit)
+                        <li class="flex gap-2.5">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D6E63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0" aria-hidden="true"><path d="M20 6L9 17l-5-5"></path></svg>
+                            <span class="text-[15px] leading-6">{{ $benefit }}</span>
+                        </li>
+                    @endforeach
+                </ul>
+
+                @auth
+                    <a href="{{ route('tests.start', [$vertical, $test]) }}"
+                        class="mt-6 block rounded-btn bg-brand-500 px-5 py-3 text-center text-[15px] font-bold text-white hover:bg-brand-600">
+                        Începe testul
+                    </a>
+                @else
+                    <a href="{{ route('login', ['redirect' => $canonical]) }}"
+                        class="mt-6 block rounded-btn bg-brand-500 px-5 py-3 text-center text-[15px] font-bold text-white hover:bg-brand-600">
+                        Intră în cont ca să începi
+                    </a>
+                    <a href="{{ route('register') }}"
+                        class="mt-3 block rounded-btn border border-line-strong px-5 py-3 text-center text-[15px] font-bold hover:border-brand-500">
+                        Creează cont gratuit
+                    </a>
+                    <p class="mt-3 text-[13px] leading-5 text-ink-500">
+                        Testul e gratuit. Contul îți trebuie doar ca să-ți salvăm rezultatul și progresul.
+                    </p>
+                @endauth
+
+                @auth
+                    <div class="mt-4">
+                        <livewire:user.favorite-toggle :test="$test" :key="'favorite-test-'.$test->id" />
+                    </div>
+                @endauth
+            </div>
         </aside>
-    </div>
 
-    <div class="mt-8 grid gap-4 sm:grid-cols-3">
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/5">
-            <p class="text-sm text-slate-500">Tip</p>
-            <p class="mt-1 font-extrabold">{{ ucfirst($test->mode->value) }}</p>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/5">
-            <p class="text-sm text-slate-500">Review</p>
-            <p class="mt-1 font-extrabold">{{ $test->allow_review ? 'Disponibil' : 'Dezactivat' }}</p>
-        </div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/5">
-            <p class="text-sm text-slate-500">Explicații</p>
-            <p class="mt-1 font-extrabold">{{ $test->show_explanations ? 'Incluse' : 'La final indisponibile' }}</p>
-        </div>
     </div>
 
     @include('partials.monetization.affiliate-resources', ['resources' => $monetization['affiliate_resources']])
 
-    <div class="mt-10 grid gap-5 lg:grid-cols-2">
+    <div class="mt-10 grid gap-4 lg:grid-cols-2">
         @if($monetization['lead'])
             <livewire:monetization.lead-capture :campaign="$monetization['lead']" :key="'lead-'.$monetization['lead']->id" />
         @endif
@@ -87,5 +146,6 @@
             :key="'newsletter-'.$monetization['newsletter']['interest_key']"
         />
     </div>
-</section>
+
+</div>
 @endsection

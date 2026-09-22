@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PublicationStatus;
+use App\Models\Question;
 use App\Models\TaxonomyNode;
 use App\Models\TestDefinition;
 use App\Models\Vertical;
@@ -34,13 +36,31 @@ class VerticalController extends Controller
             ->orderBy('name')
             ->get();
 
+        // Pagina de domeniu e un index: listează tot ce e publicat în vertical,
+        // nu doar testele agățate direct de ea. Mai multe legături interne
+        // înseamnă mai multe pagini descoperite de motoare.
         $tests = TestDefinition::query()
             ->with(['vertical', 'taxonomyNode'])
             ->where('vertical_id', $vertical->id)
-            ->whereNull('taxonomy_node_id')
             ->published()
             ->orderByDesc('published_at')
-            ->paginate(24);
+            ->paginate(24)
+            ->withQueryString();
+
+        $popularTests = TestDefinition::query()
+            ->with(['vertical', 'taxonomyNode'])
+            ->where('vertical_id', $vertical->id)
+            ->published()
+            ->withCount('attempts')
+            ->orderByDesc('attempts_count')
+            ->orderByDesc('published_at')
+            ->limit(4)
+            ->get();
+
+        $questionsCount = Question::query()
+            ->where('vertical_id', $vertical->id)
+            ->where('status', PublicationStatus::Published->value)
+            ->count();
 
         $canonical = $this->paginatedCanonical($urls->vertical($vertical));
         $brandName = (string) $tenantContext->brand('site_name', 'e-test.ro');
@@ -54,6 +74,8 @@ class VerticalController extends Controller
             'vertical' => $vertical,
             'nodes' => $nodes,
             'tests' => $tests,
+            'popularTests' => $popularTests,
+            'questionsCount' => $questionsCount,
             'canonical' => $canonical,
             'seoTitle' => $vertical->seo_title ?: $vertical->name.' – teste gratuite | '.$brandName,
             'seoDescription' => $description,
@@ -61,6 +83,7 @@ class VerticalController extends Controller
             'structuredData' => [
                 $structuredData->breadcrumbs($breadcrumbs),
                 $structuredData->collection($vertical->name, $description, $canonical),
+                $structuredData->itemList($vertical->name, $tests->items()),
             ],
             'urlGenerator' => $urls,
             'monetization' => $monetizationResolver->resolve($vertical),
