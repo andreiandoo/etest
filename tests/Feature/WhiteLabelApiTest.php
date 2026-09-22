@@ -140,7 +140,7 @@ test('white label host applies tenant branding and hides unassigned verticals', 
     $this->get('http://partner.test/medicina/rezidentiat')
         ->assertNotFound();
 
-    $this->get('http://partner.test/sitemaps/verticals.xml')
+    $this->get('http://partner.test/sitemaps/domenii.xml')
         ->assertOk()
         ->assertSee('/auto')
         ->assertDontSee('/medicina');
@@ -359,7 +359,7 @@ test('white label and api admin routes require administrator access', function (
     $user = User::factory()->create();
     $admin = User::factory()->create(['is_admin' => true]);
 
-    foreach (['/admin/white-label', '/admin/api'] as $url) {
+    foreach (['/admin/marca-proprie', '/admin/api'] as $url) {
         $this->actingAs($user)->get($url)->assertForbidden();
         $this->actingAs($admin)->get($url)->assertOk();
     }
@@ -444,17 +444,17 @@ test('white label history and result pages hide unassigned vertical content', fu
     ]);
 
     $this->actingAs($user)
-        ->get('http://private-partner.test/history')
+        ->get('http://private-partner.test/istoric')
         ->assertOk()
         ->assertSee($allowedTest->title)
         ->assertDontSee($blockedTest->title);
 
     $this->actingAs($user)
-        ->get('http://private-partner.test/attempts/'.$allowedAttempt->id.'/results')
+        ->get('http://private-partner.test/rezultate/'.$allowedAttempt->id)
         ->assertOk();
 
     $this->actingAs($user)
-        ->get('http://private-partner.test/attempts/'.$blockedAttempt->id.'/results')
+        ->get('http://private-partner.test/rezultate/'.$blockedAttempt->id)
         ->assertNotFound();
 });
 
