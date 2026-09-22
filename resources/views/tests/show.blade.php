@@ -39,6 +39,7 @@
                 @endif
 
                 <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/85">
+                    <span class="rounded-[4px] bg-white px-2.5 py-1 font-bold" style="color: {{ $theme['solid'] }}">Gratuit</span>
                     <span class="rounded-[4px] bg-white/15 px-2.5 py-1 font-bold text-white">
                         {{ $isExam ? 'Mod examen' : 'Mod exersare' }}
                     </span>
