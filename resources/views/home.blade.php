@@ -227,24 +227,14 @@
     {{-- Întrebări frecvente --}}
     <section id="intrebari" class="scroll-mt-24 pt-10">
         <h2 class="text-[21px] font-bold">Întrebări frecvente</h2>
-        @php
-            $faq = [
-                ['Chiar sunt gratuite toate testele?', 'Da. Nu există versiune plătită, pachet premium sau limită de teste pe zi. Platforma se susține din parteneriate afișate separat de conținut, niciodată în timpul testului.'],
-                ['De ce am nevoie de cont ca să dau un test?', 'Ca să-ți putem salva răspunsurile, progresul și capitolele slabe. Fără cont am putea afișa întrebări, dar n-am avea unde reține nimic — iar atunci platforma ar fi doar o listă de întrebări.'],
-                ['De unde vin întrebările și cât de actuale sunt?', 'Fiecare întrebare are referința citată și data ultimei verificări, afișate lângă răspuns. Dacă găsești ceva depășit, raportezi dintr-un clic și intră la revizuire.'],
-                ['Pot exersa de pe telefon?', 'Da. Interfața e construită întâi pentru telefon, fiindcă acolo se exersează cel mai des — în pauze, pe drum, seara.'],
-                ['Testele înlocuiesc școala de șoferi sau cursul de admitere?', 'Nu. Sunt antrenamentul pe grile care însoțește cursul sau studiul individual — partea de repetiție și de diagnostic, nu predarea materiei.'],
-            ];
-        @endphp
-
         <div class="mt-3">
-            @foreach($faq as [$question, $answer])
+            @foreach($faq as $entry)
                 <details class="group border-b border-line">
                     <summary class="flex cursor-pointer list-none items-center gap-3 py-3.5 marker:content-none">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 transition group-open:rotate-180" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
-                        <span class="text-[15px] font-semibold">{{ $question }}</span>
+                        <span class="text-[15px] font-semibold">{{ $entry['question'] }}</span>
                     </summary>
-                    <p class="max-w-4xl pb-4 pl-7 text-[15px] leading-7 text-ink-700">{{ $answer }}</p>
+                    <p class="max-w-4xl pb-4 pl-7 text-[15px] leading-7 text-ink-700">{{ $entry['answer'] }}</p>
                 </details>
             @endforeach
         </div>

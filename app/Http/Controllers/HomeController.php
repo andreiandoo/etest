@@ -74,6 +74,7 @@ class HomeController extends Controller
                 ->when($allowedVerticalIds !== null, fn ($query) => $query->whereIn('vertical_id', $allowedVerticalIds))
                 ->count(),
             'urlGenerator' => $urls,
+            'faq' => self::faq(),
             'canonical' => route('home'),
             'seoTitle' => (string) $tenantContext->brand(
                 'seo_title',
@@ -82,5 +83,39 @@ class HomeController extends Controller
             'seoDescription' => $brandDescription,
             'structuredData' => [$structuredData->website()],
         ]);
+    }
+
+    /**
+     * Întrebările frecvente de pe homepage.
+     *
+     * Stau aici, nu în view, ca să poată fi refolosite la marcajul FAQPage
+     * fără să duplicăm textul.
+     *
+     * @return array<int, array{question: string, answer: string}>
+     */
+    private static function faq(): array
+    {
+        return [
+            [
+                'question' => 'Chiar sunt gratuite toate testele?',
+                'answer' => 'Da. Nu există versiune plătită, pachet premium sau limită de teste pe zi. Platforma se susține din parteneriate afișate separat de conținut, niciodată în timpul testului.',
+            ],
+            [
+                'question' => 'De ce am nevoie de cont ca să dau un test?',
+                'answer' => 'Ca să-ți putem salva răspunsurile, progresul și capitolele slabe. Fără cont am putea afișa întrebări, dar n-am avea unde reține nimic — iar atunci platforma ar fi doar o listă de întrebări.',
+            ],
+            [
+                'question' => 'De unde vin întrebările și cât de actuale sunt?',
+                'answer' => 'Fiecare întrebare are referința citată și data ultimei verificări, afișate lângă răspuns. Dacă găsești ceva depășit, raportezi dintr-un clic și intră la revizuire.',
+            ],
+            [
+                'question' => 'Pot exersa de pe telefon?',
+                'answer' => 'Da. Interfața e construită întâi pentru telefon, fiindcă acolo se exersează cel mai des — în pauze, pe drum, seara.',
+            ],
+            [
+                'question' => 'Testele înlocuiesc școala de șoferi sau cursul de admitere?',
+                'answer' => 'Nu. Sunt antrenamentul pe grile care însoțește cursul sau studiul individual — partea de repetiție și de diagnostic, nu predarea materiei.',
+            ],
+        ];
     }
 }
