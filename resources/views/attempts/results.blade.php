@@ -112,7 +112,7 @@
                     <h2 class="text-[15px] font-bold text-ink-500">Rezultat pe capitole</h2>
                     <ul class="mt-4 space-y-3.5">
                         @foreach($breakdown as $group)
-                            @php($isWeak = $group['percentage'] < 60)
+                            @php $isWeak = $group['percentage'] < 60; @endphp
                             <li class="flex items-center gap-5">
                                 <span class="w-52 shrink-0 text-[15px] font-semibold">{{ $group['name'] }}</span>
                                 <span class="relative h-2 flex-1 overflow-hidden rounded-full bg-[#EDEFF3]">
