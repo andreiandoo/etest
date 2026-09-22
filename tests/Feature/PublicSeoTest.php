@@ -98,12 +98,12 @@ test('sitemaps expose only public active urls', function () {
         ->assertSee(route('sitemaps.taxonomy'), false)
         ->assertSee(route('sitemaps.tests'), false);
 
-    $this->get('/sitemaps/verticals.xml')
+    $this->get('/sitemaps/domenii.xml')
         ->assertOk()
         ->assertSee(url('/auto'), false)
         ->assertDontSee(url('/ascuns'), false);
 
-    $this->get('/sitemaps/tests.xml')
+    $this->get('/sitemaps/teste.xml')
         ->assertOk()
         ->assertSee(app(PublicUrlGenerator::class)->test($fixture['test']), false)
         ->assertDontSee('/ascuns/draft', false);
@@ -114,12 +114,12 @@ test('private account and runner routes emit noindex headers', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user)
-        ->get('/dashboard')
+        ->get('/panou')
         ->assertOk()
         ->assertHeader('X-Robots-Tag', 'noindex, nofollow');
 
     $this->actingAs($user)
-        ->get('/auto/simulare-001/start')
+        ->get('/auto/simulare-001/incepe')
         ->assertHeader('X-Robots-Tag', 'noindex, nofollow');
 });
 

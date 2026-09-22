@@ -3,7 +3,7 @@
 use App\Models\User;
 
 test('admin area requires authentication', function () {
-    $this->get('/admin')->assertRedirect('/login');
+    $this->get('/admin')->assertRedirect('/autentificare');
 });
 
 test('regular users cannot access admin area', function () {

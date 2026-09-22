@@ -39,38 +39,38 @@ Route::get('/', HomeController::class)->name('home');
 Route::get('/cauta', SearchController::class)->name('search');
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
-Route::get('/sitemaps/verticals.xml', [SitemapController::class, 'verticals'])->name('sitemaps.verticals');
-Route::get('/sitemaps/taxonomy.xml', [SitemapController::class, 'taxonomy'])->name('sitemaps.taxonomy');
-Route::get('/sitemaps/tests.xml', [SitemapController::class, 'tests'])->name('sitemaps.tests');
+Route::get('/sitemaps/domenii.xml', [SitemapController::class, 'verticals'])->name('sitemaps.verticals');
+Route::get('/sitemaps/taxonomie.xml', [SitemapController::class, 'taxonomy'])->name('sitemaps.taxonomy');
+Route::get('/sitemaps/teste.xml', [SitemapController::class, 'tests'])->name('sitemaps.tests');
 
 Route::middleware('noindex')->group(function () {
-    Route::get('/go/sponsor/{placement}', SponsoredClickController::class)
+    Route::get('/catre/sponsor/{placement}', SponsoredClickController::class)
         ->whereNumber('placement')
         ->name('sponsor.click');
-    Route::get('/go/resource/{resource}', AffiliateClickController::class)
+    Route::get('/catre/resursa/{resource}', AffiliateClickController::class)
         ->whereNumber('resource')
         ->name('affiliate.click');
 
-    Route::get('/newsletter/confirm/{subscription}', [NewsletterSubscriptionController::class, 'confirm'])
+    Route::get('/newsletter/confirmare/{subscription}', [NewsletterSubscriptionController::class, 'confirm'])
         ->middleware('signed')
         ->whereNumber('subscription')
         ->name('newsletter.confirm');
-    Route::get('/newsletter/unsubscribe/{subscription}', [NewsletterSubscriptionController::class, 'unsubscribe'])
+    Route::get('/newsletter/dezabonare/{subscription}', [NewsletterSubscriptionController::class, 'unsubscribe'])
         ->middleware('signed')
         ->whereNumber('subscription')
         ->name('newsletter.unsubscribe');
 
     Route::middleware('guest')->group(function () {
-        Route::get('/login', Login::class)->name('login');
-        Route::get('/register', Register::class)->name('register');
+        Route::get('/autentificare', Login::class)->name('login');
+        Route::get('/cont-nou', Register::class)->name('register');
 
-        Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])
+        Route::get('/autentificare/google', [GoogleAuthController::class, 'redirect'])
             ->name('auth.google.redirect');
-        Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])
+        Route::get('/autentificare/google/revenire', [GoogleAuthController::class, 'callback'])
             ->name('auth.google.callback');
     });
 
-    Route::post('/logout', function (Request $request) {
+    Route::post('/iesire', function (Request $request) {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -79,15 +79,15 @@ Route::middleware('noindex')->group(function () {
     })->middleware('auth')->name('logout');
 
     Route::middleware('auth')->group(function () {
-        Route::get('/dashboard', UserDashboard::class)->name('dashboard');
-        Route::get('/history', History::class)->name('history');
-        Route::get('/leaderboard', Leaderboard::class)->name('leaderboard');
+        Route::get('/panou', UserDashboard::class)->name('dashboard');
+        Route::get('/istoric', History::class)->name('history');
+        Route::get('/clasament', Leaderboard::class)->name('leaderboard');
 
-        Route::get('/attempts/{attempt}/results', AttemptResultController::class)
+        Route::get('/rezultate/{attempt}', AttemptResultController::class)
             ->whereNumber('attempt')
             ->name('attempts.results');
 
-        Route::get('/{vertical:slug}/{test:slug}/start', TestRunner::class)
+        Route::get('/{vertical:slug}/{test:slug}/incepe', TestRunner::class)
             ->where(['vertical' => '[a-z0-9-]+', 'test' => '[a-z0-9-]+'])
             ->name('tests.start');
     });
@@ -97,18 +97,18 @@ Route::middleware('noindex')->group(function () {
         ->name('admin.')
         ->group(function () {
             Route::get('/', AdminDashboard::class)->name('dashboard');
-            Route::get('/verticals', VerticalManager::class)->name('verticals');
-            Route::get('/taxonomy', TaxonomyManager::class)->name('taxonomy');
-            Route::get('/tests', TestManager::class)->name('tests');
-            Route::get('/questions', QuestionManager::class)->name('questions');
-            Route::get('/imports', ImportManager::class)->name('imports');
-            Route::get('/review', ReviewQueue::class)->name('review');
-            Route::get('/quality', QualityManager::class)->name('quality');
-            Route::get('/monetization/sponsors', SponsorshipManager::class)->name('sponsors');
-            Route::get('/monetization/leads', LeadManager::class)->name('leads');
-            Route::get('/monetization/affiliate', AffiliateManager::class)->name('affiliate');
-            Route::get('/monetization/newsletter', NewsletterManager::class)->name('newsletter');
-            Route::get('/white-label', TenantManager::class)->name('tenants');
+            Route::get('/domenii', VerticalManager::class)->name('verticals');
+            Route::get('/taxonomie', TaxonomyManager::class)->name('taxonomy');
+            Route::get('/teste', TestManager::class)->name('tests');
+            Route::get('/intrebari', QuestionManager::class)->name('questions');
+            Route::get('/importuri', ImportManager::class)->name('imports');
+            Route::get('/revizuire', ReviewQueue::class)->name('review');
+            Route::get('/calitate', QualityManager::class)->name('quality');
+            Route::get('/monetizare/sponsori', SponsorshipManager::class)->name('sponsors');
+            Route::get('/monetizare/lead-uri', LeadManager::class)->name('leads');
+            Route::get('/monetizare/afiliere', AffiliateManager::class)->name('affiliate');
+            Route::get('/monetizare/newsletter', NewsletterManager::class)->name('newsletter');
+            Route::get('/marca-proprie', TenantManager::class)->name('tenants');
             Route::get('/api', ApiManager::class)->name('api');
         });
 });

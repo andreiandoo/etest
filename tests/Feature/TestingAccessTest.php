@@ -18,8 +18,8 @@ test('a guest must authenticate before starting a test', function () {
     $vertical = Vertical::factory()->create(['slug' => 'medicina']);
     $test = TestDefinition::factory()->for($vertical)->create(['slug' => 'rezidentiat']);
 
-    $this->get('/medicina/rezidentiat/start')
-        ->assertRedirect('/login');
+    $this->get('/medicina/rezidentiat/incepe')
+        ->assertRedirect('/autentificare');
 });
 
 test('an authenticated user can start a published test and gets an attempt', function () {
@@ -28,7 +28,7 @@ test('an authenticated user can start a published test and gets an attempt', fun
     $test = TestDefinition::factory()->for($vertical)->create(['slug' => 'barou']);
 
     $this->actingAs($user)
-        ->get('/drept/barou/start')
+        ->get('/drept/barou/incepe')
         ->assertOk()
         ->assertSee($test->title);
 

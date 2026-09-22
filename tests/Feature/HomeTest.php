@@ -7,6 +7,6 @@ test('the homepage is available', function () {
 });
 
 test('the dashboard requires authentication', function () {
-    $this->get('/dashboard')
-        ->assertRedirect('/login');
+    $this->get('/panou')
+        ->assertRedirect('/autentificare');
 });

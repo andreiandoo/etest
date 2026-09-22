@@ -329,10 +329,10 @@ test('monetization admin routes require admin access', function () {
     $admin = User::factory()->create(['is_admin' => true]);
 
     foreach ([
-        '/admin/monetization/sponsors',
-        '/admin/monetization/leads',
-        '/admin/monetization/affiliate',
-        '/admin/monetization/newsletter',
+        '/admin/monetizare/sponsori',
+        '/admin/monetizare/lead-uri',
+        '/admin/monetizare/afiliere',
+        '/admin/monetizare/newsletter',
     ] as $url) {
         $this->actingAs($user)->get($url)->assertForbidden();
         $this->actingAs($admin)->get($url)->assertOk();

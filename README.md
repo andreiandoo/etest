@@ -16,6 +16,27 @@ Laravel 13, Livewire 4, Blade, Tailwind CSS 4, Alpine.js via Livewire, PostgreSQ
 6. Run npm install.
 7. Run composer run dev.
 
+## URLs
+
+All public and account URLs are Romanian: `/cauta`, `/panou`, `/istoric`, `/clasament`,
+`/autentificare`, `/cont-nou`, `/rezultate/{attempt}` and `/{verticala}/{test}/incepe`.
+
+This matters for one piece of external configuration: the Google OAuth redirect URI is
+now `https://e-test.ro/autentificare/google/revenire`, and it must match the value
+registered in the Google console and in `GOOGLE_REDIRECT_URI`.
+
+Verticals live at the site root, so a handful of slugs are reserved and rejected by the
+admin form. See `App\Services\Content\ReservedSlugs`.
+
+## Development content
+
+    php artisan db:seed --class=DevContentSeeder
+
+Creates demonstrative verticals, taxonomy, tests and questions so the interface can be
+worked on against realistic data. Every record carries `metadata.demo = true`, the
+source labels say the content must be replaced, and the seeder refuses to run in
+production.
+
 ## Content administration
 
 The administration area is available at /admin for users with is_admin=true.

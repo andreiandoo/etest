@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Vertical;
+use App\Services\Content\ReservedSlugs;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -49,7 +50,15 @@ class VerticalManager extends Component
 
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:120'],
-            'slug' => ['required', 'alpha_dash:ascii', 'max:120', Rule::unique('verticals', 'slug')->ignore($this->editingId)],
+            'slug' => [
+                'required',
+                'alpha_dash:ascii',
+                'max:120',
+                // Verticalele stau in radacina, deci un slug egal cu o ruta fixa
+                // ar produce o pagina inaccesibila.
+                Rule::notIn(ReservedSlugs::all()),
+                Rule::unique('verticals', 'slug')->ignore($this->editingId),
+            ],
             'description' => ['nullable', 'string'],
             'isActive' => ['boolean'],
             'sortOrder' => ['integer', 'min:0', 'max:32767'],

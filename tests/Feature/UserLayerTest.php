@@ -199,7 +199,7 @@ test('leaderboard exposes only users who explicitly opted in', function () {
     ]);
 
     $this->actingAs($viewer)
-        ->get('/leaderboard')
+        ->get('/clasament')
         ->assertOk()
         ->assertSee('Public Alias')
         ->assertDontSee('Hidden Account')
@@ -208,19 +208,19 @@ test('leaderboard exposes only users who explicitly opted in', function () {
 });
 
 test('dashboard and history are private user surfaces', function () {
-    $this->get('/dashboard')->assertRedirect('/login');
-    $this->get('/history')->assertRedirect('/login');
+    $this->get('/panou')->assertRedirect('/autentificare');
+    $this->get('/istoric')->assertRedirect('/autentificare');
 
     $user = User::factory()->create();
 
     $this->actingAs($user)
-        ->get('/dashboard')
+        ->get('/panou')
         ->assertOk()
         ->assertSee('Progresul tău')
         ->assertHeader('X-Robots-Tag', 'noindex, nofollow');
 
     $this->actingAs($user)
-        ->get('/history')
+        ->get('/istoric')
         ->assertOk()
         ->assertHeader('X-Robots-Tag', 'noindex, nofollow');
 });
