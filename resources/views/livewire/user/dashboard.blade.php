@@ -9,7 +9,7 @@
     <div class="flex flex-wrap items-start justify-between gap-5">
         <div>
             <h1 class="text-[34px] font-bold tracking-tight">Salut, {{ auth()->user()->name }}</h1>
-            <p class="mt-1 text-[15px] text-ink-700">Progresul se actualizează la fiecare test finalizat.</p>
+            <p class="mt-1 text-[15px] text-ink-700">Progresul tău se actualizează la fiecare test finalizat.</p>
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
