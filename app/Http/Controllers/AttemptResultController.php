@@ -65,13 +65,15 @@ class AttemptResultController extends Controller
         $groups = [];
 
         foreach ($attempt->questions as $attemptQuestion) {
-            $node = $attemptQuestion->sourceQuestion?->taxonomyNode;
-            $key = $node?->id ?? 0;
+            $question = $attemptQuestion->sourceQuestion;
+            $node = $question === null ? null : $question->taxonomyNode;
+
+            $key = $node === null ? 0 : $node->id;
 
             if (! isset($groups[$key])) {
                 $groups[$key] = [
-                    'name' => $node?->name ?? 'Întrebări fără capitol',
-                    'node_id' => $node?->id,
+                    'name' => $node === null ? 'Întrebări fără capitol' : $node->name,
+                    'node_id' => $node === null ? null : $node->id,
                     'correct' => 0,
                     'total' => 0,
                 ];
@@ -84,11 +86,10 @@ class AttemptResultController extends Controller
             }
         }
 
+        // Fiecare grup are cel puțin o întrebare, altfel n-ar exista.
         $breakdown = array_map(
             static function (array $group): array {
-                $group['percentage'] = $group['total'] > 0
-                    ? (int) round($group['correct'] / $group['total'] * 100)
-                    : 0;
+                $group['percentage'] = (int) round($group['correct'] / $group['total'] * 100);
 
                 return $group;
             },
