@@ -9,8 +9,8 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
             fonts: [
-                bunny('Manrope', {
-                    weights: [400, 500, 600, 700, 800],
+                bunny('Source Sans 3', {
+                    weights: [400, 600, 700],
                 }),
             ],
         }),

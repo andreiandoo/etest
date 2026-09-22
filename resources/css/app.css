@@ -3,18 +3,77 @@
 @source "../views/**/*.blade.php";
 @source "../../app/Livewire/**/*.php";
 
+/*
+| Sistemul vizual e-test.ro
+|
+| Registru de platformă educațională: fundal alb, un singur albastru de
+| acțiune, un singur font umanist, carduri cu contur subțire și raze mici.
+| Culorile per verticală colorează miniaturile și etichetele, nu interfața.
+*/
 @theme {
-    --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+
+    /* Albastrul de acțiune. Butoane, linkuri, stări active. */
+    --color-brand-50: #eef3fc;
+    --color-brand-100: #e3edfc;
+    --color-brand-200: #c2d7f6;
+    --color-brand-500: #0056d2;
+    --color-brand-600: #00449f;
+    --color-brand-700: #00398c;
+
+    /* Navy: bara de utilități, benzile de statistici, îndemnurile finale. */
+    --color-navy-700: #003b6f;
+    --color-navy-900: #00204d;
+    --color-navy-muted: #b9c7dc;
+
+    /* Text. Nu folosim slate: gri-albastrul lui e prea rece pentru registrul ăsta. */
+    --color-ink-900: #1f1f1f;
+    --color-ink-700: #3a3f47;
+    --color-ink-500: #5b6069;
+
+    /* Contururi și suprafețe secundare. */
+    --color-line: #e3e6ea;
+    --color-line-strong: #c2c7ce;
+    --color-surface-alt: #f2f4f7;
+    --color-surface-warm: #f6f4ef;
+
+    /* Accente per verticală: plin pentru miniaturi, soft pentru fundaluri de pictogramă. */
+    --color-vert-auto: #b4451f;
+    --color-vert-auto-soft: #fbeee9;
+    --color-vert-medical: #0d6e63;
+    --color-vert-medical-soft: #e6f2f0;
+    --color-vert-legal: #7b2d52;
+    --color-vert-legal-soft: #f5e7ee;
+    --color-vert-it: #0056d2;
+    --color-vert-it-soft: #e3edfc;
+    --color-vert-lang: #8a6114;
+    --color-vert-lang-soft: #f6eedc;
+
+    /* Semantice. */
+    --color-free: #0d6e63;
+    --color-star: #e8a33d;
+
+    /* Raze: butoane 4px, carduri 8px. Nimic mai rotund. */
+    --radius-btn: 0.25rem;
+    --radius-card: 0.5rem;
 }
 
 html {
-    color-scheme: light dark;
+    color-scheme: light;
 }
 
 body {
-    @apply min-h-screen bg-slate-50 text-slate-950 antialiased dark:bg-slate-950 dark:text-slate-50;
+    @apply min-h-screen bg-white text-ink-900 antialiased;
 }
 
 [x-cloak] {
     display: none !important;
+}
+
+/*
+| Suprafața de citit a testului. Aici se stă mult și sub presiune, deci
+| rămâne pe hârtie caldă, nu pe alb pur.
+*/
+.surface-reading {
+    background-color: var(--color-surface-warm);
 }
