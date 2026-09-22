@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /attempts
+Disallow: /login
+Disallow: /register
+Disallow: /auth
+Disallow: /go
+Disallow: /newsletter
+Disallow: /*/*/start
+
+Sitemap: https://e-test.ro/sitemap.xml
