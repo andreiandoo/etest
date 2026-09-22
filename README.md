@@ -33,9 +33,17 @@ admin form. See `App\Services\Content\ReservedSlugs`.
     php artisan db:seed --class=DevContentSeeder
 
 Creates demonstrative verticals, taxonomy, tests and questions so the interface can be
-worked on against realistic data. Every record carries `metadata.demo = true`, the
-source labels say the content must be replaced, and the seeder refuses to run in
-production.
+worked on against realistic data. Every record carries `metadata.demo = true` and the
+source labels say the content must be replaced.
+
+The seeder refuses to run in production unless asked explicitly, which matches the
+handoff's allowance for a temporary, clearly marked QA set:
+
+    ETEST_ALLOW_DEMO_CONTENT=true php artisan db:seed --class=DevContentSeeder --force
+
+Remove it again before anything is published:
+
+    php artisan content:purge-demo
 
 ## Content administration
 

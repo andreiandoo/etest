@@ -23,12 +23,13 @@ use Illuminate\Support\Carbon;
  *
  * NU este conținut editorial. Fiecare întrebare poartă `metadata.demo = true`
  * și o etichetă de sursă care spune limpede că trebuie înlocuită. Handoff-ul
- * de producție interzice explicit umplerea aplicației cu întrebări inventate,
- * de aceea seeder-ul refuză să ruleze în producție.
+ * de producție interzice umplerea aplicației cu întrebări inventate, așa că
+ * seeder-ul refuză să ruleze în producție fără o cerere explicită.
  *
- * Rulare:  php artisan db:seed --class=DevContentSeeder
- * Curățare: șterge verticalele demo din /admin, sau
- *           Vertical::whereJsonContains('metadata->demo', true)->delete();
+ * Rulare:    php artisan db:seed --class=DevContentSeeder
+ * Pe producție (set temporar de QA, permis de handoff la §28):
+ *            ETEST_ALLOW_DEMO_CONTENT=true php artisan db:seed --class=DevContentSeeder --force
+ * Curățare:  php artisan content:purge-demo
  */
 class DevContentSeeder extends Seeder
 {
@@ -36,8 +37,14 @@ class DevContentSeeder extends Seeder
 
     public function run(): void
     {
-        if (app()->isProduction()) {
-            $this->command?->error('DevContentSeeder nu rulează în producție. Conținutul demonstrativ nu are ce căuta acolo.');
+        // Handoff-ul permite un set temporar de date de QA în producție, marcat
+        // clar și șters înainte de lansare. Permitem asta, dar numai la cerere
+        // explicită: altfel un `db:seed --force` dintr-un script ar umple
+        // producția cu conținut inventat fără ca nimeni să fi decis asta.
+        if (app()->isProduction() && ! env('ETEST_ALLOW_DEMO_CONTENT', false)) {
+            $this->command?->error('Refuz să rulez în producție.');
+            $this->command?->line('Dacă vrei conținut de QA pe producție, pornește o singură dată cu ETEST_ALLOW_DEMO_CONTENT=true,');
+            $this->command?->line('apoi șterge-l cu `php artisan content:purge-demo` înainte de publicare.');
 
             return;
         }
