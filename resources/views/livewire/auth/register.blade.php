@@ -1,51 +1,57 @@
-<section class="mx-auto max-w-md px-5 py-14">
-    <div class="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm dark:border-white/10 dark:bg-white/5">
-        <p class="text-sm font-bold uppercase tracking-[0.18em] text-indigo-600">Cont gratuit</p>
-        <h1 class="mt-3 text-3xl font-extrabold tracking-tight">Creează contul</h1>
-        <p class="mt-3 text-sm text-slate-600 dark:text-slate-300">Ai nevoie de cont pentru a începe testele și pentru a-ți salva progresul.</p>
+<section class="mx-auto max-w-[440px] px-5 py-14">
+    <h1 class="text-[30px] font-bold tracking-tight">Creează cont gratuit</h1>
+    <p class="mt-2 text-[15px] leading-7 text-ink-700">
+        Fără card și fără abonament. Contul îți trebuie doar ca să-ți salvăm răspunsurile și progresul.
+    </p>
 
-        <form wire:submit="register" class="mt-8 space-y-5">
-            <div>
-                <label for="name" class="text-sm font-semibold">Nume</label>
-                <input id="name" type="text" wire:model="name" autocomplete="name"
-                    class="mt-2 w-full rounded-2xl border border-slate-300 bg-transparent px-4 py-3 outline-none focus:border-indigo-500 dark:border-white/15">
-                @error('name') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
-            </div>
+    <form wire:submit="register" class="mt-8 space-y-5">
+        <div>
+            <label for="name" class="text-sm font-semibold">Nume</label>
+            <input id="name" type="text" wire:model="name" autocomplete="name"
+                class="mt-2 w-full rounded-btn border border-line-strong bg-white px-4 py-3 text-[15px] outline-none focus:border-brand-500">
+            @error('name') <p class="mt-2 text-sm text-vert-auto">{{ $message }}</p> @enderror
+        </div>
 
-            <div>
-                <label for="email" class="text-sm font-semibold">Email</label>
-                <input id="email" type="email" wire:model="email" autocomplete="email"
-                    class="mt-2 w-full rounded-2xl border border-slate-300 bg-transparent px-4 py-3 outline-none focus:border-indigo-500 dark:border-white/15">
-                @error('email') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
-            </div>
+        <div>
+            <label for="email" class="text-sm font-semibold">Email</label>
+            <input id="email" type="email" wire:model="email" autocomplete="email"
+                class="mt-2 w-full rounded-btn border border-line-strong bg-white px-4 py-3 text-[15px] outline-none focus:border-brand-500">
+            @error('email') <p class="mt-2 text-sm text-vert-auto">{{ $message }}</p> @enderror
+        </div>
 
-            <div>
-                <label for="password" class="text-sm font-semibold">Parolă</label>
-                <input id="password" type="password" wire:model="password" autocomplete="new-password"
-                    class="mt-2 w-full rounded-2xl border border-slate-300 bg-transparent px-4 py-3 outline-none focus:border-indigo-500 dark:border-white/15">
-                @error('password') <p class="mt-2 text-sm text-red-600">{{ $message }}</p> @enderror
-            </div>
+        <div>
+            <label for="password" class="text-sm font-semibold">Parolă</label>
+            <input id="password" type="password" wire:model="password" autocomplete="new-password"
+                class="mt-2 w-full rounded-btn border border-line-strong bg-white px-4 py-3 text-[15px] outline-none focus:border-brand-500">
+            <p class="mt-2 text-[13px] text-ink-500">Minimum 8 caractere, cu litere și cifre.</p>
+            @error('password') <p class="mt-2 text-sm text-vert-auto">{{ $message }}</p> @enderror
+        </div>
 
-            <div>
-                <label for="password_confirmation" class="text-sm font-semibold">Confirmă parola</label>
-                <input id="password_confirmation" type="password" wire:model="password_confirmation" autocomplete="new-password"
-                    class="mt-2 w-full rounded-2xl border border-slate-300 bg-transparent px-4 py-3 outline-none focus:border-indigo-500 dark:border-white/15">
-            </div>
+        <div>
+            <label for="password_confirmation" class="text-sm font-semibold">Confirmă parola</label>
+            <input id="password_confirmation" type="password" wire:model="password_confirmation" autocomplete="new-password"
+                class="mt-2 w-full rounded-btn border border-line-strong bg-white px-4 py-3 text-[15px] outline-none focus:border-brand-500">
+        </div>
 
-            <button class="w-full rounded-2xl bg-indigo-600 px-5 py-3 font-bold text-white">
-                Creează cont
-            </button>
-        </form>
+        <button class="w-full rounded-btn bg-brand-500 px-5 py-3 text-[15px] font-bold text-white hover:bg-brand-600">
+            Creează cont
+        </button>
+    </form>
 
-        @if(config('services.google.client_id'))
-            <a href="{{ route('auth.google.redirect') }}"
-                class="mt-4 block rounded-2xl border border-slate-300 px-5 py-3 text-center font-bold dark:border-white/15">
-                Continuă cu Google
-            </a>
-        @endif
+    @if(config('services.google.client_id'))
+        <div class="my-6 flex items-center gap-4">
+            <span class="h-px flex-1 bg-line"></span>
+            <span class="text-[13px] text-ink-500">sau</span>
+            <span class="h-px flex-1 bg-line"></span>
+        </div>
 
-        <p class="mt-6 text-sm text-slate-600 dark:text-slate-300">
-            Ai deja cont? <a href="{{ route('login') }}" class="font-bold text-indigo-600">Autentifică-te</a>.
-        </p>
-    </div>
+        <a href="{{ route('auth.google.redirect') }}"
+            class="block rounded-btn border border-line-strong px-5 py-3 text-center text-[15px] font-bold hover:border-brand-500">
+            Continuă cu Google
+        </a>
+    @endif
+
+    <p class="mt-8 border-t border-line pt-6 text-[15px] text-ink-700">
+        Ai deja cont? <a href="{{ route('login') }}" class="font-bold text-brand-500 hover:text-brand-700">Intră în cont</a>.
+    </p>
 </section>

@@ -6,6 +6,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @php
+        // Paginile de eroare se randeaza in afara middleware-ului web, deci
+        // ResolveTenant poate sa nu fi rulat si $tenantContext sa lipseasca.
+        $tenantContext = $tenantContext ?? app(\App\Services\Tenancy\TenantContext::class);
+        $navVerticals = $navVerticals ?? collect();
+
         $brandName = (string) $tenantContext->brand('site_name', 'e-test.ro');
         $brandPrimary = (string) $tenantContext->brand('primary_color', '#0056D2');
         $brandLogo = $tenantContext->brand('logo_url');

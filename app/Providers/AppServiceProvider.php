@@ -7,10 +7,12 @@ use App\Models\Vertical;
 use App\Services\Tenancy\TenantContext;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,17 +42,26 @@ class AppServiceProvider extends ServiceProvider
     private function shareNavigationVerticals(): void
     {
         View::composer('layouts.app', function (ViewContract $view): void {
-            $allowedVerticalIds = app(TenantContext::class)->allowedVerticalIds();
+            try {
+                $allowedVerticalIds = app(TenantContext::class)->allowedVerticalIds();
 
-            $view->with('navVerticals', Vertical::query()
-                ->active()
-                ->when(
-                    $allowedVerticalIds !== null,
-                    fn ($query) => $query->whereIn('id', $allowedVerticalIds),
-                )
-                ->orderBy('sort_order')
-                ->orderBy('name')
-                ->get(['id', 'name', 'slug', 'metadata']));
+                $verticals = Vertical::query()
+                    ->active()
+                    ->when(
+                        $allowedVerticalIds !== null,
+                        fn ($query) => $query->whereIn('id', $allowedVerticalIds),
+                    )
+                    ->orderBy('sort_order')
+                    ->orderBy('name')
+                    ->get(['id', 'name', 'slug', 'metadata']);
+            } catch (Throwable) {
+                // Pagina de eroare foloseste acelasi layout. Daca baza de date e
+                // chiar cauza erorii, navigatia se afiseaza goala in loc sa
+                // transforme un 500 intr-o eroare de randare.
+                $verticals = new Collection;
+            }
+
+            $view->with('navVerticals', $verticals);
         });
     }
 }

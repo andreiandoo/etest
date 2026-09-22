@@ -1,31 +1,32 @@
 @if($resources->isNotEmpty())
     <section class="mt-12">
-        <div>
-            <p class="text-sm font-extrabold uppercase tracking-[0.16em] text-indigo-600">Resurse recomandate</p>
-            <h2 class="mt-2 text-3xl font-extrabold">Cărți și materiale utile</h2>
-            <p class="mt-2 text-xs leading-5 text-slate-500">Unele linkuri sunt linkuri de afiliere. Prețul pentru tine nu este modificat de comisionul de afiliere.</p>
-        </div>
+        <h2 class="text-[21px] font-bold">Resurse recomandate</h2>
+        <p class="mt-1.5 max-w-3xl text-[13px] leading-6 text-ink-500">
+            Unele linkuri sunt linkuri de afiliere. Prețul pentru tine nu este modificat de comisionul de afiliere,
+            iar recomandarea nu influențează conținutul testelor.
+        </p>
 
-        <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             @foreach($resources as $resource)
-                <article class="rounded-3xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-white/5">
+                <article class="flex flex-col rounded-card border border-line p-5">
                     <div class="flex items-start gap-4">
                         @if($resource->image_url)
-                            <img src="{{ $resource->image_url }}" alt="" class="h-20 w-16 rounded-lg object-cover">
+                            <img src="{{ $resource->image_url }}" alt="" class="h-20 w-16 shrink-0 rounded-btn object-cover">
                         @endif
-                        <div>
-                            <p class="text-xs font-extrabold uppercase tracking-[0.14em] text-indigo-600">{{ $resource->resource_type }}</p>
-                            <h3 class="mt-2 font-extrabold">{{ $resource->title }}</h3>
-                            <p class="mt-1 text-xs text-slate-500">{{ $resource->merchant->name }}</p>
+                        <div class="min-w-0">
+                            <p class="text-xs text-ink-500">{{ $resource->resource_type }} · {{ $resource->merchant->name }}</p>
+                            <h3 class="mt-1 text-[15px] font-bold leading-snug">{{ $resource->title }}</h3>
                         </div>
                     </div>
+
                     @if($resource->description)
-                        <p class="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">{{ $resource->description }}</p>
+                        <p class="mt-3 text-sm leading-6 text-ink-700">{{ $resource->description }}</p>
                     @endif
-                    <div class="mt-5 flex items-center justify-between gap-3">
+
+                    <div class="mt-auto flex items-center justify-between gap-3 pt-4">
                         <span class="text-sm font-bold">{{ $resource->price_label }}</span>
                         <a href="{{ route('affiliate.click', $resource) }}" rel="sponsored nofollow"
-                            class="text-sm font-extrabold text-indigo-600">Vezi resursa →</a>
+                            class="text-sm font-bold text-brand-500 hover:text-brand-700">Vezi resursa &rarr;</a>
                     </div>
                 </article>
             @endforeach
