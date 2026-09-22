@@ -38,7 +38,7 @@ class Register extends Component
         Auth::login($user);
         request()->session()->regenerate();
 
-        $this->redirectRoute('dashboard', navigate: true);
+        $this->redirectRoute('onboarding', navigate: true);
     }
 
     public function render(): View

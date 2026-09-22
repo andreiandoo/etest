@@ -26,6 +26,7 @@ use App\Livewire\Admin\TestManager;
 use App\Livewire\Admin\VerticalManager;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
+use App\Livewire\Onboarding;
 use App\Livewire\TestRunner;
 use App\Livewire\User\Dashboard as UserDashboard;
 use App\Livewire\User\History;
@@ -79,6 +80,7 @@ Route::middleware('noindex')->group(function () {
     })->middleware('auth')->name('logout');
 
     Route::middleware('auth')->group(function () {
+        Route::get('/bun-venit', Onboarding::class)->name('onboarding');
         Route::get('/panou', UserDashboard::class)->name('dashboard');
         Route::get('/istoric', History::class)->name('history');
         Route::get('/clasament', Leaderboard::class)->name('leaderboard');

@@ -8,6 +8,7 @@ Disallow: /clasament
 Disallow: /rezultate
 Disallow: /autentificare
 Disallow: /cont-nou
+Disallow: /bun-venit
 Disallow: /iesire
 Disallow: /catre
 Disallow: /newsletter

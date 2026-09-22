@@ -19,6 +19,7 @@ final class ReservedSlugs
         'admin',
         'api',
         'autentificare',
+        'bun-venit',
         'cauta',
         'catre',
         'clasament',
