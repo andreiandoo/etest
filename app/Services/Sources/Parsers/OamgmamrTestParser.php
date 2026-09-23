@@ -16,7 +16,15 @@ namespace App\Services\Sources\Parsers;
  */
 final class OamgmamrTestParser
 {
-    private const QUESTION = '/(?<=\s)(\d{1,3})\.\s+/u';
+    /**
+     * Numărul întrebării, cu punctul lui.
+     *
+     * Spațiul de după punct e opțional fiindcă nu toate bibliotecile de
+     * extragere îl păstrează: una scoate „3. În prezentația”, alta „3.În
+     * prezentația”. Litera de după e obligatorie, altfel „1,5 mg” sau „art.
+     * 5.” din mijlocul unui enunț ar rupe împărțirea.
+     */
+    private const QUESTION = '/(?<=\s)(\d{1,3})\.\s*(?=\p{L})/u';
 
     private const OPTION = '/(?<=\s)([abc])\)\s*/u';
 
