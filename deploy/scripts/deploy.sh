@@ -74,6 +74,11 @@ echo "Commit: $(git rev-parse --short HEAD) $(git log -1 --pretty=%s)"
 step "Dependinte PHP"
 composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
 
+step "Asset-uri Filament"
+# composer ruleaza deja filament:upgrade, dar il repetam explicit:
+# daca pachetul a fost actualizat, asset-urile vechi raman altfel pe disc.
+"$PHP_BIN" artisan filament:assets
+
 step "Dependinte frontend si build"
 # npm ci ar fi de preferat, dar necesita package-lock.json, care lipseste din repo.
 if [ -f package-lock.json ]; then

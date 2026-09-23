@@ -10,20 +10,6 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SponsoredClickController;
 use App\Http\Controllers\VerticalController;
-use App\Livewire\Admin\AffiliateManager;
-use App\Livewire\Admin\ApiManager;
-use App\Livewire\Admin\Dashboard as AdminDashboard;
-use App\Livewire\Admin\ImportManager;
-use App\Livewire\Admin\LeadManager;
-use App\Livewire\Admin\NewsletterManager;
-use App\Livewire\Admin\QualityManager;
-use App\Livewire\Admin\QuestionManager;
-use App\Livewire\Admin\ReviewQueue;
-use App\Livewire\Admin\SponsorshipManager;
-use App\Livewire\Admin\TaxonomyManager;
-use App\Livewire\Admin\TenantManager;
-use App\Livewire\Admin\TestManager;
-use App\Livewire\Admin\VerticalManager;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Onboarding;
@@ -94,25 +80,6 @@ Route::middleware('noindex')->group(function () {
             ->name('tests.start');
     });
 
-    Route::prefix('admin')
-        ->middleware(['auth', 'can:access-admin'])
-        ->name('admin.')
-        ->group(function () {
-            Route::get('/', AdminDashboard::class)->name('dashboard');
-            Route::get('/domenii', VerticalManager::class)->name('verticals');
-            Route::get('/taxonomie', TaxonomyManager::class)->name('taxonomy');
-            Route::get('/teste', TestManager::class)->name('tests');
-            Route::get('/intrebari', QuestionManager::class)->name('questions');
-            Route::get('/importuri', ImportManager::class)->name('imports');
-            Route::get('/revizuire', ReviewQueue::class)->name('review');
-            Route::get('/calitate', QualityManager::class)->name('quality');
-            Route::get('/monetizare/sponsori', SponsorshipManager::class)->name('sponsors');
-            Route::get('/monetizare/lead-uri', LeadManager::class)->name('leads');
-            Route::get('/monetizare/afiliere', AffiliateManager::class)->name('affiliate');
-            Route::get('/monetizare/newsletter', NewsletterManager::class)->name('newsletter');
-            Route::get('/marca-proprie', TenantManager::class)->name('tenants');
-            Route::get('/api', ApiManager::class)->name('api');
-        });
 });
 
 Route::get('/{vertical:slug}', [VerticalController::class, 'show'])

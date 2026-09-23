@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -32,6 +34,17 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    /**
+     * Accesul în panoul de administrare.
+     *
+     * Aceeași condiție ca gate-ul `access-admin`: nu vrem două surse de adevăr
+     * pentru cine e administrator.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return (bool) $this->is_admin;
+    }
 
     protected function casts(): array
     {
