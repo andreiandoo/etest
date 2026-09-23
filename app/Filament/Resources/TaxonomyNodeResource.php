@@ -10,6 +10,7 @@ use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
@@ -73,7 +74,7 @@ class TaxonomyNodeResource extends Resource
                                 'name',
                                 // Un nod nu poate fi propriul părinte, iar părintele
                                 // trebuie să fie din același domeniu.
-                                fn (Builder $query, ?TaxonomyNode $record, Forms\Get $get) => $query
+                                fn (Builder $query, ?TaxonomyNode $record, Get $get) => $query
                                     ->where('vertical_id', $get('vertical_id'))
                                     ->when($record, fn (Builder $q) => $q->whereKeyNot($record->getKey())),
                             )

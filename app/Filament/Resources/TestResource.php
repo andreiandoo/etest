@@ -11,6 +11,7 @@ use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables;
@@ -97,7 +98,7 @@ class TestResource extends Resource
                             ->relationship(
                                 'taxonomyNode',
                                 'name',
-                                fn (Builder $query, Forms\Get $get) => $query->where('vertical_id', $get('vertical_id')),
+                                fn (Builder $query, Get $get) => $query->where('vertical_id', $get('vertical_id')),
                             )
                             ->searchable()
                             ->preload()
