@@ -6,6 +6,7 @@ use App\Models\Question;
 use App\Models\Source;
 use App\Models\SourceDocument;
 use App\Models\TaxonomyNode;
+use App\Models\TestDefinition;
 use Database\Seeders\CatalogSeeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\PendingCommand;
@@ -85,6 +86,26 @@ test('subjects the document itself got wrong are reported, not guessed', functio
         ->and($import->created_rows)->toBe(6)
         ->and($import->failed_rows)->toBe(1)
         ->and(json_encode($import->errors, JSON_UNESCAPED_UNICODE))->toContain('01B44');
+});
+
+test('the import leaves behind practice tests, as drafts', function () {
+    syncAncom()->assertSuccessful();
+
+    $tests = TestDefinition::query()->get();
+
+    // Extrasul atinge trei capitole, plus cele două teste pe clasă de certificat.
+    expect($tests)->toHaveCount(5)
+        ->and($tests->where('status', PublicationStatus::Draft)->count())->toBe(5);
+
+    $classThree = TestDefinition::query()->where('slug', 'clasa-a-iii-a')->firstOrFail();
+
+    expect($classThree->questions()->count())->toBe(3)
+        ->and($classThree->questions()->where('difficulty', '>', 2)->count())->toBe(0)
+        ->and($classThree->randomize_questions)->toBeTrue();
+
+    $classTwo = TestDefinition::query()->where('slug', 'clasa-a-ii-a')->firstOrFail();
+
+    expect($classTwo->questions()->count())->toBe(6);
 });
 
 test('the original document is kept with its fingerprint', function () {

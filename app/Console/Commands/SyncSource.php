@@ -77,6 +77,7 @@ class SyncSource extends Command
             ['Întrebări create', (string) $import?->created_rows],
             ['Întrebări actualizate', (string) $import?->updated_rows],
             ['Rânduri respinse', (string) $import?->failed_rows],
+            ['Teste de exercițiu', (string) $result->tests],
             ['Amprentă SHA-256', $result->sha256],
         ]);
 

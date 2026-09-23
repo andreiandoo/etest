@@ -267,6 +267,7 @@ class TestResource extends Resource
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([
+                    EditorialActions::submitForReviewBulk(),
                     EditorialActions::publishBulk(),
                     Actions\DeleteBulkAction::make(),
                 ]),

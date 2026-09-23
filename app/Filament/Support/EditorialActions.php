@@ -91,6 +91,62 @@ final class EditorialActions
     }
 
     /**
+     * Trimiterea în revizuire, în bloc.
+     *
+     * Un import aduce sute de ciorne deodată. Fără asta, coada de revizuire
+     * s-ar umple apăsând de sute de ori în același meniu, ceea ce înseamnă în
+     * practică o coadă care nu se umple niciodată.
+     */
+    public static function submitForReviewBulk(): Actions\BulkAction
+    {
+        return Actions\BulkAction::make('submitSelectedForReview')
+            ->label('Trimite în revizuire')
+            ->icon(Heroicon::OutlinedPaperAirplane)
+            ->color('warning')
+            ->requiresConfirmation()
+            ->modalDescription('Se trimit doar ciornele. Ce e deja publicat sau în revizuire rămâne neatins.')
+            ->deselectRecordsAfterCompletion()
+            ->action(fn (Collection $records) => self::submitMany($records));
+    }
+
+    /**
+     * @param  Collection<int, Model>  $records
+     */
+    private static function submitMany(Collection $records): void
+    {
+        $actor = Auth::user();
+
+        if (! $actor instanceof User) {
+            return;
+        }
+
+        $workflow = app(EditorialWorkflow::class);
+        $sent = 0;
+        $skipped = 0;
+
+        foreach ($records as $record) {
+            if (! $record instanceof Question && ! $record instanceof TestDefinition) {
+                $skipped++;
+
+                continue;
+            }
+
+            try {
+                $workflow->submitForReview($record, $actor);
+                $sent++;
+            } catch (Throwable) {
+                $skipped++;
+            }
+        }
+
+        Notification::make()
+            ->title($sent.' trimise în revizuire')
+            ->body($skipped === 0 ? 'Toată selecția a trecut.' : $skipped.' rânduri nu erau ciorne și au fost sărite.')
+            ->color($sent > 0 ? 'success' : 'warning')
+            ->send();
+    }
+
+    /**
      * @param  Collection<int, Model>  $records
      */
     private static function publishMany(Collection $records): void

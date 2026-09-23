@@ -61,6 +61,7 @@ final class SourceSynchronizer
         }
 
         $import = $this->import($source, $connector, $storagePath, $result);
+        $tests = $connector->buildTests($source);
 
         $document = $existing ?? new SourceDocument;
         $document->fill([
@@ -93,6 +94,7 @@ final class SourceSynchronizer
             $import,
             $result['total'],
             $result['rejected'],
+            $tests,
         );
     }
 

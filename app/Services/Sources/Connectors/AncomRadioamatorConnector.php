@@ -6,8 +6,10 @@ use App\Enums\QuestionType;
 use App\Enums\TaxonomyNodeType;
 use App\Models\Source;
 use App\Models\TaxonomyNode;
+use App\Services\Content\PracticeTestBuilder;
 use App\Services\Sources\Contracts\SourceConnector;
 use App\Services\Sources\Parsers\AncomRadioParser;
+use Illuminate\Database\Eloquent\Builder;
 use RuntimeException;
 
 /**
@@ -28,7 +30,10 @@ final class AncomRadioamatorConnector implements SourceConnector
 {
     private const SOURCE_KEY_PREFIX = 'ancom-radio';
 
-    public function __construct(private readonly AncomRadioParser $parser) {}
+    public function __construct(
+        private readonly AncomRadioParser $parser,
+        private readonly PracticeTestBuilder $tests,
+    ) {}
 
     public function key(): string
     {
@@ -156,5 +161,61 @@ final class AncomRadioamatorConnector implements SourceConnector
         }
 
         return $rows;
+    }
+
+    /**
+     * Un test pe capitol, plus câte unul pe clasă de certificat.
+     *
+     * Împărțirea pe clase nu e o invenție: documentul spune explicit că pentru
+     * clasa a III-a sunt valabile doar subiectele cu gradele de dificultate A
+     * și B. Un candidat la clasa a III-a care exersează pe tot fondul ar
+     * învăța lucruri care nu i se cer.
+     *
+     * Testele sunt de exercițiu, nu simulări de examen: documentul publică
+     * subiectele, nu regulile probei — numărul de întrebări și timpul — iar
+     * acelea nu se inventează.
+     */
+    public function buildTests(Source $source): int
+    {
+        $parent = $source->taxonomyNode;
+
+        if ($parent === null) {
+            return 0;
+        }
+
+        $built = 0;
+
+        foreach (TaxonomyNode::query()->where('parent_id', $parent->id)->orderBy('sort_order')->get() as $chapter) {
+            $test = $this->tests->build(
+                $chapter,
+                $chapter->slug.'-exercitii',
+                $chapter->name.' — test de exercițiu',
+                'Întrebări oficiale ANCOM din capitolul „'.$chapter->name.'”, cu răspunsul corect afișat după fiecare încercare.',
+                20,
+            );
+
+            $built += $test === null ? 0 : 1;
+        }
+
+        foreach ([
+            ['clasa-a-iii-a', 'Radioamator clasa a III-a — test de exercițiu', 'Doar subiectele cu gradele de dificultate A și B, singurele valabile pentru clasa a III-a.', 30, [1, 2]],
+            ['clasa-a-ii-a', 'Radioamator clasa a II-a — test de exercițiu', 'Tot fondul de subiecte de electronică și radiotehnică publicat de ANCOM.', 40, null],
+        ] as [$slug, $title, $description, $limit, $difficulties]) {
+            $test = $this->tests->build(
+                $parent,
+                $slug,
+                $title,
+                $description,
+                $limit,
+                includeChildren: true,
+                filter: $difficulties === null
+                    ? null
+                    : static fn (Builder $query) => $query->whereIn('difficulty', $difficulties),
+            );
+
+            $built += $test === null ? 0 : 1;
+        }
+
+        return $built;
     }
 }

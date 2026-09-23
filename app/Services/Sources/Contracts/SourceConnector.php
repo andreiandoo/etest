@@ -44,4 +44,14 @@ interface SourceConnector
      * @return array<int, array<string, mixed>>
      */
     public function rows(Source $source, array $questions): array;
+
+    /**
+     * Construiește testele de exercițiu din întrebările tocmai importate.
+     *
+     * Un import care lasă în urmă doar întrebări nu produce nicio pagină pe
+     * care cineva să exerseze, iar catalogul public listează teste.
+     *
+     * @return int numărul de teste create sau actualizate
+     */
+    public function buildTests(Source $source): int;
 }

@@ -24,6 +24,7 @@ final readonly class SyncResult
         public ?ContentImport $import = null,
         public int $total = 0,
         public array $rejected = [],
+        public int $tests = 0,
     ) {}
 
     public function isUnchanged(): bool
