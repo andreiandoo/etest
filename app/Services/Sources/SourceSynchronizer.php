@@ -7,6 +7,7 @@ use App\Models\Source;
 use App\Models\SourceDocument;
 use App\Models\TaxonomyNode;
 use App\Models\Vertical;
+use App\Services\Content\ImportPublisher;
 use App\Services\Content\QuestionImporter;
 use App\Services\Sources\Contracts\SourceConnector;
 use Illuminate\Support\Facades\Http;
@@ -30,10 +31,15 @@ final class SourceSynchronizer
     public function __construct(
         private readonly PdfTextExtractor $extractor,
         private readonly QuestionImporter $importer,
+        private readonly ImportPublisher $publisher,
     ) {}
 
-    public function sync(SourceConnector $connector, bool $force = false, ?string $localFile = null): SyncResult
-    {
+    public function sync(
+        SourceConnector $connector,
+        bool $force = false,
+        ?string $localFile = null,
+        bool $publish = true,
+    ): SyncResult {
         $source = $this->register($connector);
         $connector->prepare($source);
 
@@ -42,9 +48,20 @@ final class SourceSynchronizer
         $existing = $source->documents()->where('sha256', $sha256)->first();
 
         if ($existing !== null && ! $force) {
+            // Documentul e același, dar pot exista rânduri rămase ciorne de la
+            // o sincronizare de dinainte. O rulare fără argumente trebuie să
+            // le aducă pe site, nu să se oprească mulțumită.
+            $published = $publish ? $this->publisher->publish($source) : ['questions' => 0, 'tests' => 0];
+
             $source->forceFill(['last_synced_at' => now()])->save();
 
-            return new SyncResult('unchanged', $sha256, $source, $existing);
+            return new SyncResult(
+                'unchanged',
+                $sha256,
+                $source,
+                $existing,
+                published: $published,
+            );
         }
 
         $extension = $localFile !== null ? strtolower(pathinfo($localFile, PATHINFO_EXTENSION)) : $source->file_format;
@@ -62,6 +79,7 @@ final class SourceSynchronizer
 
         $import = $this->import($source, $connector, $storagePath, $result);
         $tests = $connector->buildTests($source);
+        $published = $publish ? $this->publisher->publish($source) : ['questions' => 0, 'tests' => 0];
 
         $document = $existing ?? new SourceDocument;
         $document->fill([
@@ -82,7 +100,7 @@ final class SourceSynchronizer
 
         $source->forceFill([
             'item_count_raw' => $result['total'],
-            'review_status' => 'parsed',
+            'review_status' => $publish ? 'publishable' : 'parsed',
             'last_synced_at' => now(),
         ])->save();
 
@@ -95,6 +113,7 @@ final class SourceSynchronizer
             $result['total'],
             $result['rejected'],
             $tests,
+            $published,
         );
     }
 

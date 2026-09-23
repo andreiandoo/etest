@@ -115,7 +115,11 @@ final class QuestionImporter
                 'taxonomy_node_id' => $taxonomyNodeId,
                 'source_key' => $sourceKey !== '' ? $sourceKey : null,
                 'type' => $type,
-                'status' => PublicationStatus::Draft,
+                // Un import nu retrogradează ce e deja pe site. Dacă sursa
+                // s-a schimbat, conținutul se actualizează la locul lui; o
+                // întrebare publicată nu dispare din teste pentru că a rulat
+                // o sincronizare.
+                'status' => $question->exists ? $question->status : PublicationStatus::Draft,
                 'prompt' => $prompt,
                 'explanation' => $this->nullableString($row['explanation'] ?? null),
                 'difficulty' => max(1, min(5, (int) ($row['difficulty'] ?? 3))),

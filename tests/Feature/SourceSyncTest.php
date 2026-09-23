@@ -32,16 +32,54 @@ test('the sync registers the source with its rights and its version', function (
     expect($source->authority)->toBe('ANCOM')
         ->and($source->rights_status)->toBe('explicit_allowed')
         ->and($source->version_label)->toBe('2017-02-09')
-        ->and($source->review_status)->toBe('parsed')
+        ->and($source->review_status)->toBe('publishable')
         ->and($source->item_count_raw)->toBe(7)
         ->and($source->last_synced_at)->not->toBeNull();
 });
 
-test('questions arrive as drafts, never published by the importer', function () {
+test('what the parser read cleanly goes live, what it rejected never arrives', function () {
     syncAncom()->assertSuccessful();
 
     expect(Question::query()->count())->toBe(6)
-        ->and(Question::query()->where('status', PublicationStatus::Published->value)->count())->toBe(0);
+        ->and(Question::query()->where('status', PublicationStatus::Published->value)->count())->toBe(6)
+        ->and(Question::query()->where('source_key', 'ancom-radio:01B44')->exists())->toBeFalse();
+});
+
+test('with --ciorne nothing is published', function () {
+    test()->artisan('sources:sync', [
+        'sursa' => 'ancom-radioamator',
+        '--fisier' => base_path('tests/Fixtures/ancom-radiotehnica-excerpt.txt'),
+        '--ciorne' => true,
+    ])->assertSuccessful();
+
+    expect(Question::query()->where('status', PublicationStatus::Draft->value)->count())->toBe(6)
+        ->and(TestDefinition::query()->where('status', PublicationStatus::Draft->value)->count())->toBe(5);
+});
+
+test('a second run publishes what an earlier draft run left behind', function () {
+    test()->artisan('sources:sync', [
+        'sursa' => 'ancom-radioamator',
+        '--fisier' => base_path('tests/Fixtures/ancom-radiotehnica-excerpt.txt'),
+        '--ciorne' => true,
+    ])->assertSuccessful();
+
+    syncAncom()->assertSuccessful();
+
+    expect(Question::query()->where('status', PublicationStatus::Published->value)->count())->toBe(6)
+        ->and(TestDefinition::query()->where('status', PublicationStatus::Published->value)->count())->toBe(5);
+});
+
+test('a re-import never pulls published content back to draft', function () {
+    syncAncom()->assertSuccessful();
+
+    test()->artisan('sources:sync', [
+        'sursa' => 'ancom-radioamator',
+        '--fisier' => base_path('tests/Fixtures/ancom-radiotehnica-excerpt.txt'),
+        '--forteaza' => true,
+    ])->assertSuccessful();
+
+    expect(Question::query()->where('status', PublicationStatus::Published->value)->count())->toBe(6)
+        ->and(Question::query()->where('status', PublicationStatus::Draft->value)->count())->toBe(0);
 });
 
 test('a question keeps the answer, the source label and the code it came from', function () {
@@ -88,14 +126,14 @@ test('subjects the document itself got wrong are reported, not guessed', functio
         ->and(json_encode($import->errors, JSON_UNESCAPED_UNICODE))->toContain('01B44');
 });
 
-test('the import leaves behind practice tests, as drafts', function () {
+test('the import leaves behind practice tests, published', function () {
     syncAncom()->assertSuccessful();
 
     $tests = TestDefinition::query()->get();
 
     // Extrasul atinge trei capitole, plus cele două teste pe clasă de certificat.
     expect($tests)->toHaveCount(5)
-        ->and($tests->where('status', PublicationStatus::Draft)->count())->toBe(5);
+        ->and($tests->where('status', PublicationStatus::Published)->count())->toBe(5);
 
     $classThree = TestDefinition::query()->where('slug', 'clasa-a-iii-a')->firstOrFail();
 

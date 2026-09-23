@@ -15,6 +15,7 @@ final readonly class SyncResult
 {
     /**
      * @param  array<int, array{code: string, reason: string, text: string}>  $rejected
+     * @param  array{questions: int, tests: int}  $published
      */
     public function __construct(
         public string $status,
@@ -25,6 +26,7 @@ final readonly class SyncResult
         public int $total = 0,
         public array $rejected = [],
         public int $tests = 0,
+        public array $published = ['questions' => 0, 'tests' => 0],
     ) {}
 
     public function isUnchanged(): bool
