@@ -3,6 +3,7 @@
 namespace App\Services\Sources;
 
 use App\Services\Sources\Connectors\AncomRadioamatorConnector;
+use App\Services\Sources\Connectors\VanatoareConnector;
 use App\Services\Sources\Contracts\SourceConnector;
 use InvalidArgumentException;
 
@@ -19,6 +20,7 @@ final class SourceRegistry
     /** @var array<int, class-string<SourceConnector>> */
     private const CONNECTORS = [
         AncomRadioamatorConnector::class,
+        VanatoareConnector::class,
     ];
 
     public function get(string $key): SourceConnector

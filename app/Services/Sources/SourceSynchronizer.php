@@ -29,7 +29,8 @@ use RuntimeException;
 final class SourceSynchronizer
 {
     public function __construct(
-        private readonly PdfTextExtractor $extractor,
+        private readonly PdfTextExtractor $pdf,
+        private readonly DocTextExtractor $doc,
         private readonly QuestionImporter $importer,
         private readonly ImportPublisher $publisher,
     ) {}
@@ -66,7 +67,7 @@ final class SourceSynchronizer
 
         $extension = $localFile !== null ? strtolower(pathinfo($localFile, PATHINFO_EXTENSION)) : $source->file_format;
         $storagePath = $this->store($source, $contents, $sha256, $extension !== '' ? $extension : 'pdf');
-        $text = $this->text($storagePath, $contents, $localFile);
+        $text = $this->text($source, $storagePath, $contents, $localFile);
         $textPath = $this->storeText($source, $sha256, $text);
 
         $result = $connector->parse($text);
@@ -87,7 +88,13 @@ final class SourceSynchronizer
             'content_import_id' => $import->id,
             'storage_path' => $storagePath,
             'text_path' => $textPath,
-            'mime_type' => $extension === 'pdf' ? 'application/pdf' : 'text/plain',
+            'mime_type' => match ($extension) {
+                'pdf' => 'application/pdf',
+                'doc' => 'application/msword',
+                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'xml' => 'application/xml',
+                default => 'text/plain',
+            },
             'sha256' => $sha256,
             'byte_size' => strlen($contents),
             'version_label' => $source->version_label,
@@ -211,13 +218,23 @@ final class SourceSynchronizer
         return $path;
     }
 
-    private function text(string $storagePath, string $contents, ?string $localFile): string
+    /**
+     * Fiecare format are extractorul lui, iar un fișier deja convertit — text
+     * sau DocBook — se folosește așa cum e. Asta e portița pentru cazul în care
+     * conversia trebuie făcută pe altă mașină.
+     */
+    private function text(Source $source, string $storagePath, string $contents, ?string $localFile): string
     {
-        if ($localFile !== null && str_ends_with(strtolower($localFile), '.txt')) {
+        if ($localFile !== null && preg_match('/\.(txt|xml)$/i', $localFile) === 1) {
             return $contents;
         }
 
-        return $this->extractor->extract(Storage::disk('local')->path($storagePath));
+        $path = Storage::disk('local')->path($storagePath);
+
+        return match ($source->file_format) {
+            'doc', 'docx' => $this->doc->extract($path),
+            default => $this->pdf->extract($path),
+        };
     }
 
     /**

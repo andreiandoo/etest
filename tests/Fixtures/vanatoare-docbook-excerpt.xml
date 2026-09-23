@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<book lang='ro'>
+
+ <bookinfo>
+  <author><surname>test</surname></author>
+ </bookinfo>
+
+ <chapter>
+<title/>
+
+  <para>
+<emphasis role='bold'>Set de întrebări şi răspunsuri privind examenul de vânător*</emphasis>
+  </para>
+
+  <para>
+<emphasis role='bold'>CAPITOLUL I</emphasis><emphasis role='underline'>  -</emphasis><emphasis role='bold'> BIOLOGIA SPECIILOR DE FAUNĂ CINEGETICĂ</emphasis>
+  </para>
+
+  <para>
+<emphasis role='bold'>SUBCAPITOLUL I. A -  MAMIFERE MARI</emphasis>
+  </para>
+
+  <orderedlist numeration='arabic'>
+   <listitem><para><emphasis role='bold'>Durata creşterii coarnelor cerbului comun este de:</emphasis></para></listitem>
+   <listitem><para>60 - 70 zile;</para></listitem>
+   <listitem><para>90 – 100 zile;</para></listitem>
+   <listitem><para><emphasis role='bold'>120 – 130 zile.</emphasis></para></listitem>
+  </orderedlist>
+
+  <para>
+  </para>
+
+  <orderedlist numeration='arabic'>
+   <listitem><para><emphasis role='bold'>La muflon, mărimea coarnelor reprezintă:</emphasis></para></listitem>
+   <listitem><para>adaptare la condiţiile de mediu<emphasis role='bold'>;</emphasis></para></listitem>
+   <listitem><para>malformaţie a craniului;</para></listitem>
+   <listitem><para><emphasis role='bold'>caracter sexual secundar</emphasis>.</para></listitem>
+  </orderedlist>
+
+  <orderedlist numeration='arabic'>
+   <listitem><para><emphasis role='bold'>Cornul de cerb lopătar dezvoltat normal, poate avea cel mult</emphasis></para></listitem>
+   <listitem><para><emphasis role='bold'>două ramuri şi o lopată;</emphasis></para></listitem>
+   <listitem><para>două ramuri şi două lopeţi;</para></listitem>
+   <listitem><para>trei ramuri şi o lopată.</para></listitem>
+  </orderedlist>
+
+  <orderedlist numeration='arabic'>
+   <listitem><para><emphasis role='bold'>Care din imaginile de mai jos reprezintă urma tipar, la mers liniştit, a mistreţului?</emphasis></para></listitem>
+   <listitem><para><emphasis role='bold'>A</emphasis></para></listitem>
+   <listitem><para>B</para></listitem>
+   <listitem><para>C</para></listitem>
+  </orderedlist>
+
+  <para>
+[pic]                 [pic]                       [pic]
+  </para>
+
+  <para>
+<emphasis role='bold'>    A     B             C</emphasis>
+  </para>
+
+  <orderedlist numeration='arabic'>
+   <listitem><para><emphasis role='bold'>Care urme tipar sunt mai mari la mistreţ?</emphasis></para></listitem>
+   <listitem><para><emphasis role='bold'>urmele tipar ale membrelor anterioare;</emphasis></para></listitem>
+   <listitem><para>urmele tipar ale membrelor posterioare;</para></listitem>
+   <listitem><para>nu există deosebiri de mărime între urme.</para></listitem>
+  </orderedlist>
+
+  <para>
+<emphasis role='bold'>CAPITOLUL VI  - ARME, MUNIŢII ŞI ECHIPAMENTE DE VÂNĂTOARE</emphasis>
+  </para>
+
+  <orderedlist numeration='arabic'>
+   <listitem><para><emphasis role='bold'>Armele cu ţevi basculante pot fi :</emphasis></para></listitem>
+   <listitem><para>arme semiautomate;</para></listitem>
+   <listitem><para>carabine şi arme lise cu închizător ;</para></listitem>
+   <listitem><para><emphasis role='bold'>arme lise, arme ghintuite şi arme mixte.</emphasis></para></listitem>
+  </orderedlist>
+
+  <para>
+*NOTĂ: Speciile de faună de interes cinegetic sunt prevăzute în anexele legii.
+  </para>
+
+  <para>
+A. Mamifere
+  </para>
+
+  <para>
+1. Bizamul (Ondatra zibethica)
+  </para>
+
+ </chapter>
+
+</book>
