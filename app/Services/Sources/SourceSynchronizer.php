@@ -225,8 +225,7 @@ final class SourceSynchronizer
         ksort($manifest);
 
         return [
-            'sha256' => hash('sha256', implode("
-", $manifest)),
+            'sha256' => hash('sha256', implode('|', $manifest)),
             'files' => $files,
             'mime' => 'multipart/mixed',
             'bytes' => $bytes,

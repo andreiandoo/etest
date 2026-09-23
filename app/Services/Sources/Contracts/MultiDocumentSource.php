@@ -18,12 +18,12 @@ interface MultiDocumentSource extends SourceConnector
     /**
      * Fișierele de descărcat, cu un nume scurt pentru fiecare.
      *
-     * @return array<string, string> nume => adresă
+     * @return array<string, string>
      */
     public function documents(): array;
 
     /**
-     * @param  array<string, string>  $paths nume => cale locală
+     * @param  array<string, string>  $paths
      * @return array{total: int, questions: array<int, array<string, mixed>>, rejected: array<int, array<string, string>>}
      */
     public function parseDocuments(array $paths): array;
