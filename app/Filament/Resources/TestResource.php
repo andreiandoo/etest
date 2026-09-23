@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\PublicationStatus;
 use App\Enums\TestMode;
 use App\Filament\Resources\TestResource\Pages;
+use App\Filament\Support\EditorialActions;
 use App\Models\TestDefinition;
 use BackedEnum;
 use Filament\Actions;
@@ -257,10 +258,16 @@ class TestResource extends Resource
             ])
             ->actions([
                 Actions\EditAction::make(),
-                Actions\DeleteAction::make(),
+                Actions\ActionGroup::make([
+                    EditorialActions::submitForReview(),
+                    EditorialActions::publish(),
+                    EditorialActions::returnToDraft(),
+                    Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([
+                    EditorialActions::publishBulk(),
                     Actions\DeleteBulkAction::make(),
                 ]),
             ]);

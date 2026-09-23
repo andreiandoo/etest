@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\PublicationStatus;
 use App\Enums\QuestionType;
 use App\Filament\Resources\QuestionResource\Pages;
+use App\Filament\Support\EditorialActions;
 use App\Models\Question;
 use BackedEnum;
 use Filament\Actions;
@@ -257,10 +258,16 @@ class QuestionResource extends Resource
             ])
             ->actions([
                 Actions\EditAction::make(),
-                Actions\DeleteAction::make(),
+                Actions\ActionGroup::make([
+                    EditorialActions::submitForReview(),
+                    EditorialActions::publish(),
+                    EditorialActions::returnToDraft(),
+                    Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([
+                    EditorialActions::publishBulk(),
                     Actions\DeleteBulkAction::make(),
                 ]),
             ]);

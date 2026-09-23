@@ -46,13 +46,12 @@ class AdminPanelProvider extends PanelProvider
                 in: app_path('Filament/Pages'),
                 for: 'App\\Filament\\Pages',
             )
-            ->discoverWidgets(
-                in: app_path('Filament/Widgets'),
-                for: 'App\\Filament\\Widgets',
-            )
             ->pages([
                 Dashboard::class,
             ])
+            // Widgeturile sunt enumerate, nu descoperite: tot ce e descoperit
+            // ajunge automat pe tabloul de bord, iar cozile de revizuire își au
+            // ecranul lor. Lista de mai jos e exact ce se vede la /admin.
             ->widgets([
                 ContentOverview::class,
                 RecentAttempts::class,

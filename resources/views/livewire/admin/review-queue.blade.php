@@ -1,9 +1,0 @@
-<div>
-    <p class="text-sm font-extrabold uppercase tracking-[0.18em] text-indigo-600">Workflow editorial</p>
-    <h1 class="mt-2 text-4xl font-extrabold">Review queue</h1>
-
-    <div class="mt-8 grid gap-8 xl:grid-cols-2">
-        <section><h2 class="text-xl font-extrabold">Întrebări ({{ $questions->count() }})</h2><div class="mt-4 space-y-3">@forelse($questions as $question)<article class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/5"><p class="text-xs font-bold text-indigo-600">{{ $question->vertical->name }} · {{ $question->type->value }}</p><p class="mt-2 font-bold">{{ $question->prompt }}</p><div class="mt-4 flex gap-2"><button wire:click="publishQuestion({{ $question->id }})" class="rounded-xl bg-emerald-600 px-3 py-2 text-sm font-bold text-white">Aprobă + publică</button><button wire:click="draftQuestion({{ $question->id }})" class="rounded-xl border px-3 py-2 text-sm font-bold dark:border-white/15">Înapoi la draft</button></div></article>@empty<p class="text-slate-500">Nicio întrebare în review.</p>@endforelse</div></section>
-        <section><h2 class="text-xl font-extrabold">Teste ({{ $tests->count() }})</h2><div class="mt-4 space-y-3">@forelse($tests as $test)<article class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/5"><p class="text-xs font-bold text-indigo-600">{{ $test->vertical->name }} · {{ $test->mode->value }}</p><p class="mt-2 font-bold">{{ $test->title }}</p><div class="mt-4 flex gap-2"><button wire:click="publishTest({{ $test->id }})" class="rounded-xl bg-emerald-600 px-3 py-2 text-sm font-bold text-white">Aprobă + publică</button><button wire:click="draftTest({{ $test->id }})" class="rounded-xl border px-3 py-2 text-sm font-bold dark:border-white/15">Înapoi la draft</button></div></article>@empty<p class="text-slate-500">Niciun test în review.</p>@endforelse</div></section>
-    </div>
-</div>
