@@ -76,10 +76,7 @@ jobs:
         run: php artisan migrate --force
 
       - name: Code style
-        run: |
-          vendor/bin/pint
-          git --no-pager diff
-          git diff --quiet
+        run: vendor/bin/pint --test
 
       - name: Static analysis
         run: vendor/bin/phpstan analyse --memory-limit=1G
