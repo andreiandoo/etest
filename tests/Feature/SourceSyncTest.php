@@ -8,13 +8,14 @@ use App\Models\SourceDocument;
 use App\Models\TaxonomyNode;
 use Database\Seeders\CatalogSeeder;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Testing\PendingCommand;
 
 beforeEach(function () {
     Storage::fake('local');
     $this->seed(CatalogSeeder::class);
 });
 
-function syncAncom(): Illuminate\Testing\PendingCommand
+function syncAncom(): PendingCommand
 {
     return test()->artisan('sources:sync', [
         'sursa' => 'ancom-radioamator',

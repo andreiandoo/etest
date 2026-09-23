@@ -64,13 +64,7 @@ jobs:
           node-version: '22'
 
       - name: Install PHP dependencies
-        run: composer update smalot/pdfparser --no-interaction --prefer-dist --no-progress
-
-      - name: Upload refreshed lockfile
-        uses: actions/upload-artifact@v4
-        with:
-          name: composer-lock
-          path: composer.lock
+        run: composer install --no-interaction --prefer-dist --no-progress
 
       - name: Install frontend dependencies
         run: npm ci

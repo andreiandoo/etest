@@ -22,6 +22,7 @@ function adminScreens(): array
         '/admin/taxonomie',
         '/admin/teste',
         '/admin/intrebari',
+        '/admin/surse',
         '/admin/importuri',
         '/admin/revizuire',
         '/admin/calitate',
