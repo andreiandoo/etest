@@ -198,7 +198,11 @@ class TestResource extends Resource
                     ->label('Titlu')
                     ->searchable()
                     ->sortable()
-                    ->description(fn (TestDefinition $record): string => $record->taxonomyNode?->name ?? $record->vertical->name),
+                    ->description(function (TestDefinition $record): string {
+                        $node = $record->taxonomyNode;
+
+                        return $node === null ? $record->vertical->name : $node->name;
+                    }),
 
                 Tables\Columns\TextColumn::make('vertical.name')
                     ->label('Domeniu')
