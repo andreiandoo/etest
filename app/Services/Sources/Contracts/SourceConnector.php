@@ -11,6 +11,9 @@ use App\Models\Source;
  * separat, DOC cu răspunsul îngroșat. Un singur parser care le acoperă pe
  * toate ar fi un parser care nu e corect pe niciuna, așa că fiecare sursă își
  * aduce regulile ei în spatele aceleiași interfețe.
+ *
+ * Citirea propriu-zisă e în `SingleDocumentSource` sau `MultiDocumentSource`,
+ * după cum sursa e un fișier sau un set de fișiere.
  */
 interface SourceConnector
 {
@@ -31,11 +34,6 @@ interface SourceConnector
      * din taxonomie, ca întrebările să aibă unde ateriza.
      */
     public function prepare(Source $source): void;
-
-    /**
-     * @return array{total: int, questions: array<int, array<string, mixed>>, rejected: array<int, array<string, string>>}
-     */
-    public function parse(string $text): array;
 
     /**
      * Transformă întrebările citite în rânduri pentru importatorul de conținut.

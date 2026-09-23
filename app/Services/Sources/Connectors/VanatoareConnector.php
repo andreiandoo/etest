@@ -7,7 +7,7 @@ use App\Enums\TaxonomyNodeType;
 use App\Models\Source;
 use App\Models\TaxonomyNode;
 use App\Services\Content\PracticeTestBuilder;
-use App\Services\Sources\Contracts\SourceConnector;
+use App\Services\Sources\Contracts\SingleDocumentSource;
 use App\Services\Sources\Parsers\HuntingLicenceParser;
 use RuntimeException;
 
@@ -25,7 +25,7 @@ use RuntimeException;
  * pe pagină, fiindcă aceea e ce învață candidatul; discordanța rămâne scrisă
  * în notele sursei, ca să nu fie descoperită din nou peste un an.
  */
-final class VanatoareConnector implements SourceConnector
+final class VanatoareConnector implements SingleDocumentSource
 {
     private const SOURCE_KEY_PREFIX = 'mmap-vanator';
 

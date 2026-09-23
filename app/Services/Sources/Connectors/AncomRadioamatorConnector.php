@@ -8,7 +8,7 @@ use App\Models\Question;
 use App\Models\Source;
 use App\Models\TaxonomyNode;
 use App\Services\Content\PracticeTestBuilder;
-use App\Services\Sources\Contracts\SourceConnector;
+use App\Services\Sources\Contracts\SingleDocumentSource;
 use App\Services\Sources\Parsers\AncomRadioParser;
 use Illuminate\Database\Eloquent\Builder;
 use RuntimeException;
@@ -27,7 +27,7 @@ use RuntimeException;
  * actualizează periodic, iar candidatul are dreptul să știe pe ce ediție
  * învață.
  */
-final class AncomRadioamatorConnector implements SourceConnector
+final class AncomRadioamatorConnector implements SingleDocumentSource
 {
     private const SOURCE_KEY_PREFIX = 'ancom-radio';
 
