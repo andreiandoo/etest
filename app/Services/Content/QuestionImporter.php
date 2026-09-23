@@ -86,6 +86,7 @@ final class QuestionImporter
 
         $answerConfig = $this->jsonValue($row['answer_config'] ?? null, []);
         $options = $this->jsonValue($row['options'] ?? null, []);
+        $metadata = $this->jsonValue($row['metadata'] ?? null, []);
 
         return DB::transaction(function () use (
             $import,
@@ -96,7 +97,8 @@ final class QuestionImporter
             $prompt,
             $row,
             $answerConfig,
-            $options
+            $options,
+            $metadata
         ): bool {
             $query = Question::query()->where('vertical_id', $verticalId);
 
@@ -121,6 +123,12 @@ final class QuestionImporter
                 'source_url' => $this->nullableString($row['source_url'] ?? null),
                 'source_checked_at' => $this->nullableString($row['source_checked_at'] ?? null),
                 'answer_config' => $answerConfig,
+                // Metadata adusă de conector — codul din documentul sursă,
+                // grupul de variante — se adaugă peste ce există, ca un import
+                // parțial să nu șteargă ce a pus altcineva înainte.
+                'metadata' => is_array($metadata) && $metadata !== []
+                    ? array_replace($question->metadata ?? [], $metadata)
+                    : $question->metadata,
                 'created_by' => $question->exists ? $question->created_by : $import->user_id,
                 'updated_by' => $import->user_id,
                 'reviewed_by' => null,

@@ -1,0 +1,30 @@
+LISTĂ DE SUBIECTE
+utilizate pentru examinarea în vederea obţinerii certificatelor clasele a III-a şi a II-a de radioamator
+Toate problemele prezintă patru răspunsuri din care doar unul singur este corect şi complet.
+Pagina 3 din 109
+
+I. NOŢIUNI TEORETICE DE ELECTRICITATE, ELECTROMAGNETISM SI RADIO
+1. CONDUCTIBILITATE
+01A11/ Rigiditatea dielectricilor reprezintă calitatea unui izolator de a rezista la: 1) O sarcină electrică mare. 2) Un flux electric mare. 3@ Un câmp electric mare. 4) O inducţie electrică mare.
+04B11L/ Ce curent circulă printr-o rezistenţă de 10 kΩ când la capetele acesteia se aplică o tensiune continuă de 15 V:
+1) 150mA. 2)15mA. 3@1,5mA. 4) 0,15mA
+Pagina 4 din 109
+
+4. CÂMPUL MAGNETIC
+07D14/ Se dă -o bobină cu două spire libere (ne fixate pe un suport). Dacă prin aceasta circulă un curent continuu de valoare considerabilă, ce se întâmplă cu cele două spire? 1) Se rotesc în sensuri opuse. 2) Se rotesc în acelaşi sens. 3@ Se atrag reciproc. 4Se resping reciproc.
+
+6. SEMNALE SINUSOIDALE
+08B16K/ Cât este perioada T în mili secunde (ms) a unui semnal sinusoidal cu frecvenţa F=1kHz? 1) T=0,1ms 3) T=10ms 2@ T=1ms 4) T=100ms
+
+III. CIRCUITE
+4. AMPLIFICATOARE
+01D34 Etajul final al unui emiţător CW pentru banda de 10 m este realizat cu o tetrodă în montaj clasic. Care este cea mai probabilă dintre cauze? 1) Cu toate că este realizat cu o tetrodă, este necesară neutrodinarea. 2) Condensatorul de decuplare a grilei ecran s-a ales de valoare prea mică. 3@ Şocurile de grilă şi de anod sunt incorect plasate în montaj. 4) Sursa de alimentare anodică are impedanţa internă prea mare
+
+VI. ANTENE ŞI LINII DE TRANSMISIUNE
+1. TIPURI DE ANTENE
+08C61K/ Cum se modifică impedanţa de intrare la rezonanţă Zin şi lărgimea de bandă F ale unei antene "Ground plane" (în /4), dacă se măreşte diametrul fizic al conductoarelor din care este realizată? 1) Zin creşte; Fcreşte. 2) . Zin scade; F scade 3) Zin creşte; F scade. 4@ Zin scade; Fcreşte.
+
+IV. RECEPTOARE
+4. CARACTERISTICILE RECEPTOARELOR
+01B44/ Sensibilitatea receptoarelor se exprima în: 1) mA 2) m/s 3) UV @ V
+Pagina 80 din 109
