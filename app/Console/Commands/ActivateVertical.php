@@ -22,6 +22,7 @@ class ActivateVertical extends Command
 {
     protected $signature = 'content:activate
         {vertical : Slug-ul verticalei, de exemplu radio}
+        {--sectiune= : Publică doar o secțiune și ce e sub ea}
         {--dezactiveaza : Scoate verticala din site în loc să o publice}';
 
     protected $description = 'Activează sau dezactivează o verticală și toată taxonomia ei';
@@ -38,18 +39,34 @@ class ActivateVertical extends Command
         }
 
         $active = ! $this->option('dezactiveaza');
+        $section = $this->option('sectiune');
 
         $vertical->forceFill(['is_active' => $active])->save();
 
-        $nodes = TaxonomyNode::query()
-            ->where('vertical_id', $vertical->id)
-            ->update(['is_active' => $active]);
+        $query = TaxonomyNode::query()->where('vertical_id', $vertical->id);
+
+        if ($section !== null) {
+            $root = (clone $query)->where('slug', (string) $section)->first();
+
+            if ($root === null) {
+                $this->error('Verticala „'.$slug.'” nu are secțiunea „'.$section.'”.');
+
+                return self::FAILURE;
+            }
+
+            // O secțiune nu se vede dacă părinții ei sunt ascunși, iar copiii
+            // ei n-au rost fără ea: se comută tot lanțul, de sus până jos.
+            $query->whereIn('id', [...$this->ancestors($root), $root->id, ...$this->descendants($root)]);
+        }
+
+        $nodes = $query->update(['is_active' => $active]);
 
         $this->info(sprintf(
-            '%s: %s, împreună cu %d secțiuni.',
+            '%s: %s, împreună cu %d secțiuni%s.',
             $vertical->name,
             $active ? 'publicată' : 'scoasă din site',
             $nodes,
+            $section === null ? '' : ' din „'.$section.'”',
         ));
 
         if ($active) {
@@ -57,5 +74,37 @@ class ActivateVertical extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function ancestors(TaxonomyNode $node): array
+    {
+        $ids = [];
+        $current = $node->parent()->first();
+
+        while ($current !== null) {
+            $ids[] = (int) $current->id;
+            $current = $current->parent()->first();
+        }
+
+        return $ids;
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function descendants(TaxonomyNode $node): array
+    {
+        $ids = [];
+        $level = [(int) $node->id];
+
+        while ($level !== []) {
+            $level = TaxonomyNode::query()->whereIn('parent_id', $level)->pluck('id')->map(intval(...))->all();
+            $ids = [...$ids, ...$level];
+        }
+
+        return $ids;
     }
 }
