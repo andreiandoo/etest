@@ -83,3 +83,14 @@ jobs:
 
       - name: Tests
         run: php artisan test
+
+      # Temporar: repo-ul nu are inca fisiere lock, iar productia nu poate
+      # instala deterministic fara ele. Le luam de aici si le comitem.
+      - name: Upload lockfiles
+        uses: actions/upload-artifact@v4
+        with:
+          name: lockfiles
+          path: |
+            composer.lock
+            package-lock.json
+          if-no-files-found: warn
