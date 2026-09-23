@@ -21,10 +21,12 @@ final class OamgmamrTestParser
      *
      * Spațiul de după punct e opțional fiindcă nu toate bibliotecile de
      * extragere îl păstrează: una scoate „3. În prezentația”, alta „3.În
-     * prezentația”. Litera de după e obligatorie, altfel „1,5 mg” sau „art.
-     * 5.” din mijlocul unui enunț ar rupe împărțirea.
+     * prezentația”. Ce urmează nu poate fi o cifră, altfel „1,5 mg” din
+     * mijlocul unui enunț ar rupe împărțirea — dar poate fi orice altceva,
+     * fiindcă un enunț chiar începe cu ghilimele: „«Furia laptelui» se
+     * caracterizează prin”.
      */
-    private const QUESTION = '/(?<=\s)(\d{1,3})\.\s*(?=\p{L})/u';
+    private const QUESTION = '/(?<=\s)(\d{1,3})\.\s*(?=[^\s\d])/u';
 
     private const OPTION = '/(?<=\s)([abc])\)\s*/u';
 

@@ -75,10 +75,6 @@ jobs:
       - name: Run migrations
         run: php artisan migrate --force
 
-      - name: Peek
-        run: |
-          php -r 'require "vendor/autoload.php"; $t = (new App\Services\Sources\PdfTextExtractor)->extract("tests/Fixtures/oamgmamr-moasa-test.pdf"); $p = (new App\Services\Sources\Parsers\OamgmamrTestParser)->parse($t); echo "total=", $p["total"], " ok=", count($p["questions"]), " bad=", count($p["rejected"]), PHP_EOL; $n = array_column($p["questions"], "number"); echo "first: ", implode(",", array_slice($n, 0, 25)), PHP_EOL; echo "last: ", implode(",", array_slice($n, -10)), PHP_EOL; foreach (array_slice($p["rejected"], 0, 3) as $r) { echo "REJ ", $r["code"], ": ", $r["reason"], " | ", substr($r["text"], 0, 150), PHP_EOL; }' || true
-
       - name: Code style
         run: vendor/bin/pint --test
 
