@@ -18,9 +18,9 @@ class Sponsors extends Page
 
     protected static ?string $title = 'Sponsori';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Monetizare';
+    protected static string|UnitEnum|null $navigationGroup = 'Monetizare';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedMegaphone;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedMegaphone;
 
     protected static ?int $navigationSort = 10;
 

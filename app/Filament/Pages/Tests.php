@@ -18,9 +18,9 @@ class Tests extends Page
 
     protected static ?string $title = 'Teste';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Conținut';
+    protected static string|UnitEnum|null $navigationGroup = 'Conținut';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
 
     protected static ?int $navigationSort = 30;
 

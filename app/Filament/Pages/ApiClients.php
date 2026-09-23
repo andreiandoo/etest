@@ -18,9 +18,9 @@ class ApiClients extends Page
 
     protected static ?string $title = 'API';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Platformă';
+    protected static string|UnitEnum|null $navigationGroup = 'Platformă';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedKey;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedKey;
 
     protected static ?int $navigationSort = 20;
 

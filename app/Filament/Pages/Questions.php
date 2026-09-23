@@ -18,9 +18,9 @@ class Questions extends Page
 
     protected static ?string $title = 'Întrebări';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Conținut';
+    protected static string|UnitEnum|null $navigationGroup = 'Conținut';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedQuestionMarkCircle;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedQuestionMarkCircle;
 
     protected static ?int $navigationSort = 40;
 

@@ -18,9 +18,9 @@ class Tenants extends Page
 
     protected static ?string $title = 'Marcă proprie';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Platformă';
+    protected static string|UnitEnum|null $navigationGroup = 'Platformă';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
 
     protected static ?int $navigationSort = 10;
 

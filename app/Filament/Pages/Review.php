@@ -18,9 +18,9 @@ class Review extends Page
 
     protected static ?string $title = 'Revizuire';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Conținut';
+    protected static string|UnitEnum|null $navigationGroup = 'Conținut';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedCheckCircle;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckCircle;
 
     protected static ?int $navigationSort = 60;
 

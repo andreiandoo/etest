@@ -18,9 +18,9 @@ class NewsletterList extends Page
 
     protected static ?string $title = 'Newsletter';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Monetizare';
+    protected static string|UnitEnum|null $navigationGroup = 'Monetizare';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedEnvelope;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEnvelope;
 
     protected static ?int $navigationSort = 40;
 

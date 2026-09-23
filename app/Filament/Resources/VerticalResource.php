@@ -25,9 +25,9 @@ class VerticalResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedSquares2x2;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedSquares2x2;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Conținut';
+    protected static string|UnitEnum|null $navigationGroup = 'Conținut';
 
     protected static ?int $navigationSort = 10;
 

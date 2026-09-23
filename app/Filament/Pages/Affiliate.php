@@ -18,9 +18,9 @@ class Affiliate extends Page
 
     protected static ?string $title = 'Afiliere';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Monetizare';
+    protected static string|UnitEnum|null $navigationGroup = 'Monetizare';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedLink;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedLink;
 
     protected static ?int $navigationSort = 30;
 

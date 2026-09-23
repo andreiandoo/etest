@@ -18,9 +18,9 @@ class Leads extends Page
 
     protected static ?string $title = 'Lead-uri';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Monetizare';
+    protected static string|UnitEnum|null $navigationGroup = 'Monetizare';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedInbox;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedInbox;
 
     protected static ?int $navigationSort = 20;
 

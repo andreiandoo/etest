@@ -18,9 +18,9 @@ class Imports extends Page
 
     protected static ?string $title = 'Importuri';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Conținut';
+    protected static string|UnitEnum|null $navigationGroup = 'Conținut';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedArrowUpTray;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowUpTray;
 
     protected static ?int $navigationSort = 50;
 

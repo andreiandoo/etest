@@ -31,9 +31,9 @@ class Analytics extends Page
 
     protected static ?string $title = 'Analytics și Pixel';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Platformă';
+    protected static string|UnitEnum|null $navigationGroup = 'Platformă';
 
-    protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedChartBarSquare;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChartBarSquare;
 
     protected static ?int $navigationSort = 30;
 
