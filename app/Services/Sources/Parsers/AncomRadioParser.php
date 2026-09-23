@@ -48,7 +48,7 @@ final class AncomRadioParser
 
     private const CODE_PATTERN = '/(?<![\w])(\d{2})([A-F])(\d{2})([A-Z]?)\s*(?:\/|(?=\s+["„(\p{Lu}]))/u';
 
-    private const MARKER_PATTERN = '/([1-4])\s*([)@])\s*([)@])?/u';
+    private const MARKER_PATTERN = '/([1-4])\s*([)@])\s*([)@]?)/u';
 
     /**
      * @return array<int, array{slug: string, name: string}>
@@ -223,7 +223,7 @@ final class AncomRadioParser
                 default => 1,
             };
 
-            $separators = ($match[2][0] ?? '').($match[3][0] ?? '');
+            $separators = $match[2][0].$match[3][0];
 
             $markers[] = [
                 'number' => (int) $match[1][0],
