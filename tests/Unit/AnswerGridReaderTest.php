@@ -45,7 +45,7 @@ test('every answer is one of the three letters', function () {
         $answers = (new AnswerGridReader)->read(gridPath($file))['answers'];
 
         foreach ($answers as $number => $letter) {
-            expect(['a', 'b', 'c'])->toContain($letter, 'Întrebarea '.$number.' din '.$file);
+            expect(['a', 'b', 'c'])->toContain($letter);
         }
     }
 });

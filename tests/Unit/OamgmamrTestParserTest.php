@@ -36,7 +36,7 @@ test('the generator footer does not stick to the last option', function () {
 
     expect($last['number'])->toBe(100)
         ->and($last['options'][2])->not->toContain('TCPDF')
-        ->and($last['options'][2])->toBe('Avort spontan în săptămâna 6-8 de sarcină');
+        ->and($last['options'][2])->toBe('Menarha apare în jurul vârstei de 8 ani');
 });
 
 test('every question carries its number and three options', function () {

@@ -75,6 +75,10 @@ jobs:
       - name: Run migrations
         run: php artisan migrate --force
 
+      - name: Peek at the extracted text
+        run: |
+          php -r 'require "vendor/autoload.php"; $t = (new App\Services\Sources\PdfTextExtractor)->extract("tests/Fixtures/oamgmamr-moasa-test.pdf"); echo strlen($t), PHP_EOL, substr($t, 0, 900), PHP_EOL;' || true
+
       - name: Code style
         run: vendor/bin/pint --test
 
