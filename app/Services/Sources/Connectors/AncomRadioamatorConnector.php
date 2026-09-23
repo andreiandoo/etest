@@ -4,6 +4,7 @@ namespace App\Services\Sources\Connectors;
 
 use App\Enums\QuestionType;
 use App\Enums\TaxonomyNodeType;
+use App\Models\Question;
 use App\Models\Source;
 use App\Models\TaxonomyNode;
 use App\Services\Content\PracticeTestBuilder;
@@ -208,14 +209,23 @@ final class AncomRadioamatorConnector implements SourceConnector
                 $description,
                 $limit,
                 includeChildren: true,
-                filter: $difficulties === null
-                    ? null
-                    : static fn (Builder $query) => $query->whereIn('difficulty', $difficulties),
+                filter: $difficulties === null ? null : $this->difficultyFilter($difficulties),
             );
 
             $built += $test === null ? 0 : 1;
         }
 
         return $built;
+    }
+
+    /**
+     * @param  array<int, int>  $difficulties
+     * @return callable(Builder<Question>): void
+     */
+    private function difficultyFilter(array $difficulties): callable
+    {
+        return static function (Builder $query) use ($difficulties): void {
+            $query->whereIn('difficulty', $difficulties);
+        };
     }
 }
