@@ -11,6 +11,7 @@ use App\Services\Seo\PublicUrlGenerator;
 use App\Services\Seo\StructuredData;
 use App\Services\Tenancy\TenantContext;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 
 class PublicContentController extends Controller
@@ -31,19 +32,14 @@ class PublicContentController extends Controller
 
         $slug = end($segments);
 
-        $node = TaxonomyNode::query()
-            ->with(['vertical', 'parent'])
-            ->where('vertical_id', $vertical->id)
-            ->where('slug', $slug)
-            ->active()
-            ->first();
+        // Calea se parcurge segment cu segment, de la rădăcină în jos. Același
+        // slug poate exista în locuri diferite din același domeniu — „farmacie”
+        // e și la rezidențiat, și la gradul principal — iar căutarea doar după
+        // ultimul segment ar nimeri secțiunea greșită.
+        $node = $this->resolveNode($vertical, $segments);
 
         if ($node !== null) {
-            $expectedPath = $urls->taxonomyPath($node);
-
-            if ($expectedPath === $path) {
-                return $this->taxonomy($node, $urls, $structuredData, $monetizationResolver, $tenantContext);
-            }
+            return $this->taxonomy($node, $urls, $structuredData, $monetizationResolver, $tenantContext);
         }
 
         $test = TestDefinition::query()
@@ -67,11 +63,51 @@ class PublicContentController extends Controller
             return redirect()->to($urls->test($test), 301);
         }
 
-        if ($node !== null) {
-            return redirect()->to($urls->taxonomy($node), 301);
+        // Calea nu se potrivește, dar slug-ul final există undeva în domeniu:
+        // trimitem la locul corect în loc să dăm 404 pe o adresă veche.
+        $moved = TaxonomyNode::query()
+            ->with(['vertical', 'parent'])
+            ->where('vertical_id', $vertical->id)
+            ->where('slug', $slug)
+            ->active()
+            ->first();
+
+        if ($moved !== null) {
+            return redirect()->to($urls->taxonomy($moved), 301);
         }
 
         abort(404);
+    }
+
+    /**
+     * Coboară prin arbore pe segmentele adresei.
+     *
+     * @param  array<int, string>  $segments
+     */
+    private function resolveNode(Vertical $vertical, array $segments): ?TaxonomyNode
+    {
+        $parentId = null;
+        $node = null;
+
+        foreach ($segments as $segment) {
+            $node = TaxonomyNode::query()
+                ->with(['vertical', 'parent'])
+                ->where('vertical_id', $vertical->id)
+                ->where('slug', $segment)
+                ->where(fn (Builder $query) => $parentId === null
+                    ? $query->whereNull('parent_id')
+                    : $query->where('parent_id', $parentId))
+                ->active()
+                ->first();
+
+            if ($node === null) {
+                return null;
+            }
+
+            $parentId = $node->id;
+        }
+
+        return $node;
     }
 
     private function taxonomy(

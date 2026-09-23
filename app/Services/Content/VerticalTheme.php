@@ -29,12 +29,37 @@ final class VerticalTheme
         'legal' => ['solid' => '#7B2D52', 'soft' => '#F5E7EE'],
         'it' => ['solid' => '#0056D2', 'soft' => '#E3EDFC'],
         'lang' => ['solid' => '#8A6114', 'soft' => '#F6EEDC'],
+        'transport' => ['solid' => '#1A5E7A', 'soft' => '#EAF1F3'],
+        'nature' => ['solid' => '#4C6B1F', 'soft' => '#EFF2EB'],
+        'civic' => ['solid' => '#3D4E9E', 'soft' => '#EEEFF6'],
+        'finance' => ['solid' => '#1D6B45', 'soft' => '#EBF2EE'],
+        'air' => ['solid' => '#265C93', 'soft' => '#EBF0F5'],
+        'energy' => ['solid' => '#8C5A17', 'soft' => '#F5F0EA'],
+        'signal' => ['solid' => '#6A3A94', 'soft' => '#F2EDF5'],
     ];
 
     /**
      * Pictogramele disponibile, ca să nu ajungă emoji în interfață.
+     *
+     * Lista e închisă dinadins: o valoare necunoscută în metadata cade pe
+     * `book`, deci o greșeală de scriere nu lasă o verticală fără pictogramă.
      */
-    private const ICONS = ['wheel', 'pulse', 'scales', 'terminal', 'globe', 'book'];
+    private const ICONS = [
+        'wheel', 'truck', 'pulse', 'scales', 'gavel', 'terminal', 'globe', 'book',
+        'briefcase', 'chart', 'receipt', 'calculator', 'gauge', 'umbrella',
+        'antenna', 'target', 'drone', 'bolt', 'radiation', 'anchor', 'train',
+        'wrench', 'building', 'map', 'leaf', 'lightbulb', 'shield', 'cap',
+    ];
+
+    /**
+     * Numele accentelor acceptate, pentru validare în admin și în seed.
+     *
+     * @return array<int, string>
+     */
+    public static function palettes(): array
+    {
+        return array_keys(self::PALETTE);
+    }
 
     /**
      * @return array{solid: string, soft: string, icon: string}
