@@ -22,6 +22,11 @@ use UnitEnum;
  *
  * Stau în baza de date, nu în .env, fiindcă se schimbă de către oameni care nu
  * au acces la server, iar o corecție de ID nu trebuie să ceară un deploy.
+ *
+ * `$form` e furnizat de Filament la rulare, prin `__get`, deci analiza statică
+ * are nevoie de declarația de mai jos ca să-l vadă.
+ *
+ * @property-read Schema $form
  */
 class Analytics extends Page
 {
