@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ApiClientResource\Pages;
 use App\Models\ApiClient;
-use App\Models\ApiKey;
 use App\Services\Api\ApiKeyIssuer;
 use BackedEnum;
 use Filament\Actions;
