@@ -1,0 +1,235 @@
+COMISIA NAȚIONALĂ PENTRU CONTROLUL ACTIVITĂȚILOR NUCLEARE
+RTG V2.0 27.08.2018
+
+
+Întrebări de bazele radioprotecției
+
+
+1. c
+Împrăştierea coerentă apare când un foton de mică energie excită un atom, fără pierdere netă de
+energie. Se mai numeşte împrăştiere Rayleigh. Nu are nicio contribuţie la doză.
+La energia radiaţiei X utilizate în rontgendiagnostic contribuţia împrăştierii coerente la interacţia cu
+materia este de cca. 5%.
+
+2. d
+Producerea de perechi - apare când un foton interacţionează cu nucleul atomului. Fotonul dispare
+şi apare o pereche electron - pozitron cu energia de repaus a fiecăruia egală cu 0,511 MeV.
+Energia de prag a acestei interacţii este 1,022 MeV (suma energiilor de repaus a celor două
+particule). Această interacţie contează numai la energii foarte mari ale fotonilor produşi de
+acceleratoare de particule.
+
+Cele trei tipuri principale de interacţie a fotonilor cu materia - efect fotoelectric, efect Compton şi
+formare de perechi - au probabilităţi de apariţie diferite funcţie de numărul atomic Z şi energia
+fotonului incident. La energii mici şi numere atomice mici (cum e cazul ţesuturilor moi) predomină
+efectul fotoelectric, iar la energii mari, cu mult mai mari decât cele uzuale în radiologie, predomină
+formarea de perechi.
+
+   Efect fotoelectric                 Producere de
+                                      perechi
+
+Z
+
+                       Efect Compton
+
+                                                                  Energia fotonului incident (MeV)
+
+3. d
+Radiaţia de frânare - radiaţie X produsă prin frânarea electronilor în câmpul nuclear
+
+4. e
+Efectul fotoelectric - apare când un foton este absorbit total de un electron de pe un nivel interior
+(puternic legat). Ca urmare a energiei primite electronul este scos de pe orbită - emisia de
+fotoelectroni şi atomul rămâne cu o sarcină pozitivă (ion pozitiv).
+
+                                                                                                                          pagina 1
+ COMISIA NAȚIONALĂ PENTRU CONTROLUL ACTIVITĂȚILOR NUCLEARE
+ RTG V2.0 27.08.2018
+
+Locul rămas vacant pe nivelul interior este ocupat de un electron de pe un nivel exterior iar excesul
+de energie este emis sub formă de radiaţie X caracteristică sau electroni Auger.
+Fotoelectronii, având energia egală cu diferenţa dintre energia fotonului absorbit şi energia de
+legătură a electronului emis, interacţionează cu atomii de pe traseul parcurs ionizându-i şi deci
+contribuie la doza primită de materialul respectiv.
+
+
+Întrebări de legislație de bază
+
+
+1. b
+Art. 1 - (2) Obiectul prezentei legi îl constituie reglementarea, autorizarea şi controlul activităţilor nucleare
+desfăşurate în scopuri exclusiv paşnice şi a altor activităţi care conduc la expunerea la radiaţii ionizante, astfel
+încât să se îndeplinească cerinţele de securitate nucleară, de securitate radiologică, de protecţie împotriva
+radiaţiilor ionizante a personalului expus profesional, a pacientului, a mediului, a populaţiei şi a proprietăţii,
+cu riscuri minime, în conformitate cu reglementările şi cu respectarea obligaţiilor ce decurg din convenţiile şi
+acordurile internaţionale la care România este parte.
+(Legea 111/1996, republicată cu modificările și completările ulterioare)
+O parte din atribuţiile enumerate revin Agenţiei Nucleare (O. G. nr. 7/30.01.2003 privind utilizarea în scopuri
+exclusiv paşnice a energiei nucleare (r1) aprobată prin legea nr. 321/2003).
+
+2. d
+Art. 1 - (2) Obiectul prezentei legi îl constituie reglementarea, autorizarea şi controlul activităţilor nucleare
+desfăşurate în scopuri exclusiv paşnice şi a altor activităţi care conduc la expunerea la radiaţii ionizante, astfel
+încât să se îndeplinească cerinţele de securitate nucleară, de securitate radiologică, de protecţie împotriva
+radiaţiilor ionizante a personalului expus profesional, a pacientului, a mediului, a populaţiei şi a proprietăţii,
+cu riscuri minime, în conformitate cu reglementările şi cu respectarea obligaţiilor ce decurg din convenţiile şi
+acordurile internaţionale la care România este parte.
+(Legea 111/1996, republicată cu modificările și completările ulterioare)
+O parte din atribuţiile enumerate revin Agenţiei Nucleare (O. G. nr. 7/30.01.2003 privind utilizarea în scopuri
+exclusiv paşnice a energiei nucleare (r1) aprobată prin legea nr. 321/2003).
+
+3. c
+  Art. 2 - Prevederile prezentei legi se aplică următoarelor activităţi şi surse de radiații:
+
+………………………………………………………………………………………
+  c) producerea, amplasarea, construcţia, furnizarea, închirierea, transferul, manipularea, deţinerea,
+
+utilizarea, depozitarea intermediară, dezafectarea, transportul, tranzitul, importul, exportul şi
+transferul intracomunitar al instalaţiilor radiologice, inclusiv al instalaţiilor de gestionare a deşeurilor
+radioactive;
+
+                                                                                                                        pagina 56
+ COMISIA NAȚIONALĂ PENTRU CONTROLUL ACTIVITĂȚILOR NUCLEARE
+ RTG V2.0 27.08.2018
+
+  c1) producerea, fabricarea, furnizarea, închirierea, transferul, manipularea, deţinerea, prelucrarea,
+utilizarea, reciclarea, depozitarea intermediară, transportul, tranzitul, importul, exportul şi transferul
+intracomunitar al materialelor radioactive şi surselor radioactive, după caz;
+
+  c2) producerea, fabricarea, furnizarea, transferul, manipularea, deţinerea, prelucrarea, utilizarea,
+depozitarea intermediară, transportul, tranzitul, importul, exportul şi transferul intracomunitar al
+materialelor nucleare, inclusiv al combustibilului nuclear proaspăt şi uzat;
+
+  c3) transferul, manipularea, deţinerea, predepozitarea, depozitarea intermediară, depozitarea
+definitivă, transportul, tranzitul, importul, exportul şi transferul intracomunitar al deşeurilor
+radioactive;
+
+…………………………………………………………………………………………
+(Legea 111/1996, republicată cu modificările și completările ulterioare)
+
+4. e
+  Art. 2 - Prevederile prezentei legi se aplică următoarelor activităţi şi surse de radiații:
+
+………………………………………………………………………………………
+  c) producerea, amplasarea, construcţia, furnizarea, închirierea, transferul, manipularea, deţinerea,
+
+utilizarea, depozitarea intermediară, dezafectarea, transportul, tranzitul, importul, exportul şi
+transferul intracomunitar al instalaţiilor radiologice, inclusiv al instalaţiilor de gestionare a deşeurilor
+radioactive;
+……………………………………………………………………………………….
+(Legea 111/1996, republicată cu modificările și completările ulterioare).
+
+
+Întrebări de radioprotecție operațională
+
+
+1. e
+Art 142 - (3) Expunerea în scopuri medicale se efectuează luând în considerare următoarele aspecte:
+a) tipurile noi de practici care implică expunerea medicală sunt justificate în prealabil, înainte de a fi
+adoptate în mod general;
+b) toate expunerile medicale individuale se justifică în prealabil, luându-se în considerare obiectivele
+specifice ale expunerii și caracteristicile individului implicat;
+c) dacă un tip de practică care presupune expunere medicală nu este justificat în general, o expunere
+individuală specifică de acest tip poate fi justificată, după caz, în împrejurări speciale care se evaluează și se
+documentează de Ia caz Ia caz;
+d) medicul abilitat să facă trimiteri și practicianul urmăresc să obțină, în măsura posibilului, informații de
+diagnostic anterioare sau înregistrări medicale relevante pentru expunerea planificată și iau în considerare
+aceste date pentru a evita expunerea inutilă;
+e) expunerea medicală în cercetarea medicală sau biomedicală se examinează de către un Comitet pentru
+Etică constituit în conformitate cu Ordinul al ministrului sănătății și al președintelui CNCAN nr. 299/64/12006
+privind stabilirea comisiilor de etică pentru avizarea expunerilor medicale în cercetarea medicală și
+biomedicală;
+f) expunerea persoanelor implicate în îngrijirea și susținerea pacienților prezintă un beneficiu net
+suficient, luându-se în considerare beneficiile directe asupra sănătății unui pacient, beneficiile potențiale pentru
+persoana implicată în îngrijirea și susținerea pacienților și efectele negative pe care lear putea cauza expunerea;
+g) orice procedură radiologică medicală aplicată unei persoane asimptomatice se efectuează pentru
+detectarea precoce a bolii, ca parte a unui program de screening aprobat de Ministerul Sănătății sau necesită o
+justificare documentată pentru persoana respectivă, realizată de către practician în consultare cu medicul
+abilitat să facă trimiteri, în conformitate cu orientările societăților medicale științifice și cu ghidurile elaborate
+de Ministerului Sănătății. Persoana care face obiectul expunerii medicale este informată anterior expunerii
+despre riscurile și beneficiile asociate expunerii medicale;
+h) în sensul prevederilor de Ia alin. (I) și (2), Ministerul Sănătății, în colaborare cu societățile medicale
+științifice corespunzătoare sau cu organismele relevante, justifică expunerile medicale pentru procedurile
+radiologice medicale care urmează să fie efectuate ca parte a unui program de screening. (4) Decizia finală
+privind justificarea unei expuneri medicale Ia radiații ionizante în sensul alin. (3) lit. b) aparține practicianului.
+
+(NSR-01)
+
+                                                                                                                       pagina 129
+ COMISIA NAȚIONALĂ PENTRU CONTROLUL ACTIVITĂȚILOR NUCLEARE
+ RTG V2.0 27.08.2018
+
+2. c
+Art. 142 - (3) Expunerea în scopuri medicale se efectuează luând în considerare următoarele aspecte:
+a) tipurile noi de practici care implică expunerea medicală sunt justificate în prealabil, înainte de a fi
+adoptate în mod general;
+b) toate expunerile medicale individuale se justifică în prealabil, luându-se în considerare obiectivele
+specifice ale expunerii și caracteristicile individului implicat;
+c) dacă un tip de practică care presupune expunere medicală nu este justificat în general, o expunere
+individuală specifică de acest tip poate fi justificată, după caz, în împrejurări speciale care se evaluează și se
+documentează de Ia caz Ia caz;
+d) medicul abilitat să facă trimiteri și practicianul urmăresc să obțină, în măsura posibilului, informații
+de diagnostic anterioare sau înregistrări medicale relevante pentru expunerea planificată și iau în considerare
+aceste date pentru a evita expunerea inutilă;
+e) expunerea medicală în cercetarea medicală sau biomedicală se examinează de către un Comitet
+pentru Etică constituit în conformitate cu Ordinul al ministrului sănătății și al președintelui CNCAN nr.
+299/64/12006 privind stabilirea comisiilor de etică pentru avizarea expunerilor medicale în cercetarea
+medicală și biomedicală;
+f) expunerea persoanelor implicate în îngrijirea și susținerea pacienților prezintă un beneficiu net
+suficient, luându-se în considerare beneficiile directe asupra sănătății unui pacient, beneficiile potențiale
+pentru persoana implicată în îngrijirea și susținerea pacienților și efectele negative pe care lear putea cauza
+expunerea;
+g) orice procedură radiologică medicală aplicată unei persoane asimptomatice se efectuează pentru
+detectarea precoce a bolii, ca parte a unui program de screening aprobat de Ministerul Sănătății sau necesită
+o justificare documentată pentru persoana respectivă, realizată de către practician în consultare cu medicul
+abilitat să facă trimiteri, în conformitate cu orientările societăților medicale științifice și cu ghidurile
+elaborate de Ministerului Sănătății. Persoana care face obiectul expunerii medicale este informată anterior
+expunerii despre riscurile și beneficiile asociate expunerii medicale;
+h) în sensul prevederilor de Ia alin. (I) și (2), Ministerul Sănătății, în colaborare cu societățile medicale
+științifice corespunzătoare sau cu organismele relevante, justifică expunerile medicale pentru procedurile
+radiologice medicale care urmează să fie efectuate ca parte a unui program de screening.
+(NSR 01)
+
+3. c
+Art. 142 - (3) Expunerea în scopuri medicale se efectuează luând în considerare următoarele aspecte:
+a) tipurile noi de practici care implică expunerea medicală sunt justificate în prealabil, înainte de a fi
+adoptate în mod general;
+b) toate expunerile medicale individuale se justifică în prealabil, luându-se în considerare obiectivele
+specifice ale expunerii și caracteristicile individului implicat;
+c) dacă un tip de practică care presupune expunere medicală nu este justificat în general, o expunere
+individuală specifică de acest tip poate fi justificată, după caz, în împrejurări speciale care se evaluează și se
+documentează de Ia caz Ia caz;
+d) medicul abilitat să facă trimiteri și practicianul urmăresc să obțină, în măsura posibilului, informații
+de diagnostic anterioare sau înregistrări medicale relevante pentru expunerea planificată și iau în considerare
+aceste date pentru a evita expunerea inutilă;
+
+                                                                                                                       pagina 130
+ COMISIA NAȚIONALĂ PENTRU CONTROLUL ACTIVITĂȚILOR NUCLEARE
+ RTG V2.0 27.08.2018
+
+e) expunerea medicală în cercetarea medicală sau biomedicală se examinează de către un Comitet
+pentru Etică constituit în conformitate cu Ordinul al ministrului sănătății și al președintelui CNCAN nr.
+299/64/12006 privind stabilirea comisiilor de etică pentru avizarea expunerilor medicale în cercetarea
+medicală și biomedicală;
+f) expunerea persoanelor implicate în îngrijirea și susținerea pacienților prezintă un beneficiu net
+suficient, luându-se în considerare beneficiile directe asupra sănătății unui pacient, beneficiile potențiale
+pentru persoana implicată în îngrijirea și susținerea pacienților și efectele negative pe care lear putea cauza
+expunerea;
+g) orice procedură radiologică medicală aplicată unei persoane asimptomatice se efectuează pentru
+detectarea precoce a bolii, ca parte a unui program de screening aprobat de Ministerul Sănătății sau necesită
+o justificare documentată pentru persoana respectivă, realizată de către practician în consultare cu medicul
+abilitat să facă trimiteri, în conformitate cu orientările societăților medicale științifice și cu ghidurile
+elaborate de Ministerului Sănătății. Persoana care face obiectul expunerii medicale este informată anterior
+expunerii despre riscurile și beneficiile asociate expunerii medicale;
+h) în sensul prevederilor de Ia alin. (I) și (2), Ministerul Sănătății, în colaborare cu societățile medicale
+științifice corespunzătoare sau cu organismele relevante, justifică expunerile medicale pentru procedurile
+radiologice medicale care urmează să fie efectuate ca parte a unui program de screening.
+(NSR 01)
+
+4. b
+Art. 142 - (2) Expunerea în scopuri medicale trebuie să prezinte un beneficiu net suficient, punând în
+balanță, pe de o parte, beneficiile de diagnostic sau terapeutice potențiale totale pe care Ie produce, inclusiv
+beneficiile directe pentru sănătatea unei persoane și beneficiile pentru societate, iar, pe de altă parte, efectele
+negative individuale pe care le-ar putea produce expunerea, luându-se în considerare eficacitatea, beneficiile
+și riscurile tehnicilor altemative existente care au același obiectiv, dar care implică o expunere mai mică sau
+nulă la radiații ionizante.
+(NSR 01)

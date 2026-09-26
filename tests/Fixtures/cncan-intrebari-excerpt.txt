@@ -1,0 +1,98 @@
+COMISIA NAȚIONALĂ PENTRU CONTROLUL ACTIVITĂȚILOR NUCLEARE
+RTG V2.0 27.08.2018
+
+
+       Întrebări de radioprotecție
+1 Împrăştierea coerentă a fotonilor:
+
+                  a) nu poate apare la energiile utilizate în rontgendiagnostic
+                  b) este mai importantă decât efectul Compton
+                  c) nu implică pierdere de energie
+                  d) creşte doza pacientului
+                  e) depinde de energia nivelului K
+
+2 Energia de prag pentru formarea de perechi este:
+                  a) 1,022 keV
+                  b) 5,11 keV
+                  c) 511 keV
+                  d) 1,022 MeV
+                  e) nu există energie de prag
+
+3 Care din următoarele procese fizice nu apare la interacţia radiaţiei X cu materia?
+                  a) împrăştierea coerentă
+                  b) efectul fotoelectric
+                  c) efectul Compton
+                  d) radiaţia de frânare
+                  e) formarea de perechi
+
+
+       Întrebări de legislație de bază
+1 Care din următoarele atribuţii administrative privind activităţile nucleare face obiectul
+
+        Legii 111/1996 republicată cu modificările și completările ulterioare?
+                  a) dezvoltarea
+                  b) reglementarea
+                  c) implementarea
+                  d) administrarea
+                  e) popularizare
+
+                                                                                                       pagina 79
+COMISIA NAȚIONALĂ PENTRU CONTROLUL ACTIVITĂȚILOR NUCLEARE
+RTG V2.0 27.08.2018
+
+2 Care din următoarele cerinţe privind activităţile nucleare nu face obiectul Legii 111/1996
+        republicată cu modificările și completările ulterioare?
+                  a) de securitate nucleară
+                  b) de protecţie a pacientului
+                  c) de protecţie a mediului
+                  d) de protecţie financiară
+                  e) de protecţie a proprietăţii
+
+3 La care din următoarele activităţi privind instalaţiile radiologice nu se aplică prevederile
+        Legii 111/1996 republicată cu modificările și completările ulterioare?
+                  a) producerea
+                  b) amplasarea şi construcţia
+                  c) cercetarea
+                  d) furnizarea
+                  e) manipularea
+
+
+       Întrebări de radioprotecție operațională
+1 Prevederile Normelor privind cerințele de bază de securitate radiologică (NSR - 01) se
+
+        aplică următoarelor expuneri la radiaţii ionizante, cu excepţia uneia pe care trebuie să o
+        indicaţi :
+
+                  a) expunerea pacienţilor ca parte a propriului lor diagnostic sau tratament
+                  b) expunerea persoanelor în cadrul programelor de depistare medicală a unor
+                  maladii
+                  c) expunerea persoanelor sănătoase sau a pacienţilor care participă voluntar la
+                  programele de cercetare medicală sau biomedicală
+                  d) expunerea persoanelor în cadrul procedurilor medico legale
+                  e) expunerea persoanelor în caz de urgenţă radiologică
+
+2 Prevederile Normelor privind cerințele de bază de securitate radiologică (NSR - 01) se
+        aplică următoarelor expunerii la radiaţii ionizante, cu excepţia uneia pe care trebuie să o
+        indicaţi :
+
+                                                                                                     pagina 142
+COMISIA NAȚIONALĂ PENTRU CONTROLUL ACTIVITĂȚILOR NUCLEARE
+RTG V2.0 27.08.2018
+
+                  a) expunerea persoanelor care doresc să ajute (în afara profesiei lor) la sprijinul
+                  şi confortul persoanelor care sunt supuse expunerii medicale
+                  b) expunerea persoanelor în cadrul programelor de depistare medicală a unor
+                  maladii
+                  c) expunerea persoanelor care operează aparatele de rontgendiagnostic
+                  d) expunerea persoanelor în cadrul procedurilor medico legale
+                  e) expunerea în cadrul supravegherii medicale a persoanelor expuse profesional
+
+3 Care din expunerile la radiaţii ionizante menţionate nu face parte din expunerea
+        medicală?
+                  a) expunerea persoanelor care doresc să ajute (în afara profesiei lor) la sprijinul
+                  şi confortul persoanelor care sunt supuse expunerii medicale
+                  b) expunerea persoanelor în cadrul programelor de depistare medicală a unor
+                  maladii
+                  c) expunerea persoanelor care operează aparatele de rontgenterapie
+                  d) expunerea persoanelor în cadrul procedurilor medico legale
+                  e) expunerea în cadrul supravegherii medicale a persoanelor expuse profesional
