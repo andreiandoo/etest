@@ -21,7 +21,7 @@ interface LocalDocumentSource extends SourceConnector
     public function directory(): string;
 
     /**
-     * @param  array<string, string>  $paths cale relativă în folder => cale absolută
+     * @param  array<string, string>  $paths
      * @return array{total: int, questions: array<int, array<string, mixed>>, rejected: array<int, array<string, string>>}
      */
     public function parseDocuments(array $paths): array;

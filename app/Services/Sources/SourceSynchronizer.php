@@ -211,6 +211,57 @@ final class SourceSynchronizer
     }
 
     /**
+     * Fișierele aduse de mână în depozit.
+     *
+     * Amprenta se face la fel ca la sursele descărcate, din conținut, deci o
+     * sesiune nouă pusă în folder se vede la sincronizarea următoare.
+     *
+     * @return array<string, mixed>
+     */
+    private function fetchLocal(LocalDocumentSource $connector): array
+    {
+        $directory = base_path($connector->directory());
+
+        if (! is_dir($directory)) {
+            throw new RuntimeException('Folderul sursei nu există: '.$connector->directory());
+        }
+
+        $files = [];
+        $bytes = 0;
+        $manifest = [];
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS)
+        );
+
+        foreach ($iterator as $file) {
+            if (! $file instanceof SplFileInfo || ! $file->isFile()) {
+                continue;
+            }
+
+            $absolute = $file->getPathname();
+            $relative = str_replace('\\', '/', substr($absolute, strlen($directory) + 1));
+            $files[$relative] = $absolute;
+            $bytes += (int) $file->getSize();
+            $manifest[$relative] = $relative.':'.hash_file('sha256', $absolute);
+        }
+
+        if ($files === []) {
+            throw new RuntimeException('Folderul sursei e gol: '.$connector->directory());
+        }
+
+        ksort($manifest);
+
+        return [
+            'sha256' => hash('sha256', implode('|', $manifest)),
+            'paths' => $files,
+            'mime' => 'multipart/mixed',
+            'bytes' => $bytes,
+            'origin' => 'local',
+        ];
+    }
+
+    /**
      * Amprenta unui set e amprenta amprentelor, pe nume sortate.
      *
      * Așa, o sursă cu optsprezece fișiere are tot un singur identificator, iar
