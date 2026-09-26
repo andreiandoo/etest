@@ -6,6 +6,7 @@ use App\Services\Sources\Connectors\AncomRadioamatorConnector;
 use App\Services\Sources\Connectors\AnfpConnector;
 use App\Services\Sources\Connectors\BarouConnector;
 use App\Services\Sources\Connectors\CncanConnector;
+use App\Services\Sources\Connectors\InmConnector;
 use App\Services\Sources\Connectors\OamgmamrConnector;
 use App\Services\Sources\Connectors\UmfTimisoaraConnector;
 use App\Services\Sources\Connectors\VanatoareConnector;
@@ -31,6 +32,7 @@ final class SourceRegistry
         BarouConnector::class,
         CncanConnector::class,
         UmfTimisoaraConnector::class,
+        InmConnector::class,
     ];
 
     public function get(string $key): SourceConnector
