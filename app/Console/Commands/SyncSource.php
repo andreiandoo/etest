@@ -97,6 +97,14 @@ class SyncSource extends Command
             ['Amprentă SHA-256', $result->sha256],
         ]);
 
+        // O sincronizare care aduce întrebări, dar nu publică niciuna, a lăsat
+        // tot fondul ciornă — invizibil pe site, deși tabelul de mai sus arată
+        // bine. Se spune tare, nu se deduce din cifre.
+        if (! $this->option('ciorne') && (int) $import?->created_rows > 0 && $result->published['questions'] === 0) {
+            $this->newLine();
+            $this->error('Am creat întrebări, dar n-am publicat niciuna: au rămas ciorne, deci nu apar pe site.');
+        }
+
         if ($rejected !== []) {
             $this->newLine();
             $this->warn('Respinse — se repară de mână în /admin/importuri:');

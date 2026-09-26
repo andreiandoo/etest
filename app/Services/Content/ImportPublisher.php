@@ -12,10 +12,18 @@ use App\Models\TestDefinition;
  * Publică ce a adus o sincronizare.
  *
  * Coada de revizuire e făcută pentru conținut scris de om, unde răspunsul
- * corect e o decizie. Aici nu e: ANCOM publică el însuși baremul, marcat cu
- * `@` în chiar documentul oficial, iar noi nu-l interpretăm, doar îl citim. O
- * coadă de șase sute de rânduri pe care cineva ar apăsa „publică” fără să
- * verifice nimic nu e o verificare, e un obstacol.
+ * corect e o decizie. Aici nu e: autoritatea publică ea însăși baremul, iar noi
+ * nu-l interpretăm, doar îl citim. O coadă de treisprezece mii de rânduri pe
+ * care cineva ar apăsa „publică” fără să verifice nimic nu e o verificare, e un
+ * obstacol.
+ *
+ * Ce se publică se alege după locul din taxonomie, nu după adresa
+ * documentului. O sursă cu un singur fișier își recunoștea întrebările după
+ * adresă, dar CNCAN are câte un PDF pe specialitate, iar întrebările poartă
+ * adresa specialității, nu a paginii-sursă: toate treisprezece mii rămâneau
+ * ciorne sub un teren de teste publicate. Secțiunea sursei și tot ce e sub ea,
+ * pe oricâte niveluri, e regula care ține pentru fiecare conector — unii pun
+ * întrebările în copiii secțiunii, Baroul le pune în nepoți.
  *
  * Ce nu iese curat din parser nu ajunge oricum aici: rândurile respinse rămân
  * în lista de erori a importului, netrecute în întrebări.
@@ -30,11 +38,17 @@ final class ImportPublisher
      */
     public function publish(Source $source): array
     {
+        $nodes = $this->subtree($source);
+
+        if ($nodes === []) {
+            return ['questions' => 0, 'tests' => 0];
+        }
+
         $now = now();
 
         $questions = Question::query()
             ->where('vertical_id', $source->vertical_id)
-            ->where('source_url', $source->document_url)
+            ->whereIn('taxonomy_node_id', $nodes)
             ->where('status', PublicationStatus::Draft->value)
             ->update([
                 'status' => PublicationStatus::Published->value,
@@ -44,7 +58,7 @@ final class ImportPublisher
 
         $tests = TestDefinition::query()
             ->where('vertical_id', $source->vertical_id)
-            ->whereIn('taxonomy_node_id', $this->nodeIds($source))
+            ->whereIn('taxonomy_node_id', $nodes)
             ->where('status', PublicationStatus::Draft->value)
             ->update([
                 'status' => PublicationStatus::Published->value,
@@ -57,21 +71,34 @@ final class ImportPublisher
     }
 
     /**
-     * Secțiunea sursei și capitolele de sub ea.
+     * Secțiunea sursei și tot ce crește sub ea.
+     *
+     * Coborârea se face nivel cu nivel, nu recursiv în SQL, ca să meargă la fel
+     * pe Postgres și pe baza din teste. Nodurile deja văzute nu se mai caută a
+     * doua oară, deci o legătură greșită în date nu învârte bucla la infinit.
      *
      * @return array<int, int>
      */
-    private function nodeIds(Source $source): array
+    private function subtree(Source $source): array
     {
         if ($source->taxonomy_node_id === null) {
             return [];
         }
 
-        return TaxonomyNode::query()
-            ->where('parent_id', $source->taxonomy_node_id)
-            ->pluck('id')
-            ->push($source->taxonomy_node_id)
-            ->map(static fn (mixed $id): int => (int) $id)
-            ->all();
+        $ids = [(int) $source->taxonomy_node_id];
+        $level = $ids;
+
+        while ($level !== []) {
+            $children = TaxonomyNode::query()
+                ->whereIn('parent_id', $level)
+                ->pluck('id')
+                ->map(static fn (mixed $id): int => (int) $id)
+                ->all();
+
+            $level = array_values(array_diff($children, $ids));
+            $ids = [...$ids, ...$level];
+        }
+
+        return $ids;
     }
 }
