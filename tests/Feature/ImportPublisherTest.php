@@ -50,6 +50,7 @@ function publishFixture(): array
         'taxonomy_node_id' => $section->id,
         'document_url' => 'https://exemplu.ro/pagina-sursei',
         'file_format' => 'pdf',
+        'rights_status' => 'official_public_unclear',
     ]);
 
     return [$vertical, $section, $child, $grandchild, $source];
@@ -138,6 +139,7 @@ test('a source without a section publishes nothing at all', function () {
         'vertical_id' => $vertical->id,
         'document_url' => 'https://exemplu.ro/pagina-sursei',
         'file_format' => 'pdf',
+        'rights_status' => 'official_public_unclear',
     ]);
 
     expect((new ImportPublisher)->publish($orphan))->toBe(['questions' => 0, 'tests' => 0]);
