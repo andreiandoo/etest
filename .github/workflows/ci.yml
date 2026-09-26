@@ -80,9 +80,6 @@ jobs:
       - name: Run migrations
         run: php artisan migrate --force
 
-      - name: Peek
-        run: php peek.php || true
-
       - name: Code style
         run: vendor/bin/pint --test
 

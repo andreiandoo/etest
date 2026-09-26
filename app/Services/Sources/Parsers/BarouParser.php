@@ -222,8 +222,20 @@ final class BarouParser
         $ranges = [];
 
         foreach ($matches as $match) {
+            // Antetul poartă uneori și numele instituției — „INPPA OEPA” pe
+            // prima pagină — așa că materia se caută în el, nu i se cere să
+            // fie exact el. Cele procesuale sunt trecute primele în listă, ca
+            // „Drept procesual civil” să nu fie confundat cu „Drept civil”.
             $name = trim($match[1][0]);
-            $subject = self::SUBJECTS[$name] ?? null;
+            $subject = null;
+
+            foreach (self::SUBJECTS as $needle => $candidate) {
+                if (str_contains($name, $needle)) {
+                    $subject = $candidate;
+
+                    break;
+                }
+            }
 
             if ($subject === null) {
                 continue;
