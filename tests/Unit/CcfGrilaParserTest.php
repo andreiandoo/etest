@@ -37,7 +37,7 @@ test('the marker is read in Romanian and in English alike', function () {
 test('the number in front of the question does not stay in the text', function () {
     $questions = ccfParsed()['questions'];
 
-    expect($questions[1]['prompt'])->toBe('Codul fiscal definește nerezidentul ca fiind')
+    expect($questions[1]['prompt'])->toBe('Codul fiscal definește nerezidentul ca fiind:')
         ->and($questions[0]['prompt'])->toStartWith('Pentru a fi scutit de impozit în România');
 });
 
