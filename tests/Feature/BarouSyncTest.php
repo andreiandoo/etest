@@ -60,7 +60,10 @@ test('a question has one or two correct options out of three', function () {
         $spread[count($question['correct'])] = true;
     }
 
-    expect(array_keys($spread))->toBe([1, 2]);
+    $counts = array_keys($spread);
+    sort($counts);
+
+    expect($counts)->toBe([1, 2]);
 })->skip(fn (): bool => ! is_dir(base_path('docs/barou-2026')), 'Fișierele sesiunii nu sunt în depozit.');
 
 test('the answer read under the question matches the one drawn in the grid', function () {
