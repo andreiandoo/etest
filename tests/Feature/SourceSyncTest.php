@@ -7,6 +7,8 @@ use App\Models\Source;
 use App\Models\SourceDocument;
 use App\Models\TaxonomyNode;
 use App\Models\TestDefinition;
+use App\Models\Vertical;
+use App\Services\Sources\SourceRegistry;
 use Database\Seeders\CatalogSeeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\PendingCommand;
@@ -173,4 +175,26 @@ test('the sync refuses to run before the catalogue exists', function () {
     TaxonomyNode::query()->delete();
 
     syncAncom()->assertFailed();
+});
+
+/**
+ * Un conector se leagă de catalog prin două slug-uri scrise de mână, în
+ * definiția lui. Dacă unul din ele nu există, sincronizarea cade abia la
+ * rulare, pe server, cu o eroare despre o verticală lipsă. Aici se vede
+ * înainte.
+ */
+test('every connector points at a section the catalogue really has', function () {
+    foreach (app(SourceRegistry::class)->all() as $connector) {
+        $definition = $connector->definition();
+        $vertical = Vertical::query()->where('slug', $definition['vertical_slug'])->first();
+
+        expect($vertical)->not->toBeNull($connector->key().': verticala „'.$definition['vertical_slug'].'”');
+
+        $node = TaxonomyNode::query()
+            ->where('vertical_id', $vertical?->id)
+            ->where('slug', $definition['taxonomy_slug'])
+            ->first();
+
+        expect($node)->not->toBeNull($connector->key().': secțiunea „'.$definition['taxonomy_slug'].'”');
+    }
 });
