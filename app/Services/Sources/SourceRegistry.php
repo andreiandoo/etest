@@ -5,6 +5,8 @@ namespace App\Services\Sources;
 use App\Services\Sources\Connectors\AncomRadioamatorConnector;
 use App\Services\Sources\Connectors\AnfpConnector;
 use App\Services\Sources\Connectors\BarouConnector;
+use App\Services\Sources\Connectors\CcfAsistentConnector;
+use App\Services\Sources\Connectors\CcfConsultantFiscalConnector;
 use App\Services\Sources\Connectors\CncanConnector;
 use App\Services\Sources\Connectors\InmConnector;
 use App\Services\Sources\Connectors\OamgmamrConnector;
@@ -33,6 +35,8 @@ final class SourceRegistry
         CncanConnector::class,
         UmfTimisoaraConnector::class,
         InmConnector::class,
+        CcfConsultantFiscalConnector::class,
+        CcfAsistentConnector::class,
     ];
 
     public function get(string $key): SourceConnector
