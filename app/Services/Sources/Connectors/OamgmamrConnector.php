@@ -313,6 +313,7 @@ final class OamgmamrConnector implements MultiDocumentSource
                 'type' => QuestionType::SingleChoice->value,
                 'prompt' => $question['prompt'],
                 'taxonomy_slug' => $question['specialty'],
+                'taxonomy_parent_slug' => 'grad-principal',
                 'source_label' => $label.', '.self::SPECIALTIES[$question['specialty']]['name'],
                 'source_url' => $source->source_page_url,
                 'source_checked_at' => today()->toDateString(),

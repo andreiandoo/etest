@@ -261,6 +261,7 @@ final class InmConnector implements MultiDocumentSource
                 'prompt' => $prompt,
                 'explanation' => '',
                 'taxonomy_slug' => $discipline,
+                'taxonomy_parent_slug' => 'inm',
                 'source_label' => 'INM — testul-grilă de la admiterea în magistratură, '
                     .($sessions[$session]['name'] ?? $session).', grila nr. 1',
                 'source_url' => $sessions[$session]['document'] ?? $source->document_url,

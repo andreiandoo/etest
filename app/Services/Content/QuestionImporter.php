@@ -47,6 +47,48 @@ final class QuestionImporter
     }
 
     /**
+     * Secțiunea în care intră întrebarea.
+     *
+     * Slug-urile de taxonomie sunt unice doar față de același părinte, nu în
+     * toată verticala: în Drept există „drept civil” sub avocat stagiar, sub
+     * avocat definitiv și sub INM. O căutare doar pe slug nimerea prima
+     * secțiune găsită și punea liniștit opt sute de întrebări sub examenul
+     * greșit, fără nicio eroare. De aceea rândul spune și părintele, iar un
+     * slug care rămâne ambiguu oprește importul rândului în loc să ghicească.
+     */
+    private function nodeId(int $verticalId, string $slug, string $parentSlug): int
+    {
+        $query = TaxonomyNode::query()->where('vertical_id', $verticalId)->where('slug', $slug);
+
+        if ($parentSlug !== '') {
+            $parents = TaxonomyNode::query()
+                ->where('vertical_id', $verticalId)
+                ->where('slug', $parentSlug)
+                ->pluck('id');
+
+            if ($parents->count() !== 1) {
+                throw new InvalidArgumentException('Secțiunea-părinte „'.$parentSlug.'” apare de '
+                    .$parents->count().' ori în verticală.');
+            }
+
+            $query->where('parent_id', $parents->first());
+        }
+
+        $ids = $query->pluck('id');
+
+        if ($ids->isEmpty()) {
+            throw new InvalidArgumentException('Unknown taxonomy_slug: '.$slug);
+        }
+
+        if ($ids->count() > 1) {
+            throw new InvalidArgumentException('Secțiunea „'.$slug.'” apare de '.$ids->count()
+                .' ori în verticală. Rândul are nevoie de taxonomy_parent_slug ca să se știe care.');
+        }
+
+        return (int) $ids->first();
+    }
+
+    /**
      * @param  array<string, mixed>  $row
      */
     private function importRow(ContentImport $import, array $row): bool
@@ -70,19 +112,13 @@ final class QuestionImporter
         }
 
         $sourceKey = trim((string) ($row['source_key'] ?? ''));
-        $taxonomyNodeId = null;
         $taxonomySlug = trim((string) ($row['taxonomy_slug'] ?? ''));
 
-        if ($taxonomySlug !== '') {
-            $taxonomyNodeId = TaxonomyNode::query()
-                ->where('vertical_id', $verticalId)
-                ->where('slug', $taxonomySlug)
-                ->value('id');
-
-            if ($taxonomyNodeId === null) {
-                throw new InvalidArgumentException('Unknown taxonomy_slug: '.$taxonomySlug);
-            }
-        }
+        $taxonomyNodeId = $taxonomySlug === '' ? null : $this->nodeId(
+            $verticalId,
+            $taxonomySlug,
+            trim((string) ($row['taxonomy_parent_slug'] ?? '')),
+        );
 
         $answerConfig = $this->jsonValue($row['answer_config'] ?? null, []);
         $options = $this->jsonValue($row['options'] ?? null, []);

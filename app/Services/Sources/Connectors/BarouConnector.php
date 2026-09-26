@@ -191,6 +191,9 @@ final class BarouConnector implements LocalDocumentSource
                 'type' => QuestionType::MultipleChoice->value,
                 'prompt' => $question['prompt'],
                 'taxonomy_slug' => $question['subject_slug'],
+                // Materiile se repetă între stagiari și definitivi, deci fără
+                // categorie ar intra toate sub prima găsită.
+                'taxonomy_parent_slug' => $category,
                 'source_label' => 'INPPA — examen de primire în profesia de avocat, '
                     .self::CATEGORIES[$category]['label'].', sesiunea '.self::SESSION
                     .', grila '.$question['grila'],

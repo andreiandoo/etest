@@ -152,6 +152,7 @@ final class VanatoareConnector implements SingleDocumentSource
                 'type' => QuestionType::SingleChoice->value,
                 'prompt' => $prompt,
                 'taxonomy_slug' => $question['chapter_slug'],
+                'taxonomy_parent_slug' => 'permis-de-vanator',
                 'source_label' => $label,
                 'source_url' => $source->document_url,
                 'source_checked_at' => today()->toDateString(),

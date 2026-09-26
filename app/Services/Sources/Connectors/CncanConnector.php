@@ -252,6 +252,7 @@ final class CncanConnector implements MultiDocumentSource
                 'prompt' => $question['prompt'],
                 'explanation' => $question['explanation'],
                 'taxonomy_slug' => $specialty,
+                'taxonomy_parent_slug' => 'permise-de-exercitare',
                 'source_label' => 'CNCAN — listă de întrebări pentru permisul de exercitare, '
                     .($specialties[$specialty]['name'] ?? $specialty).', '.self::VERSION,
                 'source_url' => $specialties[$specialty]['questions'] ?? $source->document_url,

@@ -148,6 +148,7 @@ final class AncomRadioamatorConnector implements SingleDocumentSource
                 'prompt' => $question['prompt'],
                 'difficulty' => $question['difficulty'],
                 'taxonomy_slug' => $question['chapter_slug'],
+                'taxonomy_parent_slug' => 'radiotehnica-si-electronica',
                 'source_label' => $label,
                 'source_url' => $source->document_url,
                 'source_checked_at' => today()->toDateString(),

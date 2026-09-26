@@ -142,6 +142,7 @@ final class AnfpConnector implements SingleDocumentSource
                 'prompt' => $question['prompt'],
                 'explanation' => 'Temei legal: '.$reference.'.',
                 'taxonomy_slug' => $question['chapter_slug'],
+                'taxonomy_parent_slug' => 'concurs-national',
                 'source_label' => 'ANFP — baterie de teste exemplificative, proba de testare preliminară',
                 'source_url' => $source->document_url,
                 'source_checked_at' => today()->toDateString(),

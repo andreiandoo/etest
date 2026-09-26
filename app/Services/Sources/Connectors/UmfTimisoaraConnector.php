@@ -279,6 +279,7 @@ final class UmfTimisoaraConnector implements MultiDocumentSource
                 'prompt' => $prompt,
                 'explanation' => '',
                 'taxonomy_slug' => $session,
+                'taxonomy_parent_slug' => 'umf-timisoara',
                 'source_label' => 'UMF „Victor Babeș” Timișoara — caiet de concurs, '
                     .($sessions[$session]['name'] ?? $session).', cu baremul oficial de corectură',
                 'source_url' => $this->subjectUrls($sessions[$session]['subjects'] ?? '')[0] ?? $source->document_url,
