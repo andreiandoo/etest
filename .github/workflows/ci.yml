@@ -63,6 +63,11 @@ jobs:
         with:
           node-version: '22'
 
+      # Unele surse nu pot fi citite fără așezarea din pagină, iar pentru asta
+      # nu există înlocuitor în PHP.
+      - name: Install poppler
+        run: sudo apt-get install -y --no-install-recommends poppler-utils
+
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 

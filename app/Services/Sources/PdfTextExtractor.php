@@ -20,6 +20,48 @@ use Throwable;
  */
 final class PdfTextExtractor
 {
+    /**
+     * Textul cu așezarea din pagină păstrată.
+     *
+     * Unele documente nu pot fi citite altfel: la grilele de Barou, răspunsul
+     * apare înaintea variantelor lui în ordinea brută a textului, iar asociat
+     * greșit ar da răspunsul altei întrebări. Aici nu există variantă de
+     * rezervă — fără `pdftotext`, spunem asta, nu ghicim.
+     */
+    public function extractLayout(string $path): string
+    {
+        if (! is_file($path)) {
+            throw new RuntimeException('Fișierul nu există: '.$path);
+        }
+
+        $binary = $this->popplerBinary();
+
+        if ($binary === null) {
+            throw new RuntimeException(
+                'Documentul are nevoie de așezarea din pagină, iar pentru asta e nevoie de `pdftotext`. '
+                .'Instalează-l cu `sudo apt install poppler-utils`.'
+            );
+        }
+
+        $output = tempnam(sys_get_temp_dir(), 'etest-pdf');
+
+        if ($output === false) {
+            throw new RuntimeException('Nu am putut crea un fișier temporar.');
+        }
+
+        $command = escapeshellcmd($binary).' -layout -enc UTF-8 '.escapeshellarg($path).' '.escapeshellarg($output);
+        exec($command.' 2>/dev/null', $lines, $status);
+
+        $text = $status === 0 && is_file($output) ? (string) file_get_contents($output) : '';
+        @unlink($output);
+
+        if (trim($text) === '') {
+            throw new RuntimeException('`pdftotext` nu a putut citi documentul.');
+        }
+
+        return $text;
+    }
+
     public function extract(string $path): string
     {
         if (! is_file($path)) {

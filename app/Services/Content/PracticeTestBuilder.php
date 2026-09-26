@@ -33,6 +33,8 @@ final class PracticeTestBuilder
         int $questionLimit,
         bool $includeChildren = false,
         ?callable $filter = null,
+        TestMode $mode = TestMode::Practice,
+        ?int $durationSeconds = null,
     ): ?TestDefinition {
         // Un singur nivel de copii e de ajuns pentru structura de acum:
         // examen → capitole. Dacă apare un nivel mai jos, aici se vede.
@@ -67,7 +69,8 @@ final class PracticeTestBuilder
             'description' => $description,
             'seo_title' => $title.' | e-test.ro',
             'seo_description' => $description,
-            'mode' => TestMode::Practice,
+            'mode' => $mode,
+            'duration_seconds' => $durationSeconds,
             // Numărul de întrebări e o limită, nu o selecție fixă: la fiecare
             // încercare se amestecă altele din același fond, ca al doilea tur
             // să nu fie o repetare din memorie.
@@ -75,7 +78,9 @@ final class PracticeTestBuilder
             'randomize_questions' => true,
             'randomize_options' => true,
             'allow_review' => true,
-            'show_explanations' => true,
+            // La simularea unui examen, explicația imediată ar schimba proba
+            // într-un exercițiu. Se vede la final, pe pagina de rezultat.
+            'show_explanations' => $mode !== TestMode::Exam,
         ]);
 
         if ($isNew) {

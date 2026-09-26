@@ -4,6 +4,7 @@ namespace App\Services\Sources;
 
 use App\Services\Sources\Connectors\AncomRadioamatorConnector;
 use App\Services\Sources\Connectors\AnfpConnector;
+use App\Services\Sources\Connectors\BarouConnector;
 use App\Services\Sources\Connectors\OamgmamrConnector;
 use App\Services\Sources\Connectors\VanatoareConnector;
 use App\Services\Sources\Contracts\SourceConnector;
@@ -25,6 +26,7 @@ final class SourceRegistry
         VanatoareConnector::class,
         OamgmamrConnector::class,
         AnfpConnector::class,
+        BarouConnector::class,
     ];
 
     public function get(string $key): SourceConnector

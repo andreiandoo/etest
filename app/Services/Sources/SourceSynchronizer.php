@@ -9,12 +9,17 @@ use App\Models\TaxonomyNode;
 use App\Models\Vertical;
 use App\Services\Content\ImportPublisher;
 use App\Services\Content\QuestionImporter;
+use App\Services\Sources\Contracts\LocalDocumentSource;
 use App\Services\Sources\Contracts\MultiDocumentSource;
 use App\Services\Sources\Contracts\SingleDocumentSource;
 use App\Services\Sources\Contracts\SourceConnector;
+use FilesystemIterator;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use RuntimeException;
+use SplFileInfo;
 
 /**
  * Duce o sursă de la adresa oficială până la întrebări în coada de revizuire.
@@ -46,9 +51,11 @@ final class SourceSynchronizer
         $source = $this->register($connector);
         $connector->prepare($source);
 
-        $fetched = $connector instanceof MultiDocumentSource
-            ? $this->fetchSet($connector)
-            : $this->fetchOne($source, $localFile);
+        $fetched = match (true) {
+            $connector instanceof LocalDocumentSource => $this->fetchLocal($connector),
+            $connector instanceof MultiDocumentSource => $this->fetchSet($connector),
+            default => $this->fetchOne($source, $localFile),
+        };
 
         $sha256 = (string) $fetched['sha256'];
         $existing = $source->documents()->where('sha256', $sha256)->first();
@@ -70,9 +77,15 @@ final class SourceSynchronizer
             );
         }
 
-        [$storagePath, $textPath, $result] = $connector instanceof MultiDocumentSource
-            ? $this->readSet($source, $connector, $fetched)
-            : $this->readOne($source, $connector, $fetched, $localFile);
+        [$storagePath, $textPath, $result] = match (true) {
+            $connector instanceof LocalDocumentSource => [
+                $connector->directory(),
+                null,
+                $connector->parseDocuments((array) $fetched['paths']),
+            ],
+            $connector instanceof MultiDocumentSource => $this->readSet($source, $connector, $fetched),
+            default => $this->readOne($source, $connector, $fetched, $localFile),
+        };
 
         if ($result['questions'] === []) {
             throw new RuntimeException(
