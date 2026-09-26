@@ -264,10 +264,14 @@ final class UmfTimisoaraConnector implements MultiDocumentSource
             $prompt = (string) $question['prompt'];
 
             $rows[] = [
-                // Cheia se face din enunț, nu din numărul din caiet: numărul
-                // diferă de la o variantă la alta, iar la o resincronizare am
-                // ajunge cu aceeași întrebare de două ori.
-                'source_key' => self::SOURCE_KEY_PREFIX.':'.$session.':'.substr(sha1($prompt), 0, 12),
+                // Cheia nu se face din numărul din caiet: numărul diferă de la
+                // o variantă la alta, iar la o resincronizare am ajunge cu
+                // aceeași întrebare de două ori. Dar nici din enunț singur: un
+                // caiet are mai multe întrebări care încep cu „Alegeți
+                // afirmațiile adevărate dintre cele de mai jos:”, iar pe cheie
+                // comună s-ar suprascrie una pe alta. Enunțul plus răspunsurile,
+                // adică exact ce a folosit parserul ca să le deosebească.
+                'source_key' => self::SOURCE_KEY_PREFIX.':'.$session.':'.substr((string) $question['identity'], 0, 12),
                 // Întotdeauna răspuns multiplu, chiar când e corect unul
                 // singur: la concurs candidatul nu știe câte sunt, iar un
                 // câmp care lasă o singură bifă i-ar spune.

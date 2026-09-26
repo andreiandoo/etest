@@ -94,7 +94,7 @@ final class UmfAdmitereParser
         $questions = [];
         $rejected = [];
 
-        foreach ($readings as $views) {
+        foreach ($readings as $identity => $views) {
             $agreed = $this->agreement($views);
             $prompt = (string) $views[0]['question']['prompt'];
 
@@ -118,6 +118,10 @@ final class UmfAdmitereParser
                 'correct' => $this->indexes($first['options'], $agreed),
                 'number' => $first['number'],
                 'variants' => count($views),
+                // Identitatea pleacă mai departe: e singurul lucru care
+                // deosebește două întrebări cu același enunț, iar cheia sub
+                // care se salvează întrebarea are nevoie de ea.
+                'identity' => (string) $identity,
             ];
         }
 

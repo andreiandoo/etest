@@ -89,3 +89,69 @@ test('the signature under the table is not mistaken for an answer', function () 
     expect(umfAnswers())->toContain('Comisiei Centrale de Admitere')
         ->and(umfParsed()['questions'])->toHaveCount(3);
 });
+
+/**
+ * Un caiet are mai multe întrebări care încep la fel — „Alegeți afirmațiile
+ * adevărate dintre cele de mai jos:” — cu răspunsuri cu totul diferite. Dacă
+ * enunțul singur ar fi ce le deosebește, s-ar amesteca între ele: sau ar intra
+ * în conflict și s-ar pierde amândouă, sau una ar suprascrie pe alta la salvare.
+ */
+test('two questions that start with the same words stay two questions', function () {
+    $variantA = implode("\n", [
+        '                    Varianta A',
+        '',
+        '1. Alegeți afirmațiile adevărate dintre cele de mai jos:',
+        'A. Inima are patru camere',
+        'B. Sângele circulă în vase închise',
+        'C. Plămânii sunt trei la număr',
+        'D. Ficatul produce insulină',
+        'E. Rinichii filtrează aerul',
+        '',
+        '2. Alegeți afirmațiile adevărate dintre cele de mai jos:',
+        'A. Stomacul absoarbe apa în cea mai mare parte',
+        'B. Duodenul face parte din intestinul gros',
+        'C. Bila este produsă de ficat',
+        'D. Pancreasul este un organ pereche',
+        'E. Esofagul are rol de absorbție',
+        '',
+    ]);
+
+    $variantB = implode("\n", [
+        '                    Varianta B',
+        '',
+        '1. Alegeți afirmațiile adevărate dintre cele de mai jos:',
+        'A. Duodenul face parte din intestinul gros',
+        'B. Stomacul absoarbe apa în cea mai mare parte',
+        'C. Bila este produsă de ficat',
+        'D. Pancreasul este un organ pereche',
+        'E. Esofagul are rol de absorbție',
+        '',
+        '2. Alegeți afirmațiile adevărate dintre cele de mai jos:',
+        'A. Plămânii sunt trei la număr',
+        'B. Inima are patru camere',
+        'C. Sângele circulă în vase închise',
+        'D. Ficatul produce insulină',
+        'E. Rinichii filtrează aerul',
+        '',
+    ]);
+
+    $answers = implode("\n", [
+        'Nr. Varianta A  Varianta B',
+        '',
+        ' 1  ab          c',
+        ' 2  c           bc',
+        '',
+    ]);
+
+    $parsed = (new UmfAdmitereParser)->parse([$variantA."\f".$variantB], $answers);
+
+    expect($parsed['questions'])->toHaveCount(2)
+        ->and($parsed['rejected'])->toBe([]);
+
+    [$first, $second] = $parsed['questions'];
+
+    expect($first['prompt'])->toBe($second['prompt'])
+        ->and($first['identity'])->not->toBe($second['identity'])
+        ->and($first['correct'])->toBe([1, 2])
+        ->and($second['correct'])->toBe([3]);
+});
