@@ -8,6 +8,8 @@ use App\Services\Sources\Connectors\BarouConnector;
 use App\Services\Sources\Connectors\CcfAsistentConnector;
 use App\Services\Sources\Connectors\CcfConsultantFiscalConnector;
 use App\Services\Sources\Connectors\CncanConnector;
+use App\Services\Sources\Connectors\DrpcivCategoriaAConnector;
+use App\Services\Sources\Connectors\DrpcivCategoriaBConnector;
 use App\Services\Sources\Connectors\InmConnector;
 use App\Services\Sources\Connectors\OamgmamrConnector;
 use App\Services\Sources\Connectors\UmfTimisoaraConnector;
@@ -37,6 +39,8 @@ final class SourceRegistry
         InmConnector::class,
         CcfConsultantFiscalConnector::class,
         CcfAsistentConnector::class,
+        DrpcivCategoriaAConnector::class,
+        DrpcivCategoriaBConnector::class,
     ];
 
     public function get(string $key): SourceConnector
