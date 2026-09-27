@@ -73,7 +73,7 @@ test('the candidate sees the image and its alternative text', function () {
     ]);
 
     Livewire::actingAs($user)
-        ->test(TestRunner::class, ['test' => $test])
+        ->test(TestRunner::class, ['vertical' => $vertical, 'test' => $test])
         ->assertSee('questions/indicator-cedeaza-trecerea.svg', false)
         ->assertSee('Indicator de prioritate: cedează trecerea', false)
         ->assertSee('CC BY-SA 4.0', false);
@@ -88,7 +88,7 @@ test('a question without an image renders no empty frame', function () {
     $question->forceFill(['media' => null])->save();
 
     Livewire::actingAs($user)
-        ->test(TestRunner::class, ['test' => $test])
+        ->test(TestRunner::class, ['vertical' => $vertical, 'test' => $test])
         ->assertDontSee('<figure', false);
 });
 
