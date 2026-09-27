@@ -15,6 +15,7 @@ test('every command the project offers is registered', function () {
         'content:activate',
         'content:purge-demo',
         'content:status',
+        'content:teste-examen',
         'sources:sync',
     ] as $command) {
         expect($registered)->toContain($command);

@@ -127,3 +127,35 @@ test('the only source cleared for reuse is recorded as such', function () {
     expect(data_get($radiotehnica->metadata, 'catalog.rights'))->toBe(Catalog::RIGHTS_EXPLICIT)
         ->and(data_get($radiotehnica->metadata, 'catalog.items_raw'))->toBe(632);
 });
+
+/**
+ * Permisul de conducere are optsprezece categorii, nu patru, iar proba
+ * teoretică arată altfel la fiecare grupă: 26 de întrebări la B, 20 la
+ * motociclete, 11 la remorci. Cifrele sunt cele din Ordinul 268/2010 și stau în
+ * catalog, ca testele să le ia de acolo, nu dintr-o decizie de moment.
+ */
+test('every licence category carries the rules of its own exam', function () {
+    $this->seed(CatalogSeeder::class);
+
+    $auto = Vertical::query()->where('slug', 'auto')->firstOrFail();
+    $categories = TaxonomyNode::query()->where('vertical_id', $auto->id)->get()->keyBy('slug');
+
+    expect($categories)->toHaveCount(18);
+
+    $profiles = [
+        'permis-categoria-b' => [26, 1800, 22],
+        'permis-categoria-tv' => [26, 1800, 22],
+        'permis-categoria-a' => [20, 1200, 17],
+        'permis-categoria-am' => [20, 1200, 17],
+        'permis-categoria-be' => [11, 900, 9],
+        'permis-categoria-d1e' => [11, 900, 9],
+    ];
+
+    foreach ($profiles as $slug => [$questions, $duration, $passing]) {
+        $exam = data_get($categories[$slug]->metadata, 'exam');
+
+        expect($exam['questions'])->toBe($questions, $slug)
+            ->and($exam['duration_seconds'])->toBe($duration, $slug)
+            ->and($exam['passing_questions'])->toBe($passing, $slug);
+    }
+});

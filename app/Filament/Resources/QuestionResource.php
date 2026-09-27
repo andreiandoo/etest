@@ -110,6 +110,40 @@ class QuestionResource extends Resource
                     ])
                     ->columns(2),
 
+                Section::make('Imagine')
+                    ->description('Indicatorul, marcajul sau intersecția despre care e întrebarea. '
+                        .'Textul alternativ e obligatoriu: fără el, întrebarea nu se poate răspunde '
+                        .'de la un cititor de ecran.')
+                    ->collapsed(fn (Get $get): bool => blank($get('media.path')))
+                    ->schema([
+                        Forms\Components\FileUpload::make('media.path')
+                            ->label('Fișier')
+                            ->image()
+                            ->disk('public')
+                            ->directory('questions')
+                            ->visibility('public')
+                            ->imageEditor()
+                            ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml'])
+                            ->maxSize(2048)
+                            ->columnSpanFull(),
+
+                        Forms\Components\TextInput::make('media.alt')
+                            ->label('Text alternativ')
+                            ->maxLength(300)
+                            ->required(fn (Get $get): bool => filled($get('media.path')))
+                            ->columnSpanFull(),
+
+                        Forms\Components\TextInput::make('media.credit')
+                            ->label('Autor')
+                            ->maxLength(200),
+
+                        Forms\Components\TextInput::make('media.license')
+                            ->label('Licență')
+                            ->placeholder('CC BY-SA 4.0, desen propriu, act normativ…')
+                            ->maxLength(120),
+                    ])
+                    ->columns(2),
+
                 Section::make('Variante de răspuns')
                     ->description('Bifează varianta corectă. Ordinea de aici e cea implicită; testele o pot amesteca.')
                     ->visible(fn (Get $get): bool => in_array($get('type'), self::choiceTypes(), true))

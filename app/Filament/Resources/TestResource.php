@@ -144,6 +144,13 @@ class TestResource extends Resource
                             ->minValue(0)
                             ->maxValue(100),
 
+                        Forms\Components\TextInput::make('passing_questions')
+                            ->label('Prag de promovare (răspunsuri corecte)')
+                            ->helperText('Când examenul numără întrebări — 22 din 26 la proba auto — '
+                                .'scrie numărul aici. Are întâietate față de procent.')
+                            ->numeric()
+                            ->minValue(1),
+
                         Forms\Components\Toggle::make('randomize_questions')
                             ->label('Amestecă întrebările'),
 

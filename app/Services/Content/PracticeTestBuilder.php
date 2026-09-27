@@ -24,6 +24,7 @@ final class PracticeTestBuilder
 {
     /**
      * @param  callable(Builder<Question>): void|null  $filter
+     * @param  int|null  $passingQuestions  câte răspunsuri corecte cere examenul
      */
     public function build(
         TaxonomyNode $node,
@@ -35,6 +36,7 @@ final class PracticeTestBuilder
         ?callable $filter = null,
         TestMode $mode = TestMode::Practice,
         ?int $durationSeconds = null,
+        ?int $passingQuestions = null,
     ): ?TestDefinition {
         // Un singur nivel de copii e de ajuns pentru structura de acum:
         // examen → capitole. Dacă apare un nivel mai jos, aici se vede.
@@ -71,6 +73,10 @@ final class PracticeTestBuilder
             'seo_description' => $description,
             'mode' => $mode,
             'duration_seconds' => $durationSeconds,
+            // Pragul se ține în întrebări, nu în procente: la proba teoretică
+            // auto se cer 22 corecte din 26, iar „84,62%" nu i-a spus nimeni
+            // niciodată candidatului.
+            'passing_questions' => $passingQuestions,
             // Numărul de întrebări e o limită, nu o selecție fixă: la fiecare
             // încercare se amestecă altele din același fond, ca al doilea tur
             // să nu fie o repetare din memorie.

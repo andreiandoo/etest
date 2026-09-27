@@ -123,14 +123,18 @@ class CatalogSeeder extends Seeder
             'sort_order' => $index,
             'seo_title' => $data['seo_title'] ?? $data['name'].' — teste grilă gratuite | e-test.ro',
             'seo_description' => $data['seo_description'] ?? $description,
-            'metadata' => array_replace($node->metadata ?? [], [
+            'metadata' => array_replace($node->metadata ?? [], array_filter([
                 'catalog' => array_filter([
                     'authority' => $context['authority'],
                     'source_url' => $context['source_url'],
                     'rights' => $context['rights'],
                     'items_raw' => $data['items'] ?? null,
                 ], static fn (mixed $value): bool => $value !== null),
-            ]),
+                // Regulile probei, acolo unde examenul le are scrise în lege:
+                // câte întrebări, în cât timp, câte corecte cer promovarea.
+                // Testele se construiesc din ele, nu din cifre alese de noi.
+                'exam' => $data['exam'] ?? null,
+            ], static fn (mixed $value): bool => $value !== null)),
         ]);
 
         if ($isNew) {

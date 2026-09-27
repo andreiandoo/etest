@@ -9,16 +9,27 @@
     $theme = VerticalTheme::for($vertical);
 
     $percentage = (int) round((float) ($attempt->percentage ?? 0));
-    $passing = $test->passing_percentage !== null ? (float) $test->passing_percentage : null;
-    $passed = $passing !== null && $percentage >= $passing;
 
     $correctCount = $attempt->questions->filter(fn ($q) => $q->answer?->is_correct === true)->count();
     $totalCount = $attempt->questions->count();
 
+    // Unde legea numără întrebări — 22 corecte din 26 la proba teoretică auto —
+    // le numărăm și noi. Procentul rămâne pentru testele al căror prag chiar
+    // așa e scris.
+    $passingQuestions = $test->passing_questions;
+    $passingPercentage = $test->passing_percentage !== null ? (float) $test->passing_percentage : null;
+    $passing = $passingQuestions !== null || $passingPercentage !== null;
+    $passed = $passingQuestions !== null
+        ? $correctCount >= $passingQuestions
+        : ($passingPercentage !== null && $percentage >= $passingPercentage);
+    $passingLabel = $passingQuestions !== null
+        ? $passingQuestions.' răspunsuri corecte din '.$totalCount
+        : ($passingPercentage !== null ? rtrim(rtrim(number_format($passingPercentage, 2, ',', ' '), '0'), ',').'%' : '');
+
     // Inelul de scor. Circumferinta unui cerc cu raza 102.
     $ringLength = 640.9;
     $ringFilled = round($ringLength * ($percentage / 100), 1);
-    $ringColor = $passing === null
+    $ringColor = ! $passing
         ? '#0056D2'
         : ($passed ? '#0D6E63' : '#B4451F');
 
@@ -55,7 +66,7 @@
                     </div>
                 </div>
 
-                @if($passing !== null)
+                @if($passing)
                     <div class="flex w-full items-start gap-3 rounded-card p-4 {{ $passed ? 'bg-[#EAF4F2]' : 'bg-[#FBEEE9]' }}">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{ $passed ? '#0D6E63' : '#B4451F' }}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0" aria-hidden="true">
                             @if($passed)
@@ -67,7 +78,7 @@
                         <div>
                             <p class="text-[17px] font-bold">{{ $passed ? 'Ai trece examenul' : 'Încă nu ai atinge pragul' }}</p>
                             <p class="mt-0.5 text-sm leading-6 {{ $passed ? 'text-[#235B54]' : 'text-[#8C3617]' }}">
-                                Pragul pentru acest test este {{ rtrim(rtrim(number_format($passing, 2, ',', ' '), '0'), ',') }}%.
+                                Pragul pentru acest test este {{ $passingLabel }}.
                             </p>
                         </div>
                     </div>
@@ -192,6 +203,8 @@
                     </div>
 
                     <p class="mt-3 text-[17px] font-bold leading-snug">{{ $snapshot['prompt'] ?? '' }}</p>
+
+                    <x-question-media :media="$snapshot['media'] ?? null" compact />
 
                     @if(! empty($snapshot['options']))
                         <ul class="mt-3 space-y-1.5">

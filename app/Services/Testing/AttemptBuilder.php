@@ -129,6 +129,9 @@ final readonly class AttemptBuilder
                     'type' => $question->type->value,
                     'prompt' => $question->prompt,
                     'explanation' => $question->explanation,
+                    // Imaginea intră în instantaneu ca tot restul: o întrebare
+                    // rezolvată acum un an trebuie să se vadă cum arăta atunci.
+                    'media' => $question->media,
                     'difficulty' => $question->difficulty,
                     'source_label' => $question->source_label,
                     'source_url' => $question->source_url,

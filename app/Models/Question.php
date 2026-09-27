@@ -28,6 +28,7 @@ class Question extends Model
         'status',
         'prompt',
         'explanation',
+        'media',
         'difficulty',
         'source_label',
         'source_url',
@@ -49,6 +50,7 @@ class Question extends Model
             'source_checked_at' => 'date',
             'reviewed_at' => 'datetime',
             'answer_config' => 'array',
+            'media' => 'array',
             'metadata' => 'array',
         ];
     }

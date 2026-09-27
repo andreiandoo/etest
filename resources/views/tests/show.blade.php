@@ -45,7 +45,9 @@
                     </span>
                     <span>{{ $test->question_limit ?? $questionCount }} întrebări</span>
                     <span>{{ $minutes !== null ? $minutes.' minute' : 'fără limită de timp' }}</span>
-                    @if($test->passing_percentage !== null)
+                    @if($test->passing_questions !== null)
+                        <span>prag {{ $test->passing_questions }} din {{ $test->question_limit ?? $questionCount }}</span>
+                    @elseif($test->passing_percentage !== null)
                         <span>prag {{ rtrim(rtrim(number_format((float) $test->passing_percentage, 2, ',', ' '), '0'), ',') }}%</span>
                     @endif
                 </div>

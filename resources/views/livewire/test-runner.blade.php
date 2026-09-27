@@ -84,6 +84,8 @@
 
                     <h1 class="mt-3 max-w-3xl text-[26px] font-bold leading-snug sm:text-[30px]">{{ $snapshot['prompt'] ?? '' }}</h1>
 
+                    <x-question-media :media="$snapshot['media'] ?? null" />
+
                     <form wire:submit="submitCurrent" class="mt-7 max-w-3xl">
                         @if($type === 'single_choice')
                             <div class="space-y-2.5">
