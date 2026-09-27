@@ -158,6 +158,11 @@ final class QuestionImporter
                 'status' => $question->exists ? $question->status : PublicationStatus::Draft,
                 'prompt' => $prompt,
                 'explanation' => $this->nullableString($row['explanation'] ?? null),
+                // Imaginea vine ca obiect — cale, text alternativ, autor,
+                // licență. O coloană goală păstrează ce era: un lot care
+                // corectează enunțuri nu trebuie să șteargă pozele puse de
+                // altcineva.
+                'media' => $this->jsonValue($row['media'] ?? null, $question->media),
                 'difficulty' => max(1, min(5, (int) ($row['difficulty'] ?? 3))),
                 'source_label' => $this->nullableString($row['source_label'] ?? null),
                 'source_url' => $this->nullableString($row['source_url'] ?? null),

@@ -4,10 +4,12 @@ use App\Enums\PublicationStatus;
 use App\Enums\QuestionType;
 use App\Livewire\TestRunner;
 use App\Models\AnswerOption;
+use App\Models\ContentImport;
 use App\Models\Question;
 use App\Models\TestDefinition;
 use App\Models\User;
 use App\Models\Vertical;
+use App\Services\Content\QuestionImporter;
 use App\Services\Testing\AttemptBuilder;
 use App\Services\Testing\AttemptEngine;
 use Livewire\Livewire;
@@ -149,4 +151,53 @@ test('the verdict counts questions when the exam counts questions', function () 
         ->assertSuccessful()
         ->assertSee('Ai trece examenul')
         ->assertSee('3 răspunsuri corecte din 4');
+});
+
+/**
+ * Întrebările scrise de noi intră în loturi, iar cele de legislație rutieră vin
+ * cu indicatorul lângă enunț. Dacă importul n-ar duce imaginea mai departe,
+ * fiecare poză ar trebui pusă de mână, una câte una.
+ */
+test('an imported batch brings its images along', function () {
+    $vertical = Vertical::factory()->create();
+    $import = ContentImport::create([
+        'vertical_id' => $vertical->id,
+        'type' => 'questions',
+        'format' => 'csv',
+        'original_name' => 'lot.csv',
+        'stored_path' => 'imports/lot.csv',
+        'status' => 'processing',
+        'started_at' => now(),
+    ]);
+
+    $media = ['path' => 'questions/b/indicator-stop.svg', 'alt' => 'Indicator STOP', 'license' => 'desen propriu'];
+
+    app(QuestionImporter::class)->import($import, [[
+        'source_key' => 'auto:b:0001',
+        'type' => 'multiple_choice',
+        'prompt' => 'Ce obligație aveți la acest indicator?',
+        'media' => json_encode($media, JSON_THROW_ON_ERROR),
+        'options' => json_encode([
+            ['content' => 'Opriți', 'is_correct' => true],
+            ['content' => 'Reduceți viteza', 'is_correct' => false],
+        ], JSON_THROW_ON_ERROR),
+    ]]);
+
+    $question = Question::query()->where('source_key', 'auto:b:0001')->firstOrFail();
+
+    expect($question->media)->toBe($media);
+
+    // Un al doilea lot, care corectează doar enunțul, nu șterge imaginea.
+    app(QuestionImporter::class)->import($import, [[
+        'source_key' => 'auto:b:0001',
+        'type' => 'multiple_choice',
+        'prompt' => 'Ce obligație aveți la întâlnirea acestui indicator?',
+        'options' => json_encode([
+            ['content' => 'Opriți', 'is_correct' => true],
+            ['content' => 'Reduceți viteza', 'is_correct' => false],
+        ], JSON_THROW_ON_ERROR),
+    ]]);
+
+    expect($question->refresh()->media)->toBe($media)
+        ->and($question->prompt)->toBe('Ce obligație aveți la întâlnirea acestui indicator?');
 });
