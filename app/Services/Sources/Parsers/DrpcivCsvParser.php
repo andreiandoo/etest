@@ -177,7 +177,7 @@ final class DrpcivCsvParser
                 return ['error' => 'Litera „'.$letter.'” apare de două ori printre variante.'];
             }
 
-            $options[$letter] = ['content' => $this->tidy($found[2]), 'is_correct' => $correct];
+            $options[$letter] = ['content' => $this->tidyOption($found[2]), 'is_correct' => $correct];
         }
 
         // Ordinea de la examen, nu ordinea coloanelor.
@@ -249,6 +249,17 @@ final class DrpcivCsvParser
         $value = html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $value = str_replace("\u{00A0}", ' ', $value);
 
-        return trim((string) preg_replace('/\s+/u', ' ', $value), " \t\n\r;");
+        return trim((string) preg_replace('/\s+/u', ' ', $value));
+    }
+
+    /**
+     * Variantele vin din fișier cu punctuația de listă: primele două se termină
+     * în punct și virgulă, ultima în punct. Afișate una sub alta, punctuația
+     * asta arată a listă ruptă în bucăți, nu a variante de răspuns. Enunțul și-o
+     * păstrează pe a lui.
+     */
+    private function tidyOption(string $value): string
+    {
+        return trim($this->tidy($value), " \t\n\r;.");
     }
 }
