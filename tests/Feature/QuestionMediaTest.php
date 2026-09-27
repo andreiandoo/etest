@@ -9,6 +9,7 @@ use App\Models\TestDefinition;
 use App\Models\User;
 use App\Models\Vertical;
 use App\Services\Testing\AttemptBuilder;
+use App\Services\Testing\AttemptEngine;
 use Livewire\Livewire;
 
 /**
@@ -129,7 +130,7 @@ test('the verdict counts questions when the exam counts questions', function () 
     }
 
     $attempt = app(AttemptBuilder::class)->startOrResume($user, $test);
-    $engine = app(App\Services\Testing\AttemptEngine::class);
+    $engine = app(AttemptEngine::class);
 
     // Trei corecte din patru: sub procent ar fi 75%, dar pragul e în întrebări.
     foreach ($attempt->questions()->orderBy('position')->get() as $index => $question) {
