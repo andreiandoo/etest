@@ -185,7 +185,8 @@ test('an imported batch brings its images along', function () {
 
     $question = Question::query()->where('source_key', 'auto:b:0001')->firstOrFail();
 
-    expect($question->media)->toBe($media);
+    // jsonb nu păstrează ordinea cheilor, deci se compară conținutul.
+    expect($question->media)->toEqual($media);
 
     // Un al doilea lot, care corectează doar enunțul, nu șterge imaginea.
     app(QuestionImporter::class)->import($import, [[
@@ -198,6 +199,6 @@ test('an imported batch brings its images along', function () {
         ], JSON_THROW_ON_ERROR),
     ]]);
 
-    expect($question->refresh()->media)->toBe($media)
+    expect($question->refresh()->media)->toEqual($media)
         ->and($question->prompt)->toBe('Ce obligație aveți la întâlnirea acestui indicator?');
 });
