@@ -127,6 +127,15 @@ final class Catalog
                     'exam' => ['questions' => 11, 'duration_seconds' => 900, 'passing_questions' => 9, 'max_wrong' => 3],
                 ],
                 [
+                    'slug' => 'permis-categoria-tr-tv',
+                    'name' => 'Categoriile Tr și Tv',
+                    'type' => TaxonomyNodeType::Exam,
+                    'description' => 'Tractoare agricole sau forestiere și tramvaie. Aceleași reguli de probă ca la categoriile B și C, cu care sunt puse laolaltă în lege.',
+                    'seo_title' => 'Chestionare auto categoriile Tr și Tv 2026 — 26 de întrebări ca la examen | e-test.ro',
+                    'seo_description' => 'Chestionare gratuite pentru tractor și tramvai: 26 de întrebări în 30 de minute, 22 de răspunsuri corecte pentru promovare, chestionarul se închide la 5 greșeli.',
+                    'exam' => ['questions' => 26, 'duration_seconds' => 1800, 'passing_questions' => 22, 'max_wrong' => 5],
+                ],
+                [
                     'slug' => 'redobandire-permis',
                     'name' => 'Redobândirea permisului',
                     'type' => TaxonomyNodeType::Exam,

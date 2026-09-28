@@ -103,7 +103,7 @@ abstract class DrpcivConnector implements LocalDocumentSource
 
     protected function fileName(): string
     {
-        return 'DRPCIV_qa_'.mb_strtoupper($this->category()).'.csv';
+        return 'DRPCIV_qa_'.$this->category().'.csv';
     }
 
     /**
@@ -246,6 +246,7 @@ abstract class DrpcivConnector implements LocalDocumentSource
             $prompt = (string) $question['prompt'];
             $options = (array) $question['options'];
             $media = $question['media'] ?? null;
+            $chapter = $question['chapter'] ?? null;
 
             $rows[] = [
                 'source_key' => 'drpciv:'.$category.':'
@@ -256,8 +257,10 @@ abstract class DrpcivConnector implements LocalDocumentSource
                 'prompt' => $prompt,
                 'explanation' => $question['explanation'],
                 'media' => $media,
-                'taxonomy_slug' => (string) $question['chapter'],
-                'taxonomy_parent_slug' => $this->taxonomySlug(),
+                // Unde nu există capitole, întrebarea stă direct sub categoria
+                // de permis.
+                'taxonomy_slug' => $chapter ?? $this->taxonomySlug(),
+                'taxonomy_parent_slug' => $chapter === null ? '' : $this->taxonomySlug(),
                 'source_label' => 'DRPCIV — chestionar oficial de legislație rutieră, '.$this->label(),
                 'source_url' => $source->source_page_url,
                 'source_checked_at' => today()->toDateString(),
@@ -265,7 +268,7 @@ abstract class DrpcivConnector implements LocalDocumentSource
                 'options' => $options,
                 'metadata' => array_filter([
                     'category' => $category,
-                    'chapter' => $question['chapter'],
+                    'chapter' => $chapter,
                     'origin' => $question['origin'] ?? null,
                     'needs_alt' => $media === null ? null : true,
                 ], static fn (mixed $value): bool => $value !== null && $value !== ''),
@@ -345,10 +348,10 @@ abstract class DrpcivConnector implements LocalDocumentSource
         $chapters = [];
 
         foreach ($this->parser->parse($path)['questions'] as $question) {
-            $slug = (string) $question['chapter'];
+            $slug = $question['chapter'] ?? null;
 
-            if (! in_array($slug, $chapters, true)) {
-                $chapters[] = $slug;
+            if ($slug !== null && ! in_array($slug, $chapters, true)) {
+                $chapters[] = (string) $slug;
             }
         }
 

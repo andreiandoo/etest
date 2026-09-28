@@ -23,10 +23,25 @@ use RuntimeException;
  */
 final class DrpcivCsvParser
 {
-    /** Litera din capul unei variante, cu textul care îi urmează. */
-    private const LETTERED = '/^\s*([A-C])\s*[-–]\s*(.+)$/su';
+    /**
+     * Litera din capul unei variante, cu textul care îi urmează.
+     *
+     * Separatorul diferă de la un fișier la altul: unele scriu „A - text”,
+     * altele doar „A text”. Tăierea pe simplu spațiu ar fi primejdioasă singură
+     * — există răspunsuri care chiar încep cu „A”, „C” sau „U” — dar nu e
+     * singură: rândul trebuie să iasă cu exact literele A, B și C, altfel se
+     * respinge. Invariantul acela ține tăierea în frâu.
+     */
+    private const LETTERED = '/^\s*([A-C])(?:\s*[-–]\s*|\s+)(\S.*)$/su';
 
-    private const REQUIRED = ['data', 'raspuns_corect_1', 'raspuns_1', 'image', 'explicatie', 'categorii'];
+    /** Coloana cu enunțul, sub numele pe care îl poartă în fiecare fișier. */
+    private const PROMPT_COLUMNS = ['data', 'intrebare'];
+
+    /** Coloanele cu variantele greșite, în cele două forme întâlnite. */
+    private const WRONG_COLUMNS = [
+        ['raspuns_1', 'raspuns_2'],
+        ['raspuns_incorect_1', 'raspuns_incorect_2'],
+    ];
 
     /**
      * @return array{total: int, questions: array<int, array<string, mixed>>, rejected: array<int, array<string, string>>}
@@ -47,7 +62,7 @@ final class DrpcivCsvParser
             }
 
             $headers = $this->headers($headers);
-            $missing = array_diff(self::REQUIRED, $headers);
+            $missing = $this->missingColumns($headers);
 
             if ($missing !== []) {
                 return ['total' => 0, 'questions' => [], 'rejected' => [[
@@ -151,16 +166,29 @@ final class DrpcivCsvParser
      */
     private function question(array $row): array
     {
-        $prompt = $this->tidy($row['data'] ?? '');
+        $prompt = '';
+
+        foreach (self::PROMPT_COLUMNS as $column) {
+            $prompt = $prompt !== '' ? $prompt : $this->tidy($row[$column] ?? '');
+        }
 
         if ($prompt === '') {
             return ['error' => 'Rândul nu are enunț.'];
         }
 
+        $columns = [['raspuns_corect_1', true], ['raspuns_corect_2', true], ['raspuns_corect_3', true]];
+
+        foreach (self::WRONG_COLUMNS as $pair) {
+            foreach ($pair as $column) {
+                if (array_key_exists($column, $row)) {
+                    $columns[] = [$column, false];
+                }
+            }
+        }
+
         $options = [];
 
-        foreach ([['raspuns_corect_1', true], ['raspuns_corect_2', true], ['raspuns_corect_3', true],
-            ['raspuns_1', false], ['raspuns_2', false]] as [$column, $correct]) {
+        foreach ($columns as [$column, $correct]) {
             $cell = $row[$column] ?? '';
 
             if (trim($cell) === '') {
@@ -197,20 +225,48 @@ final class DrpcivCsvParser
             return ['error' => 'Nicio variantă nu e marcată drept corectă.'];
         }
 
+        // Unele fișiere nu au capitole deloc; întrebările lor stau direct sub
+        // categoria de permis. Absența nu e o eroare, doar o structură mai
+        // plată.
         $chapter = $this->chapter($row['categorii'] ?? '');
-
-        if ($chapter === '') {
-            return ['error' => 'Nu am putut citi capitolul din adresa categoriei.'];
-        }
 
         return [
             'prompt' => $prompt,
             'options' => array_values($options),
             'explanation' => $this->explanation($row['explicatie'] ?? ''),
             'image' => $this->image($row['image'] ?? ''),
-            'chapter' => $chapter,
+            'chapter' => $chapter === '' ? null : $chapter,
             'origin' => $row['data3'] ?? '',
         ];
+    }
+
+    /**
+     * @param  array<int, string>  $headers
+     * @return array<int, string>
+     */
+    private function missingColumns(array $headers): array
+    {
+        $missing = [];
+
+        if (array_intersect(self::PROMPT_COLUMNS, $headers) === []) {
+            $missing[] = implode(' sau ', self::PROMPT_COLUMNS);
+        }
+
+        if (! in_array('raspuns_corect_1', $headers, true)) {
+            $missing[] = 'raspuns_corect_1';
+        }
+
+        $hasWrong = false;
+
+        foreach (self::WRONG_COLUMNS as $pair) {
+            $hasWrong = $hasWrong || array_intersect($pair, $headers) !== [];
+        }
+
+        if (! $hasWrong) {
+            $missing[] = 'raspuns_1 sau raspuns_incorect_1';
+        }
+
+        return $missing;
     }
 
     /**

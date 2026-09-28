@@ -69,3 +69,54 @@ test('a row whose answer lost its letter is reported, not guessed', function () 
         ->and($parsed['rejected'][0]['code'])->toBe('rândul 5')
         ->and($parsed['rejected'][0]['reason'])->toContain('nu începe cu litera ei');
 });
+
+/**
+ * Al doilea fel de fișier: alte nume de coloane, litera lipită de text fără
+ * liniuță, fără explicații și fără capitole. Tăierea pe simplu spațiu ar fi
+ * primejdioasă singură — există răspunsuri care sunt chiar „C” sau „U” — dar
+ * rândul trebuie să iasă cu exact literele A, B și C, iar invariantul acela o
+ * ține în frâu.
+ *
+ * @return array{total: int, questions: array<int, array<string, mixed>>, rejected: array<int, array<string, string>>}
+ */
+function drpcivTrParsed(): array
+{
+    return (new DrpcivCsvParser)->parse(__DIR__.'/../Fixtures/drpciv-tr-tv-excerpt.csv');
+}
+
+test('the other file shape is read too, columns and separator included', function () {
+    $parsed = drpcivTrParsed();
+    $first = $parsed['questions'][0];
+
+    expect($first['prompt'])->toBe('Ce semnifică panoul adițional?')
+        ->and(array_column($first['options'], 'content'))->toBe([
+            'începutul zonei de acțiune a indicatorului „Staționarea interzisă“',
+            'începutul zonei de acțiune a indicatorului „Oprirea interzisă“',
+            'staționarea este interzisă până la indicator',
+        ])
+        ->and(array_column($first['options'], 'is_correct'))->toBe([false, true, false]);
+});
+
+test('an answer that is itself a single letter survives the cut', function () {
+    $question = drpcivTrParsed()['questions'][1];
+
+    expect(array_column($question['options'], 'content'))->toBe(['D', 'C', 'U'])
+        ->and(array_column($question['options'], 'is_correct'))->toBe([true, false, true]);
+});
+
+test('a file without chapters leaves the question without one, and that is no error', function () {
+    $parsed = drpcivTrParsed();
+
+    expect($parsed['questions'][0]['chapter'])->toBeNull()
+        ->and($parsed['questions'][0]['explanation'])->toBeNull()
+        ->and($parsed['questions'][0]['image'])->toBe('https://exemplu.ro/poze/3979.jpg')
+        ->and($parsed['questions'][2]['image'])->toBeNull();
+});
+
+test('two answers on the same letter are refused, not silently merged', function () {
+    $parsed = drpcivTrParsed();
+
+    expect($parsed['questions'])->toHaveCount(3)
+        ->and($parsed['rejected'])->toHaveCount(1)
+        ->and($parsed['rejected'][0]['reason'])->toContain('apare de două ori');
+});
