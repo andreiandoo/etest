@@ -45,6 +45,9 @@
                     </span>
                     <span>{{ $test->question_limit ?? $questionCount }} întrebări</span>
                     <span>{{ $minutes !== null ? $minutes.' minute' : 'fără limită de timp' }}</span>
+                    @if($test->max_wrong_answers !== null)
+                        <span>se închide la {{ $test->max_wrong_answers }} greșeli</span>
+                    @endif
                     @if($test->passing_questions !== null)
                         <span>prag {{ $test->passing_questions }} din {{ $test->question_limit ?? $questionCount }}</span>
                     @elseif($test->passing_percentage !== null)

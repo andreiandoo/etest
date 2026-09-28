@@ -63,7 +63,37 @@ final readonly class AttemptEngine
             $this->analytics->rebuild((int) $question->question_id);
         }
 
+        // La proba teoretică auto, examinarea nu merge până la ultima
+        // întrebare: la a patra greșeală pentru categoria A, a cincea pentru B,
+        // chestionarul se închide pe loc. Verificarea stă aici, imediat după
+        // notare, ca regula să se aplice oricine ar trimite răspunsul.
+        if ($this->hasFailedEarly($attempt)) {
+            $this->finish($attempt, 'too_many_wrong');
+        }
+
         return $answer;
+    }
+
+    /**
+     * A adunat destule greșeli cât să i se închidă chestionarul?
+     */
+    public function hasFailedEarly(TestAttempt $attempt): bool
+    {
+        $limit = $attempt->test?->max_wrong_answers;
+
+        if ($limit === null || $limit < 1) {
+            return false;
+        }
+
+        return $this->wrongAnswers($attempt) >= $limit;
+    }
+
+    public function wrongAnswers(TestAttempt $attempt): int
+    {
+        return AttemptAnswer::query()
+            ->whereHas('attemptQuestion', fn ($query) => $query->where('test_attempt_id', $attempt->id))
+            ->where('is_correct', false)
+            ->count();
     }
 
     public function finish(TestAttempt $attempt, string $reason = 'submitted'): TestAttempt

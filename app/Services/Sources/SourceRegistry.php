@@ -10,6 +10,10 @@ use App\Services\Sources\Connectors\CcfConsultantFiscalConnector;
 use App\Services\Sources\Connectors\CncanConnector;
 use App\Services\Sources\Connectors\DrpcivCategoriaAConnector;
 use App\Services\Sources\Connectors\DrpcivCategoriaBConnector;
+use App\Services\Sources\Connectors\DrpcivCategoriaCConnector;
+use App\Services\Sources\Connectors\DrpcivCategoriaDConnector;
+use App\Services\Sources\Connectors\DrpcivCategoriaEConnector;
+use App\Services\Sources\Connectors\DrpcivRedobandireConnector;
 use App\Services\Sources\Connectors\InmConnector;
 use App\Services\Sources\Connectors\OamgmamrConnector;
 use App\Services\Sources\Connectors\UmfTimisoaraConnector;
@@ -41,6 +45,10 @@ final class SourceRegistry
         CcfAsistentConnector::class,
         DrpcivCategoriaAConnector::class,
         DrpcivCategoriaBConnector::class,
+        DrpcivCategoriaCConnector::class,
+        DrpcivCategoriaDConnector::class,
+        DrpcivCategoriaEConnector::class,
+        DrpcivRedobandireConnector::class,
     ];
 
     public function get(string $key): SourceConnector

@@ -55,19 +55,21 @@ test('the exam test is built with the numbers the law gives, not with ours', fun
     expect($test->question_limit)->toBe(26)
         ->and($test->duration_seconds)->toBe(1800)
         ->and($test->passing_questions)->toBe(22)
+        ->and($test->max_wrong_answers)->toBe(5)
         ->and($test->mode)->toBe(TestMode::Exam);
 });
 
-test('a motorcycle category gets its own shorter exam', function () {
-    stockCategory('permis-categoria-a1', 25);
+test('the motorcycle paper is shorter and less forgiving', function () {
+    stockCategory('permis-categoria-a', 25);
 
     $this->artisan('content:teste-examen', ['verticala' => 'auto'])->assertSuccessful();
 
-    $test = TestDefinition::query()->where('slug', 'permis-categoria-a1-examen')->firstOrFail();
+    $test = TestDefinition::query()->where('slug', 'permis-categoria-a-examen')->firstOrFail();
 
     expect($test->question_limit)->toBe(20)
         ->and($test->duration_seconds)->toBe(1200)
-        ->and($test->passing_questions)->toBe(17);
+        ->and($test->passing_questions)->toBe(17)
+        ->and($test->max_wrong_answers)->toBe(4);
 });
 
 test('a category with no questions yet is skipped, not built empty', function () {
@@ -77,6 +79,6 @@ test('a category with no questions yet is skipped, not built empty', function ()
         ->expectsOutputToContain('secțiuni sărite')
         ->assertSuccessful();
 
-    expect(TestDefinition::query()->where('slug', 'permis-categoria-be-examen')->exists())->toBeFalse()
+    expect(TestDefinition::query()->where('slug', 'permis-categoria-e-examen')->exists())->toBeFalse()
         ->and(TestDefinition::query()->where('slug', 'permis-categoria-b-examen')->firstOrFail()->question_limit)->toBe(5);
 });

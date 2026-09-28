@@ -22,6 +22,18 @@
     $passed = $passingQuestions !== null
         ? $correctCount >= $passingQuestions
         : ($passingPercentage !== null && $percentage >= $passingPercentage);
+    // De ce s-a încheiat proba. Un candidat căruia i s-a închis chestionarul la
+    // a cincea greșeală trebuie să afle asta aici, nu să se întrebe de ce are
+    // întrebări fără răspuns.
+    $reason = data_get($attempt->configuration, 'completion_reason');
+    $reasonLabel = match ($reason) {
+        'expired' => 'Timpul a expirat, iar proba s-a încheiat automat.',
+        'too_many_wrong' => $test->max_wrong_answers !== null
+            ? 'Chestionarul s-a închis la '.$test->max_wrong_answers.' răspunsuri greșite, ca la examen.'
+            : 'Chestionarul s-a închis după prea multe răspunsuri greșite.',
+        default => null,
+    };
+
     $passingLabel = $passingQuestions !== null
         ? $passingQuestions.' răspunsuri corecte din '.$totalCount
         : ($passingPercentage !== null ? rtrim(rtrim(number_format($passingPercentage, 2, ',', ' '), '0'), ',').'%' : '');
@@ -65,6 +77,12 @@
                         <p class="mt-1 text-[15px] text-ink-500">{{ $correctCount }} din {{ $totalCount }} corecte</p>
                     </div>
                 </div>
+
+                @if($reasonLabel !== null)
+                    <p class="w-full rounded-card bg-surface-alt px-4 py-3 text-[14px] leading-6 text-ink-700">
+                        {{ $reasonLabel }}
+                    </p>
+                @endif
 
                 @if($passing)
                     <div class="flex w-full items-start gap-3 rounded-card p-4 {{ $passed ? 'bg-[#EAF4F2]' : 'bg-[#FBEEE9]' }}">

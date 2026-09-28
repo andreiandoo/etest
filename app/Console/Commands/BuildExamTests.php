@@ -58,6 +58,7 @@ class BuildExamTests extends Command
                 $questions = (int) ($exam['questions'] ?? 0);
                 $duration = (int) ($exam['duration_seconds'] ?? 0);
                 $passing = (int) ($exam['passing_questions'] ?? 0);
+                $wrong = (int) ($exam['max_wrong'] ?? 0);
 
                 if ($questions < 1) {
                     continue;
@@ -68,13 +69,15 @@ class BuildExamTests extends Command
                     $node->slug.'-examen',
                     $node->name.' — simulare examen',
                     'Proba teoretică pentru '.mb_strtolower($node->name).', în formatul ei oficial: '
-                        .$questions.' întrebări în '.intdiv($duration, 60).' de minute, cu '.$passing
-                        .' răspunsuri corecte pentru promovare.',
+                        .$questions.' întrebări în '.intdiv($duration, 60).' minute, cu '.$passing
+                        .' răspunsuri corecte pentru promovare'
+                        .($wrong > 0 ? ', iar chestionarul se închide la '.$wrong.' greșeli.' : '.'),
                     $questions,
                     includeChildren: true,
                     mode: TestMode::Exam,
                     durationSeconds: $duration > 0 ? $duration : null,
                     passingQuestions: $passing > 0 ? $passing : null,
+                    maxWrongAnswers: $wrong > 0 ? $wrong : null,
                 );
 
                 if ($test === null) {

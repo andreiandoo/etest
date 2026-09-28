@@ -75,6 +75,14 @@ abstract class DrpcivConnector implements LocalDocumentSource
      */
     abstract protected function category(): string;
 
+    /**
+     * Cum se numește proba în titluri: „categoria B”, dar „redobândire”.
+     */
+    protected function label(): string
+    {
+        return 'categoria '.mb_strtoupper($this->category());
+    }
+
     public function key(): string
     {
         return 'drpciv-categoria-'.mb_strtolower($this->category());
@@ -103,20 +111,18 @@ abstract class DrpcivConnector implements LocalDocumentSource
      */
     public function definition(): array
     {
-        $category = mb_strtoupper($this->category());
-
         return [
             'key' => $this->key(),
             'authority' => 'DRPCIV — Direcția Regim Permise de Conducere și Înmatriculare a Vehiculelor',
-            'title' => 'Chestionare de legislație rutieră, categoria '.$category,
-            'exam' => 'Proba teoretică pentru permisul de conducere, categoria '.$category,
+            'title' => 'Chestionare de legislație rutieră, '.$this->label(),
+            'exam' => 'Proba teoretică pentru permisul de conducere, '.$this->label(),
             'specialty' => 'Legislație rutieră, conduită preventivă, mecanică, prim ajutor',
             'vertical_slug' => 'auto',
             'taxonomy_slug' => $this->taxonomySlug(),
             'source_page_url' => 'https://dgpci.mai.gov.ro/',
             'document_url' => 'https://dgpci.mai.gov.ro/',
             'license_url' => null,
-            'version_label' => 'chestionar '.$category,
+            'version_label' => 'chestionar '.$this->label(),
             'file_format' => 'csv',
             'rights_status' => 'official_public_unclear',
             'answer_key' => 'embedded',
@@ -160,9 +166,9 @@ abstract class DrpcivConnector implements LocalDocumentSource
                 'type' => TaxonomyNodeType::Chapter,
                 'name' => $name,
                 'sort_order' => $index++,
-                'seo_title' => $name.' — chestionare auto categoria '.mb_strtoupper($this->category()).' | e-test.ro',
+                'seo_title' => $name.' — chestionare auto '.$this->label().' | e-test.ro',
                 'seo_description' => 'Întrebări de '.mb_strtolower($name).' din chestionarele pentru permisul '
-                    .'de conducere, categoria '.mb_strtoupper($this->category()).', cu articolul de lege la fiecare răspuns.',
+                    .'de conducere, '.$this->label().', cu articolul de lege la fiecare răspuns.',
             ]);
 
             if ($isNew) {
@@ -252,8 +258,7 @@ abstract class DrpcivConnector implements LocalDocumentSource
                 'media' => $media,
                 'taxonomy_slug' => (string) $question['chapter'],
                 'taxonomy_parent_slug' => $this->taxonomySlug(),
-                'source_label' => 'DRPCIV — chestionar oficial de legislație rutieră, categoria '
-                    .mb_strtoupper($this->category()),
+                'source_label' => 'DRPCIV — chestionar oficial de legislație rutieră, '.$this->label(),
                 'source_url' => $source->source_page_url,
                 'source_checked_at' => today()->toDateString(),
                 'answer_config' => [],
@@ -291,9 +296,9 @@ abstract class DrpcivConnector implements LocalDocumentSource
             $test = $this->tests->build(
                 $chapter,
                 $this->taxonomySlug().'-'.$chapter->slug,
-                $chapter->name.' — categoria '.mb_strtoupper($this->category()),
-                'Întrebări de '.mb_strtolower($chapter->name).' din chestionarele pentru permisul de conducere, '
-                    .'categoria '.mb_strtoupper($this->category()).', cu articolul de lege la fiecare răspuns.',
+                $chapter->name.' — '.$this->label(),
+                'Întrebări de '.mb_strtolower($chapter->name).' din chestionarele pentru permisul de '
+                    .'conducere, '.$this->label().', cu articolul de lege la fiecare răspuns.',
                 20,
             );
 
@@ -312,13 +317,15 @@ abstract class DrpcivConnector implements LocalDocumentSource
             $this->taxonomySlug().'-examen',
             $parent->name.' — simulare examen',
             'Proba teoretică pentru '.mb_strtolower($parent->name).', în formatul ei oficial: '.$questions
-                .' întrebări în '.intdiv((int) ($exam['duration_seconds'] ?? 0), 60).' de minute, cu '
-                .($exam['passing_questions'] ?? 0).' răspunsuri corecte pentru promovare.',
+                .' întrebări în '.intdiv((int) ($exam['duration_seconds'] ?? 0), 60).' minute, cu '
+                .($exam['passing_questions'] ?? 0).' răspunsuri corecte pentru promovare, iar chestionarul se '
+                .'închide la '.($exam['max_wrong'] ?? 0).' greșeli.',
             $questions,
             includeChildren: true,
             mode: TestMode::Exam,
             durationSeconds: (int) ($exam['duration_seconds'] ?? 0) ?: null,
             passingQuestions: (int) ($exam['passing_questions'] ?? 0) ?: null,
+            maxWrongAnswers: (int) ($exam['max_wrong'] ?? 0) ?: null,
         );
 
         return $built + ($simulation === null ? 0 : 1);

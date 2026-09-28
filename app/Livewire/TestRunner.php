@@ -99,6 +99,14 @@ class TestRunner extends Component
 
         $this->attempt->refresh();
 
+        // Motorul poate să fi închis proba chiar acum, dacă s-au adunat
+        // greșelile care o închid. Candidatul nu mai are ce răspunde.
+        if ($this->attempt->status === AttemptStatus::Completed) {
+            $this->redirectRoute('attempts.results', $this->attempt, navigate: true);
+
+            return;
+        }
+
         if ($this->test->mode === TestMode::Practice) {
             $this->showFeedback = true;
 
