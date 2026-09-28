@@ -3,18 +3,16 @@
 namespace App\Services\Testing;
 
 use App\Enums\AttemptStatus;
-use App\Enums\PublicationStatus;
-use App\Models\Question;
 use App\Models\TestAttempt;
 use App\Models\TestDefinition;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 final readonly class AttemptBuilder
 {
     public function __construct(
         private DeterministicOrder $order,
+        private QuestionPool $pool,
     ) {}
 
     public function startOrResume(User $user, TestDefinition $test): TestAttempt
@@ -61,11 +59,9 @@ final readonly class AttemptBuilder
 
     private function buildSnapshot(TestAttempt $attempt, TestDefinition $test): void
     {
-        /** @var Collection<int, Question> $questions */
-        $questions = $test->questions()
-            ->with('options')
-            ->where('questions.status', PublicationStatus::Published->value)
-            ->get();
+        // Fie lista fixă a testului, fie secțiunea din care trage de fiecare
+        // dată — decide testul, nu locul ăsta.
+        $questions = $this->pool->questions($test);
 
         $ids = $questions->modelKeys();
 

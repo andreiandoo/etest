@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\PublicationStatus;
 use App\Models\TaxonomyNode;
 use App\Models\TestDefinition;
 use App\Models\Vertical;
@@ -10,6 +9,7 @@ use App\Services\Monetization\MonetizationResolver;
 use App\Services\Seo\PublicUrlGenerator;
 use App\Services\Seo\StructuredData;
 use App\Services\Tenancy\TenantContext;
+use App\Services\Testing\QuestionPool;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -23,6 +23,7 @@ class PublicContentController extends Controller
         StructuredData $structuredData,
         MonetizationResolver $monetizationResolver,
         TenantContext $tenantContext,
+        QuestionPool $pool,
     ): View|RedirectResponse {
         abort_unless($vertical->is_active && $tenantContext->allowsVertical($vertical), 404);
 
@@ -55,7 +56,7 @@ class PublicContentController extends Controller
             $incomingPath = $vertical->slug.'/'.$path;
 
             if ($expectedPath === $incomingPath) {
-                return $this->test($test, $urls, $structuredData, $monetizationResolver, $tenantContext);
+                return $this->test($test, $urls, $structuredData, $monetizationResolver, $tenantContext, $pool);
             }
         }
 
@@ -163,10 +164,9 @@ class PublicContentController extends Controller
         StructuredData $structuredData,
         MonetizationResolver $monetizationResolver,
         TenantContext $tenantContext,
+        QuestionPool $pool,
     ): View {
-        $publishedQuestionCount = $test->questions()
-            ->where('questions.status', PublicationStatus::Published->value)
-            ->count();
+        $publishedQuestionCount = $pool->count($test);
         $questionCount = $test->question_limit !== null
             ? min($test->question_limit, $publishedQuestionCount)
             : $publishedQuestionCount;

@@ -26,6 +26,7 @@ final class PracticeTestBuilder
      * @param  callable(Builder<Question>): void|null  $filter
      * @param  int|null  $passingQuestions  câte răspunsuri corecte cere examenul
      * @param  int|null  $maxWrongAnswers  la a câta greșeală se închide proba
+     * @param  bool  $dynamic  întrebările se aleg la fiecare accesare, nu se leagă de test
      */
     public function build(
         TaxonomyNode $node,
@@ -39,6 +40,7 @@ final class PracticeTestBuilder
         ?int $durationSeconds = null,
         ?int $passingQuestions = null,
         ?int $maxWrongAnswers = null,
+        bool $dynamic = false,
     ): ?TestDefinition {
         // Un singur nivel de copii e de ajuns pentru structura de acum:
         // examen → capitole. Dacă apare un nivel mai jos, aici se vede.
@@ -84,7 +86,13 @@ final class PracticeTestBuilder
             // Numărul de întrebări e o limită, nu o selecție fixă: la fiecare
             // încercare se amestecă altele din același fond, ca al doilea tur
             // să nu fie o repetare din memorie.
-            'question_limit' => min($questionLimit, count($ids)),
+            // Un test dinamic își păstrează numărul cerut de probă chiar dacă
+            // azi fondul e mai mic: mâine se adaugă întrebări și proba e
+            // întreagă, fără să reconstruiască nimeni nimic.
+            'question_limit' => $dynamic ? $questionLimit : min($questionLimit, count($ids)),
+            'question_pool' => $dynamic
+                ? ['node' => $node->id, 'include_children' => $includeChildren]
+                : null,
             'randomize_questions' => true,
             'randomize_options' => true,
             'allow_review' => true,
@@ -99,7 +107,9 @@ final class PracticeTestBuilder
 
         $test->save();
 
-        $test->questions()->sync($this->pivot($ids));
+        // Testul dinamic nu leagă întrebări de el: le caută la fiecare
+        // încercare, în secțiunea din care trage.
+        $test->questions()->sync($dynamic ? [] : $this->pivot($ids));
 
         return $test;
     }

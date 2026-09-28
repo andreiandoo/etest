@@ -78,6 +78,7 @@ class BuildExamTests extends Command
                     durationSeconds: $duration > 0 ? $duration : null,
                     passingQuestions: $passing > 0 ? $passing : null,
                     maxWrongAnswers: $wrong > 0 ? $wrong : null,
+                    dynamic: true,
                 );
 
                 if ($test === null) {

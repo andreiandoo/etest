@@ -36,6 +36,34 @@ class TaxonomyNode extends Model
         ];
     }
 
+    /**
+     * Secțiunea și tot ce crește sub ea.
+     *
+     * Coborârea se face nivel cu nivel, nu recursiv în SQL, ca să meargă la fel
+     * pe orice bază; nodurile deja văzute nu se mai caută, deci o legătură
+     * greșită în date nu învârte bucla la infinit.
+     *
+     * @return array<int, int>
+     */
+    public function subtreeIds(): array
+    {
+        $ids = [(int) $this->id];
+        $level = $ids;
+
+        while ($level !== []) {
+            $children = static::query()
+                ->whereIn('parent_id', $level)
+                ->pluck('id')
+                ->map(static fn (mixed $id): int => (int) $id)
+                ->all();
+
+            $level = array_values(array_diff($children, $ids));
+            $ids = [...$ids, ...$level];
+        }
+
+        return $ids;
+    }
+
     /** @return BelongsTo<Vertical, $this> */
     public function vertical(): BelongsTo
     {

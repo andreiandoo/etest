@@ -300,6 +300,7 @@ abstract class DrpcivConnector implements LocalDocumentSource
                 'Întrebări de '.mb_strtolower($chapter->name).' din chestionarele pentru permisul de '
                     .'conducere, '.$this->label().', cu articolul de lege la fiecare răspuns.',
                 20,
+                dynamic: true,
             );
 
             $built += $test === null ? 0 : 1;
@@ -326,6 +327,9 @@ abstract class DrpcivConnector implements LocalDocumentSource
             durationSeconds: (int) ($exam['duration_seconds'] ?? 0) ?: null,
             passingQuestions: (int) ($exam['passing_questions'] ?? 0) ?: null,
             maxWrongAnswers: (int) ($exam['max_wrong'] ?? 0) ?: null,
+            // Nu există „testul numărul 7”: există proba, iar întrebările se
+            // trag altele la fiecare accesare, din tot fondul categoriei.
+            dynamic: true,
         );
 
         return $built + ($simulation === null ? 0 : 1);
