@@ -6,7 +6,6 @@ use App\Enums\TaxonomyNodeType;
 use App\Models\AnswerOption;
 use App\Models\Question;
 use App\Models\TaxonomyNode;
-use App\Models\TestDefinition;
 use App\Models\User;
 use App\Models\Vertical;
 use App\Services\Content\PracticeTestBuilder;
