@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
 /**
  * @property TestMode $mode
  * @property PublicationStatus $status
+ * @property array<string, mixed>|null $question_pool
  * @property Carbon|null $published_at
  * @property Carbon|null $reviewed_at
  */
