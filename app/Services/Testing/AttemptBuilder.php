@@ -85,7 +85,12 @@ final readonly class AttemptBuilder
                 continue;
             }
 
-            $points = (float) ($question->pivot?->getAttribute('points') ?? 1);
+            // Întrebarea trasă dintr-o secțiune nu vine prin tabela de
+            // legătură, deci n-are pivot — iar pe modele stricte simpla lui
+            // atingere aruncă. Punctajul ei e cel implicit.
+            $points = $question->relationLoaded('pivot')
+                ? (float) ($question->getRelation('pivot')->getAttribute('points') ?? 1)
+                : 1.0;
             $optionIds = $question->options->modelKeys();
 
             if ($test->randomize_options) {

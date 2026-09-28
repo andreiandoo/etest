@@ -79,6 +79,11 @@ test('a category with no questions yet is skipped, not built empty', function ()
         ->expectsOutputToContain('secțiuni sărite')
         ->assertSuccessful();
 
+    $test = TestDefinition::query()->where('slug', 'permis-categoria-b-examen')->firstOrFail();
+
+    // Proba cere 26 de întrebări și le cere în continuare: azi fondul are cinci,
+    // mâine are destule, iar testul nu trebuie reconstruit între timp.
     expect(TestDefinition::query()->where('slug', 'permis-categoria-e-examen')->exists())->toBeFalse()
-        ->and(TestDefinition::query()->where('slug', 'permis-categoria-b-examen')->firstOrFail()->question_limit)->toBe(5);
+        ->and($test->question_limit)->toBe(26)
+        ->and($test->question_pool['include_children'])->toBeTrue();
 });
