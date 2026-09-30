@@ -121,12 +121,13 @@ abstract class IsfConnector implements LocalDocumentSource
         $rows = [];
 
         foreach ($questions as $question) {
+            $correct = (int) $question['correct'];
             $options = [];
 
             foreach ((array) $question['options'] as $index => $content) {
                 $options[] = [
                     'content' => (string) $content,
-                    'is_correct' => $index + 1 === (int) $question['correct'],
+                    'is_correct' => $correct === $index + 1,
                 ];
             }
 
@@ -174,6 +175,9 @@ abstract class IsfConnector implements LocalDocumentSource
 
         $exam = (array) data_get($node->metadata, 'exam');
         $questions = (int) ($exam['questions'] ?? 0);
+        $duration = (int) ($exam['duration_seconds'] ?? 0);
+        $passing = (int) ($exam['passing_questions'] ?? 0);
+        $wrong = (int) ($exam['max_wrong'] ?? 0);
 
         if ($questions < 1) {
             $practice = $this->tests->build(
@@ -194,13 +198,13 @@ abstract class IsfConnector implements LocalDocumentSource
             $this->examSlug().'-examen',
             $node->name.' — simulare examen',
             'Proba de certificare pentru '.mb_strtolower($this->examName()).', în formatul ei: '.$questions
-                .' întrebări în '.intdiv((int) ($exam['duration_seconds'] ?? 0), 60).' de minute, cu '
-                .($exam['passing_questions'] ?? 0).' răspunsuri corecte pentru promovare.',
+                .' întrebări în '.intdiv($duration, 60).' de minute, cu '.$passing
+                .' răspunsuri corecte pentru promovare.',
             $questions,
             mode: TestMode::Exam,
-            durationSeconds: (int) ($exam['duration_seconds'] ?? 0) ?: null,
-            passingQuestions: (int) ($exam['passing_questions'] ?? 0) ?: null,
-            maxWrongAnswers: (int) ($exam['max_wrong'] ?? 0) ?: null,
+            durationSeconds: $duration > 0 ? $duration : null,
+            passingQuestions: $passing > 0 ? $passing : null,
+            maxWrongAnswers: $wrong > 0 ? $wrong : null,
             dynamic: true,
         );
 
