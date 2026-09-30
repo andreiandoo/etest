@@ -5,7 +5,6 @@ namespace App\Services\Sources\Connectors;
 use App\Enums\QuestionType;
 use App\Enums\TestMode;
 use App\Models\Source;
-use App\Models\TaxonomyNode;
 use App\Services\Content\PracticeTestBuilder;
 use App\Services\Sources\Contracts\LocalDocumentSource;
 use App\Services\Sources\Parsers\IsfCsvParser;
@@ -22,10 +21,10 @@ use RuntimeException;
  * conducta e simplă.
  *
  * Sunt două examene diferite, cu două secțiuni surori în catalog, deci doi
- * conectori pe același cod. Împart un fond comun — patru sute de întrebări apar
- * în amândouă — și e firesc: un conducător de societate dă și el examenul de
- * bază, plus partea lui. Fiecare secțiune își ține copia ei, fiindcă un candidat
- * la un examen trebuie să aibă fondul întreg, nu ciuruit de trimiteri.
+ * conectori pe același cod. Împart un fond comun de peste patru sute de
+ * întrebări și e firesc: un conducător de societate dă și examenul de bază, plus
+ * partea lui. Fiecare secțiune își ține copia ei, fiindcă un candidat la un
+ * examen trebuie să aibă fondul întreg, nu ciuruit de trimiteri.
  */
 abstract class IsfConnector implements LocalDocumentSource
 {
@@ -77,11 +76,7 @@ abstract class IsfConnector implements LocalDocumentSource
             'explanations' => 'none',
             'import_difficulty' => 'mixed',
             'count_status' => 'counted_exact',
-            'notes' => 'Institutul publică întrebările cu răspunsul corect marcat printr-un asterisc, dar în '
-                .'PDF, ca tabel pe trei coloane care nu se lasă citit curat; fișierul pentru conducători e '
-                .'chiar scanat. Fișierele din depozit sunt transcrierea lor în CSV. Rândurile cărora le '
-                .'lipsește litera — în PDF aveau asterisc două variante sau niciuna — se raportează, nu se '
-                .'ghicesc.',
+            'notes' => $this->notes(),
         ];
     }
 
@@ -100,16 +95,19 @@ abstract class IsfConnector implements LocalDocumentSource
     {
         $path = $this->fileFor($paths);
 
-        if ($path === null) {
-            return ['total' => 0, 'questions' => [], 'rejected' => [[
-                'code' => $this->examName(),
-                'reason' => 'Nu am găsit în '.$this->directory().' niciun fișier CSV cu „'
-                    .$this->fileMarker().'” în nume.',
-                'text' => '',
-            ]]];
+        if ($path !== null) {
+            return $this->parser->parse($path);
         }
 
-        return $this->parser->parse($path);
+        $reason = 'Nu am găsit în '.$this->directory().' niciun fișier CSV cu „'.$this->fileMarker().'” în nume.';
+
+        return [
+            'total' => 0,
+            'questions' => [],
+            'rejected' => [
+                ['code' => $this->examName(), 'reason' => $reason, 'text' => ''],
+            ],
+        ];
     }
 
     /**
@@ -137,8 +135,7 @@ abstract class IsfConnector implements LocalDocumentSource
                 // Cele două examene împart un fond comun, dar fiecare își ține
                 // copia lui: cheia poartă examenul, ca o întrebare comună să
                 // existe în ambele secțiuni, nu doar în cea sincronizată ultima.
-                'source_key' => 'isf:'.$this->examSlug().':'
-                    .substr(sha1($prompt."\n".implode("\n", (array) $question['options'])), 0, 12),
+                'source_key' => $this->sourceKey($prompt, (array) $question['options']),
                 'type' => QuestionType::SingleChoice->value,
                 'prompt' => $prompt,
                 'explanation' => '',
@@ -161,9 +158,9 @@ abstract class IsfConnector implements LocalDocumentSource
     /**
      * Simularea probei, după regulile scrise în catalog.
      *
-     * Unde regulile lipsesc — nu le știm pentru toate examenele Institutului —
-     * iese un test de exercițiu fără ceas, nu o simulare care pretinde reguli
-     * inventate.
+     * Unde regulile lipsesc, fiindcă nu le știm pentru toate examenele
+     * Institutului, iese un test de exercițiu fără ceas, nu o simulare care
+     * pretinde reguli inventate.
      */
     public function buildTests(Source $source): int
     {
@@ -193,13 +190,15 @@ abstract class IsfConnector implements LocalDocumentSource
             return $practice === null ? 0 : 1;
         }
 
+        $description = 'Proba de certificare pentru '.mb_strtolower($this->examName())
+            .', în formatul ei: '.$questions.' întrebări în '.intdiv($duration, 60)
+            .' de minute, cu '.$passing.' răspunsuri corecte pentru promovare.';
+
         $simulation = $this->tests->build(
             $node,
             $this->examSlug().'-examen',
             $node->name.' — simulare examen',
-            'Proba de certificare pentru '.mb_strtolower($this->examName()).', în formatul ei: '.$questions
-                .' întrebări în '.intdiv($duration, 60).' de minute, cu '.$passing
-                .' răspunsuri corecte pentru promovare.',
+            $description,
             $questions,
             mode: TestMode::Exam,
             durationSeconds: $duration > 0 ? $duration : null,
@@ -212,22 +211,36 @@ abstract class IsfConnector implements LocalDocumentSource
     }
 
     /**
+     * @param  array<int, string>  $options
+     */
+    private function sourceKey(string $prompt, array $options): string
+    {
+        return 'isf:'.$this->examSlug().':'.substr(sha1($prompt."\n".implode("\n", $options)), 0, 12);
+    }
+
+    private function notes(): string
+    {
+        return 'Institutul publică întrebările cu răspunsul corect marcat printr-un asterisc, dar în PDF, ca '
+            .'tabel pe trei coloane care nu se lasă citit curat; fișierul pentru conducători e chiar scanat. '
+            .'Fișierele din depozit sunt transcrierea lor în CSV. Rândurile fără literă marcată, care în PDF '
+            .'aveau asterisc la două variante sau la niciuna, se raportează, nu se ghicesc.';
+    }
+
+    /**
      * Fișierul acestui examen, recunoscut după o bucată din nume.
      *
      * Numele vin de la Institut, cu spații și diacritice, și se schimbă la
-     * fiecare actualizare — „16.01.2026” e chiar în ele. De aceea se caută o
-     * bucată stabilă, nu numele întreg.
+     * fiecare actualizare: data e chiar în ele. De aceea se caută o bucată
+     * stabilă, nu numele întreg.
      *
      * @param  array<string, string>  $paths
      */
     private function fileFor(array $paths): ?string
     {
         foreach ($paths as $name => $path) {
-            if (! str_ends_with(mb_strtolower($name), '.csv')) {
-                continue;
-            }
+            $lower = mb_strtolower($name);
 
-            if (mb_stripos($name, $this->fileMarker()) !== false) {
+            if (str_ends_with($lower, '.csv') && mb_strpos($lower, $this->fileMarker()) !== false) {
                 return $path;
             }
         }
