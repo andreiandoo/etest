@@ -16,6 +16,8 @@ use App\Services\Sources\Connectors\DrpcivCategoriaEConnector;
 use App\Services\Sources\Connectors\DrpcivRedobandireConnector;
 use App\Services\Sources\Connectors\DrpcivTractorTramvaiConnector;
 use App\Services\Sources\Connectors\InmConnector;
+use App\Services\Sources\Connectors\IsfConducatorConnector;
+use App\Services\Sources\Connectors\IsfDistributieConnector;
 use App\Services\Sources\Connectors\OamgmamrConnector;
 use App\Services\Sources\Connectors\UmfTimisoaraConnector;
 use App\Services\Sources\Connectors\VanatoareConnector;
@@ -51,6 +53,8 @@ final class SourceRegistry
         DrpcivCategoriaEConnector::class,
         DrpcivRedobandireConnector::class,
         DrpcivTractorTramvaiConnector::class,
+        IsfDistributieConnector::class,
+        IsfConducatorConnector::class,
     ];
 
     public function get(string $key): SourceConnector
